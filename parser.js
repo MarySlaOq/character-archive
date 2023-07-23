@@ -415,7 +415,7 @@ function openWorld(event, world){
     const n_char = Math.floor(myworld.characters.length / 2);
     const height = n_char * (320 + 290);
 
-    document.getElementsByClassName("chara-container").item(0).style.height = height + "px";
+    //document.getElementsByClassName("chara-container").item(0).style.height = height + "px";
 }
 
 function popupOf(who){

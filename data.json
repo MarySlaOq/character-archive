@@ -436,7 +436,7 @@ data = {
     "settings": {
         "arrow_animation": true,
         "line_weight": 8,
-        "labels": false,
+        "labels": true,
         "sort_characters_alphabetically": true,
         "mix_mutual_relationships": true
     }
