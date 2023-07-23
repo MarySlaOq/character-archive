@@ -1,0 +1,443 @@
+/* Roles are:
+    0: Main character
+    1: Support
+    2: Arc character
+    3: Background character
+*/
+
+data = {
+    "people": [
+        {
+            "id": 0,
+            "name": "MarySlaOq",
+            "socials": [
+                {
+                    "name": "Twitter",
+                    "link": "https://twitter.com/ghostyshrimp"
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "name": "Test",
+            "socials": [
+                {
+                    "name": "Twitter",
+                    "link": "https://twitter.com/home"
+                },
+                {
+                    "name": "Reddit",
+                    "link": "https://www.reddit.com/"
+                }
+            ]
+        }
+    ],
+    "dimensions":[
+        {
+            "name": "World 1",
+            "outline": "This characters live in a fantasy world ruled by a hierarchy of Gods, from minor Gods to the supreme God, they control different parts of the terrain and enforce they're own rules while always respecting their superiors. This world is divided in various continents with their own culture, natural resources, geographical characteristics, holidays, animal species and more.",
+            "characters": [
+                {
+                    "id": 0,
+                    "name": "Saloman",
+                    "biography": "Saloman is a vagrant adventurer whose arm and eye were replaced by his travelling companion Acheron. He is the sole survivor of a horrible human experiment that took place when he was younger. After escaping from his captors he meets Sasha and together they search for Mary and the jewels which will help free her from her seal.",
+                    "personality": ["Hot-headed", "Hands-on", "Blunt", "Loyal", "Caring"],
+                    "species": "Human",
+                    "age": "varies",
+                    "gender": "M",
+                    "occupation": "Adventurer",
+                    "height": 0,
+                    "weight": 0,
+                    "bloodtype": "O",
+                    "birthdate": "29/2/xxxx",
+                    "birthplace": "",
+                    "creators": [0],
+                    "image": "saloman.png",
+                    "role": 0,
+                    "relations": [
+                        {
+                            "to": 1,
+                            "details": "Childhood friends"
+                        },
+                        {
+                            "to":4,
+                            "details": "Mentor figure"
+                        }
+                    ],
+                    "likes": ["Food", "Fighting", "Acheron"],
+                    "hates": ["When people call him uncaring", "Egocentric people", "Rude people"],
+                    "notes": "",
+                    "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/saloman/",
+                    "spotify": "https://open.spotify.com/playlist/4FmIaQM0z4L5qvqd1VfOHU?si=039f9dd66510443a",
+                    "highlight": "greenyellow"
+                },
+                {
+                    "id": 1,
+                    "name": "Sasha",
+                    "biography": "Sasha was one of the first people Saloman met after escaping his captors. Sasha and Saloman form a lifelong relationship through various hardships and care for eachother very much, Sasha is a more rational and level-headed person, even thought she may be taken in the heat of the moment from time to time. Once gratuated, she turn to work as Mary's secretary alongside Ethan, but she still aids Saloman in adventures when she's freed from her waves of paperwork.",
+                    "personality": [],
+                    "species": "Human",
+                    "age": "varies",
+                    "gender": "F",
+                    "occupation": "Vice-secratary of the supreme Goddess",
+                    "height": 0,
+                    "weight": 0,
+                    "bloodtype": "",
+                    "birthdate": "",
+                    "birthplace": "",
+                    "creators": [0],
+                    "image": "sasha.png",
+                    "role": 0,
+                    "relations": [
+                        {
+                            "to": 0,
+                            "details": "Childhood friends"
+                        },
+                        {
+                            "to": 4,
+                            "details": "Mentor figure"
+                        }
+                    ],
+                    "likes": [],
+                    "hates": [],
+                    "notes": "",
+                    "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/sasha/",
+                    "spotify": "https://open.spotify.com/playlist/5cl1sNdKxVp7tyirZoF3Pj?si=7453ae1f5b474903",
+                    "highlight": "salmon"
+                },
+                {
+                    "id": 2,
+                    "name": "Sora",
+                    "biography": "The daughter of Mary, supreme Goddess of the world. She was created as a statue but given conscience through Mary's blood, thus conferring her a pale stone like appearance, but she still feels warm to touch. When she's hurt Sora can resculpt her body parts, but still feels pain, despite not having any internal organs, appart from a jewel in the heart's place.",
+                    "personality": ["Lazy"],
+                    "species": "Statue",
+                    "age": "",
+                    "gender": "F",
+                    "occupation": "Heir",
+                    "height": 0,
+                    "weight": 0,
+                    "bloodtype": "",
+                    "birthdate": "",
+                    "birthplace": "",
+                    "creators": [0, 1],
+                    "image": "sora.png",
+                    "role": 1,
+                    "relations": [
+                    ],
+                    "likes": [],
+                    "hates": [],
+                    "notes": "",
+                    "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/sora/",
+                    "spotify": "",
+                    "highlight": "cyan"
+                },
+                {
+                    "id": 3,
+                    "name": "Mary",
+                    "biography": "Mary's parents were the former rulers of this world, after she was born her body was sealed in a statue, and after being freed by Saloman, Sasha and Acheron she took over regency of this world and created Sora. Now she works alongside Ethan to mantain a just a fair world, unaware of the man's foul deeds with her parents.",
+                    "personality": ["Honest", "Just", "Earnest"],
+                    "species": "Goddess",
+                    "age": "varies",
+                    "gender": "F",
+                    "occupation": "Ruler of this world",
+                    "height": 230,
+                    "weight": 0,
+                    "bloodtype": "",
+                    "birthdate": "",
+                    "birthplace": "",
+                    "creators": [0],
+                    "image": "none.png",
+                    "role": 0,
+                    "relations": [
+                        {
+                            "to": 2,
+                            "details": "Heir/Creation"
+                        },
+                        {
+                            "to": 4,
+                            "details": "Superior"
+                        }
+                    ],
+                    "likes": [],
+                    "hates": [],
+                    "notes": "Mary was born biologically",
+                    "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/mary/",
+                    "spotify": "https://open.spotify.com/playlist/0exULt7DOEfz9Pg2L7ut1W?si=c899df592b91408d",
+                    "highlight": "gold"
+                },
+                {
+                    "id": 4,
+                    "name": "Ethan",
+                    "biography": "A multidimensional traveller who took a liking to Saloman's dimensions. Ethan was associated to Mary's parents, former rulers of this world, and led the human experiment which Saloman was subjected to. After the passing of Mary's parents he is now working as a secretary for their daughter, having a lot of influence in the world.",
+                    "personality": [],
+                    "species": "???",
+                    "age": "???",
+                    "gender": "M",
+                    "occupation": "Secretary",
+                    "height": 0,
+                    "weight": 0,
+                    "bloodtype": "",
+                    "birthdate": "",
+                    "birthplace": "",
+                    "creators": [0],
+                    "image": "none.png",
+                    "role": 1,
+                    "relations": [
+                        {
+                            "to": 3,
+                            "details": "Friend of parents"
+                        },
+                        {
+                            "to": 1,
+                            "details": "Superior"
+                        }
+                    ],
+                    "likes": [],
+                    "hates": [],
+                    "notes": "Ethan is blind",
+                    "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/ethan/",
+                    "spotify": "",
+                    "highlight": "darkslateblue"
+                },
+                {
+                    "id": 5,
+                    "name": "Felix",
+                    "biography": "",
+                    "personality": [],
+                    "species": "Human",
+                    "age": "???",
+                    "gender": "",
+                    "occupation": "Dodgy merchant",
+                    "height": 0,
+                    "weight": 0,
+                    "bloodtype": "",
+                    "birthdate": "",
+                    "birthplace": "",
+                    "creators": [0],
+                    "image": "felix.jpg",
+                    "role": 2,
+                    "relations": [
+                        {
+                            "to": 0,
+                            "details": "Friend and companion and sidekick"
+                        }
+                    ],
+                    "likes": [],
+                    "hates": [],
+                    "notes": "He is Saloman's ex-boyfriend",
+                    "pinterest": "",
+                    "spotify": "",
+                    "highlight": "black"
+                },
+                {
+                    "id": 6,
+                    "name": "Acheron",
+                    "biography": "",
+                    "personality": [],
+                    "species": "Monster, former human",
+                    "age": "???",
+                    "gender": "",
+                    "occupation": "Saloman's left hand :flushed:",
+                    "height": 0,
+                    "weight": 0,
+                    "bloodtype": "I don't think he has blood",
+                    "birthdate": "",
+                    "birthplace": "",
+                    "creators": [0],
+                    "image": "acheron.png",
+                    "role": 0,
+                    "relations": [
+                        {
+                            "to": 0,
+                            "details": "Friend and companion and sidekick"
+                        }
+                    ],
+                    "likes": [],
+                    "hates": [],
+                    "notes": "Acheron was originally human",
+                    "pinterest": "",
+                    "spotify": "",
+                    "highlight": "black"
+                }
+            ]
+        },
+        {
+            "name": "World 2",
+            "outline": "Alexia, Jonathan, Max, and Harry met at an orphanage and, after not being adopted and let go, they decided to get together and really become a family. They meet when Alexia was only 9, while Harry had 11 and Jonathan and Max were 13.",
+            "characters": [
+                {
+                    "id": 0,
+                    "name": "Alexia",
+                    "biography": "Youngest of four siblings. As a teenager, she kept bringing stray cats to their house, making Harry's allergies worse. She goes to the army to learn how to be a surgeon and, after some years, she comes back and work at a local hospital. Alexia gets married to her commander that decides to become a PE teacher after getting out of the army. After getting married, she moves to a small house with her wife, where she plants some biological fruit and legumes and adopts a stray cat.",
+                    "personality": ["Nice", "Polite", "Caring", "Sarcastic", "Loving", "Determined"],
+                    "species": "Human",
+                    "age": "varies",
+                    "gender": "F",
+                    "occupation": "Surgeon",
+                    "height": 0,
+                    "weight": 0,
+                    "bloodtype": "",
+                    "birthdate": "",
+                    "birthplace": "",
+                    "creators": [0],
+                    "image": "alexia.jpg",
+                    "role": 0,
+                    "relations": [
+                        {
+                            "to": 1,
+                            "details": "Siblings"
+                        },
+                        {
+                            "to": 2,
+                            "details": "Siblings"
+                        },
+                        {
+                            "to": 3,
+                            "details": "Siblings"
+                        }
+                    ],
+                    "likes": ["Plants and gardening",
+                    "Family and friends",
+                    "Music",
+                    "Hanging out",
+                    "Books",
+                    "Bees (although allergic to them)"],
+                    "hates": ["Loud noises",
+                    "Unfriendly people"],
+                    "notes": "",
+                    "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/alexia/",
+                    "spotify": "https://open.spotify.com/playlist/71QeeFgEcfEGkiUHUA6PzL?si=42e6b42f0d314ec0",
+                    "highlight": "pink"
+                },
+                {
+                    "id": 1,
+                    "name": "Harry",
+                    "biography": "Second youngest of four siblings. Harry met Alexia and Jonathan and Max at an orphanage and, after not being adopted and let go, they decided to get together and really become a family. Harry was 11 when he met Jonathan and Max (13) and Alexia (9). Harry, when an adult, is an unemployed artist, who occasionally does traditional commissions.",
+                    "personality": ["Sometimes cold", "Blunt", "Introverted", "Socially awkward"],
+                    "species": "Human/Vampire",
+                    "age": "varies",
+                    "gender": "M",
+                    "occupation": "Artist",
+                    "height": 0,
+                    "weight": 0,
+                    "bloodtype": "",
+                    "birthdate": "",
+                    "birthplace": "",
+                    "creators": [0],
+                    "image": "harry.jpg",
+                    "role": 0,
+                    "relations": [
+                        {
+                            "to": 0,
+                            "details": "Siblings"
+                        },
+                        {
+                            "to": 2,
+                            "details": "Siblings"
+                        },
+                        {
+                            "to": 3,
+                            "details": "Siblings"
+                        }
+                    ],
+                    "likes": ["Drawing", "Language learning", "Cherries"],
+                    "hates": ["Noise", "Touchy people"],
+                    "notes": "",
+                    "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/harry/",
+                    "spotify": "https://open.spotify.com/playlist/6OLllDa2wXVGhMlnwlklmO?si=48346335594844d6",
+                    "highlight": "black"
+                },
+                {
+                    "id": 2,
+                    "name": "Max",
+                    "biography": "Second oldest of the four siblings. As a teenager, he kept indulging himself in new hobbies, like cooking, dancing and ended up learning Korean when he had a K-Pop phase. At 18, he got a job in the morning at a coffee shop, in the afternoon had classes, and at night worked as a bartender (and sometimes stripper himself) in a strip club to gain money to open his own restaurant. After buying the restaurant, which has a small flat on the third floor, he invited his best friend that he met on said strip club to be his business partner.",
+                    "personality": ["Nice", "Funny", "Creative", "Easy-going", "Loyal", "Emotinally intelligent", "Trouble understanding social queues"],
+                    "species": "Human",
+                    "age": "varies",
+                    "gender": "M",
+                    "occupation": "Restaurant owner",
+                    "height": 0,
+                    "weight": 0,
+                    "bloodtype": "",
+                    "birthdate": "",
+                    "birthplace": "",
+                    "creators": [0],
+                    "image": "max.png",
+                    "role": 0,
+                    "relations": [
+                        {
+                            "to": 1,
+                            "details": "Siblings"
+                        },
+                        {
+                            "to": 0,
+                            "details": "Siblings"
+                        },
+                        {
+                            "to": 3,
+                            "details": "Siblings"
+                        }
+                    ],
+                    "likes": ["Running",
+                    "Dancing",
+                    "Listening to music and singing",
+                    "Cooking and baking",
+                    "Cheering other people up"],
+                    "hates": ["When people call him weird and annoying",
+                    "When people make fun of his interests and hyperfixations",
+                    "When people refuse his food",
+                    "Arguments"],
+                    "notes": "",
+                    "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/max/",
+                    "spotify": "https://open.spotify.com/playlist/0jwQ2wIylTlAo8j8UIo189?si=c36686ae22a140b7",
+                    "highlight": "red"
+                },
+                {
+                    "id": 3,
+                    "name": "Jonathan",
+                    "biography": "Oldest of four siblings. Jonathan, as an adult, becomes a professional volleyball player and engages in a polyamorous marriage",
+                    "personality": ["Angry >:(", "Short-tempered", "Loyal", "Good leader", "Polite when needed"],
+                    "species": "Human",
+                    "age": "",
+                    "gender": "",
+                    "occupation": "",
+                    "height": 0,
+                    "weight": 0,
+                    "bloodtype": "",
+                    "birthdate": "",
+                    "birthplace": "",
+                    "creators": [0],
+                    "role": 0,
+                    "image": "jonathan.jpg",
+                    "relations": [
+                        {
+                            "to": 1,
+                            "details": "Siblings"
+                        },
+                        {
+                            "to": 2,
+                            "details": "Siblings"
+                        },
+                        {
+                            "to": 0,
+                            "details": "Siblings"
+                        }
+                    ],
+                    "likes": [],
+                    "hates": [],
+                    "notes": "",
+                    "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/jonathan/",
+                    "spotify": "https://open.spotify.com/playlist/2gTlRM0uHA2gzheuAi8X1l?si=0663950f46c34e5f",
+                    "highlight": "blue"
+                }
+            ]
+        }
+    ],
+    "settings": {
+        "arrow_animation": true,
+        "line_weight": 8,
+        "labels": false,
+        "sort_characters_alphabetically": true,
+        "mix_mutual_relationships": true
+    }
+}

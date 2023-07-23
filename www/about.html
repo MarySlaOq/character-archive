@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>The world relationship building app</h1>
+    <a href="index.html">Back to world view</a>
+    <h2>How to create with the app!</h2>
+    <p>
+      Outside the "www" directory there is a file called data.json, this file
+      has all the world and character data, you can create various dimensions
+      with diferent worlds by just creating a new file with the same format and
+      inputing the file's name in the "www/index.html" file in the line shown
+      bellow, that way the displayed data will change and the other file's
+      information is still saved
+      <br />
+      <img src="../resources/src1.png" alt="" />
+
+      <br />
+    </p>
+
+    <h2>Working with json files</h2>
+    <ul>
+      <li>
+        <a href="https://www.w3schools.com/js/js_json_intro.asp"
+          >https://www.w3schools.com/js/js_json_intro.asp</a
+        >
+      </li>
+      <li>
+        <a
+          href="https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON"
+          >https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON</a
+        >
+      </li>
+      <li>
+        <a href="https://www.youtube.com/watch?v=iiADhChRriM"
+          >https://www.youtube.com/watch?v=iiADhChRriM</a
+        >
+      </li>
+    </ul>
+
+    <h2>People</h2>
+    <p>
+      When editing the "people" attribute in the json data file, you can create
+      a person by adding an object to the array and giving that object an unique
+      id, a name, and a list of social media links, a social media link is an
+      object with the name of the site and the hyperlink to the account. People
+      represent creators of characters, a character can have multiple creators.
+    </p>
+
+    <h2>Worlds</h2>
+    <p>
+      A world is a tab in the big tabbed pane on the display page, it contains a
+      name, outline and characters which live in this world.
+    </p>
+
+    <h2>Characters</h2>
+    <p>
+      Characters have a lot of attributes, this attributes can be seen when this
+      character is interacted with in the world view, a character has a lot of
+      identifying features but still needs an unique id. <br />
+      The creators of a character need to be given as an array of people ids.
+      The highlight of a character is the color of it's border, it can be given
+      as a
+      <a href="https://www.w3.org/wiki/CSS/Properties/color/keywords"
+        >css default colour keyword</a
+      >
+      or an <a href="https://htmlcolorcodes.com/">hexadecimal color</a>
+      <br />
+      Relationships can be defined by adding an object to the array "relations"
+      of a character, a relation needs 2 attributes, "to", which is the id of
+      the second character in this relationship, and "details", which let you
+      specify the relationship between the two
+    </p>
+
+    <img src="../resources/char.png" alt="" />
+
+    <h2>Settings</h2>
+    <p>
+      The app's settings can be changed in this file as well, stuff like if the
+      arrows are animated or not
+    </p>
+  </body>
+</html>

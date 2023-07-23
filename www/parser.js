@@ -1,0 +1,542 @@
+const file = document.getElementById("script").src;
+console.log(data);
+
+const color_codes = {
+    "aliceblue":"#f0f8ff", "antiquewhite":"#faebd7", "aqua":"#00ffff", "aquamarine":"#7fffd4", "azure":"#f0ffff", "beige":"#f5f5dc", "bisque":"#ffe4c4", "black":"#000000", "blanchedalmond":"#ffebcd", "blue":"#0000ff", "blueviolet":"#8a2be2", "brown":"#a52a2a", "burlywood":"#deb887", "cadetblue":"#5f9ea0", "chartreuse":"#7fff00", "chocolate":"#d2691e", "coral":"#ff7f50", "cornflowerblue":"#6495ed", "cornsilk":"#fff8dc", "crimson":"#dc143c", "cyan":"#00ffff", "darkblue":"#00008b", "darkcyan":"#008b8b", "darkgoldenrod":"#b8860b", "darkgray":"#a9a9a9", "darkgreen":"#006400", "darkkhaki":"#bdb76b", "darkmagenta":"#8b008b", "darkolivegreen":"#556b2f", "darkorange":"#ff8c00", "darkorchid":"#9932cc", "darkred":"#8b0000", "darksalmon":"#e9967a", "darkseagreen":"#8fbc8f", "darkslateblue":"#483d8b", "darkslategray":"#2f4f4f", "darkturquoise":"#00ced1", "darkviolet":"#9400d3", "deeppink":"#ff1493", "deepskyblue":"#00bfff", "dimgray":"#696969", "dodgerblue":"#1e90ff", "firebrick":"#b22222", "floralwhite":"#fffaf0", "forestgreen":"#228b22", "fuchsia":"#ff00ff", "gainsboro":"#dcdcdc", "ghostwhite":"#f8f8ff", "gold":"#ffd700", "goldenrod":"#daa520", "gray":"#808080", "green":"#008000", "greenyellow":"#adff2f",
+     "honeydew":"#f0fff0", "hotpink":"#ff69b4", "indianred ":"#cd5c5c", "indigo":"#4b0082", "ivory":"#fffff0", "khaki":"#f0e68c", "lavender":"#e6e6fa", "lavenderblush":"#fff0f5", "lawngreen":"#7cfc00", "lemonchiffon":"#fffacd", "lightblue":"#add8e6", "lightcoral":"#f08080", "lightcyan":"#e0ffff", "lightgoldenrodyellow":"#fafad2", "lightgrey":"#d3d3d3", "lightgreen":"#90ee90", "lightpink":"#ffb6c1", "lightsalmon":"#ffa07a", "lightseagreen":"#20b2aa", "lightskyblue":"#87cefa", "lightslategray":"#778899", "lightsteelblue":"#b0c4de", "lightyellow":"#ffffe0", "lime":"#00ff00", "limegreen":"#32cd32", "linen":"#faf0e6", "magenta":"#ff00ff", "maroon":"#800000", "mediumaquamarine":"#66cdaa", "mediumblue":"#0000cd", "mediumorchid":"#ba55d3", "mediumpurple":"#9370d8", "mediumseagreen":"#3cb371", "mediumslateblue":"#7b68ee",  "mediumspringgreen":"#00fa9a", "mediumturquoise":"#48d1cc", "mediumvioletred":"#c71585", "midnightblue":"#191970", "mintcream":"#f5fffa", "mistyrose":"#ffe4e1", "moccasin":"#ffe4b5", "navajowhite":"#ffdead", "navy":"#000080", "oldlace":"#fdf5e6", "olive":"#808000", "olivedrab":"#6b8e23", "orange":"#ffa500", "orangered":"#ff4500", "orchid":"#da70d6", "palegoldenrod":"#eee8aa",
+     "palegreen":"#98fb98", "paleturquoise":"#afeeee", "palevioletred":"#d87093", "papayawhip":"#ffefd5", "peachpuff":"#ffdab9", "peru":"#cd853f", "pink":"#ffc0cb", "plum":"#dda0dd", "powderblue":"#b0e0e6", "purple":"#800080", "rebeccapurple":"#663399", "red":"#ff0000", "rosybrown":"#bc8f8f", "royalblue":"#4169e1", "saddlebrown":"#8b4513", "salmon":"#fa8072", "sandybrown":"#f4a460", "seagreen":"#2e8b57", "seashell":"#fff5ee", "sienna":"#a0522d", "silver":"#c0c0c0", "skyblue":"#87ceeb", "slateblue":"#6a5acd", "slategray":"#708090", "snow":"#fffafa", "springgreen":"#00ff7f", "steelblue":"#4682b4", "tan":"#d2b48c", "teal":"#008080", "thistle":"#d8bfd8", "tomato":"#ff6347", "turquoise":"#40e0d0", "violet":"#ee82ee", "wheat":"#f5deb3", "white":"#ffffff", "whitesmoke":"#f5f5f5", "yellow":"#ffff00", "yellowgreen":"#9acd32"
+}
+
+// Prevent right click
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+var block_popup = false;
+
+const popup = document.getElementById("popup");
+
+function getCreator(id){
+
+    return data.people.find(p => p.id == id);
+}
+
+const roles = ["Main character", "Supporting character", "Arc character", "Background character"];
+class World {
+
+    name = "";
+    outline = "";
+    characters = [];
+
+    output = "";
+    divisions = [];
+
+    lines = [];
+
+    height = -1;
+
+    constructor(name){
+
+        if(name=="") return;
+
+        let dim = data.dimensions.find(w => w.name == name);
+
+        this.name = dim.name;
+        this.outline = dim.outline;
+        this.characters = dim.characters;
+
+        this.divisions = this.setupCharacters();
+    }
+
+    sortCharactersByAttribute = (attr) => {
+        
+        let sorted = false;
+        while (!sorted){
+
+            sorted = true;
+            for (let index = 0; index < this.characters.length - 1; index++) {
+                const current_role = this.characters[index][attr];
+                const next_role = this.characters[index + 1][attr];
+
+                if(current_role > next_role){
+
+                    let save = this.characters[index];
+                    this.characters[index] = this.characters[index + 1];
+                    this.characters[index + 1] = save;
+
+                    sorted = false;
+                }
+            }
+        }
+    }
+
+    sortCharactersByName = () => {
+
+        let subarrays = [];
+
+        for (let index = 0; index < roles.length; index++) {
+            
+            let startIndex = 0;
+            // Remove already checked characters
+            let sliced_chara = this.characters.slice(
+                subarrays.map(a => a.length).reduce((pre, cur) => pre + cur, 0), 
+                this.characters.length
+            );
+
+            let endIndex = sliced_chara.indexOf(sliced_chara.find(c => c.role != index));
+            if(endIndex == -1) endIndex = sliced_chara.length;
+
+            subarrays.push(sliced_chara.slice(startIndex, endIndex));
+        }
+
+        // Sort each section alphabetically
+        for (let index = 0; index < subarrays.length; index++) {
+            
+            var role_list = subarrays[index];
+            //Sort this
+            role_list.sort(function(a, b) {
+                return a.name == b.name ? 0 : a.name < b.name ? -1 : 1;
+            });
+        }
+
+        //Unite array
+        this.characters = subarrays.flat(1);
+    }
+
+    setupCharacters(){
+
+        if(this.characters.length == 0){
+            this.output = "<p>No characters to be displayed</p>";
+            return [];
+        }
+
+        //Order characters by role relevance and alphabetically
+        this.sortCharactersByAttribute("role");
+        if(data.settings.sort_characters_alphabetically) this.sortCharactersByName();
+
+        this.output = `<p>Showing ${this.characters.length} characters</p>`;
+        let chars = [];
+
+        for (let index = 0; index < this.characters.length; index++) {
+            const chara = this.characters[index];
+            
+            let container = document.createElement("div");
+            container.className = "chara DraggableItem";
+            container.draggable = true;
+            container.id = this.name+ "c"+chara.id;
+            
+            let chara_image = document.createElement("img");
+            chara_image.src = "../resources/" + chara.image;
+            chara_image.className = "chara-image";
+            chara_image.style.borderColor = chara.highlight;
+
+            
+            let chara_name = document.createElement("p");
+            chara_name.innerText = chara.name;
+            chara_name.classList = "chara-name tooltip"
+            
+            chara_name.innerHTML += "<span class=\"tooltiptext\">" + roles[chara.role] + "</span>";
+
+            let my_relations = document.createElement("button");
+            my_relations.innerHTML = "<i class=\"fas fa-arrow-up\"></i>";
+            my_relations.className = "button-4"
+            my_relations.onclick = () => {
+
+                block_popup = true;
+                clearLines(chara.highlight);
+            }
+            
+            container.appendChild(chara_image);
+            //chara_name.appendChild(my_relations);
+            container.appendChild(chara_name);
+
+            container.addEventListener("click", () => {this.openPopUp(chara)})
+
+            chars.push(container);
+        }
+
+        return chars;
+    }
+
+    establishRelations(){
+
+        document.querySelectorAll(".controller").forEach(e => e.innerText = "Hide all relationships");
+        
+        this.characters.forEach(chara => {
+            chara.relations.forEach(relation => {
+
+                const start = document.getElementById(this.name + 'c' + chara.id);
+                const end = document.getElementById(this.name + 'c' + relation.to);
+                
+                const settings = {
+                    color: chara.highlight,
+                    size: data.settings.line_weight,
+                    path: "sway",
+                    startPlug: 'square',
+                    dash: {animation: data.settings.arrow_animation}
+                };
+
+                //Check if is mutual relation
+                if(data.settings.mix_mutual_relationships){
+
+                    const mutual = this.getChara(relation.to).relations.find(r => r.to == chara.id);
+                    if(mutual != undefined){
+                        
+                        // Double arrow
+                        settings.startPlug = "arrow1";
+                        // Inbetween color
+                        const color1 = this.hexToRgb(color_codes[chara.highlight]);
+                        const color2 = this.hexToRgb(color_codes[this.getChara(relation.to).highlight]);
+    
+                        const new_color = [
+                            (color1[0] + color2[0]) / 2,
+                            (color1[1] + color2[1]) / 2,
+                            (color1[2] + color2[2]) / 2,
+                        ];
+    
+                        settings.color = `rgb(${new_color.join(",")})`;
+    
+                        let index = this.getChara(relation.to).relations.indexOf(mutual);
+                        if(relation.drawn == undefined) this.getChara(relation.to).relations[index].drawn = true;
+                    }
+                }
+
+                if(data.settings.labels) settings["middleLabel"] = relation.details;
+                
+                //Draw relation lines
+                if(relation.drawn == undefined) {
+
+                    new LeaderLine(
+                        start,
+                        end,
+                        settings
+                        );
+                }
+            });
+        });
+    }
+
+    hexToRgb(hex, result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)) {
+        return result ? result.map(i => parseInt(i, 16)).slice(1) : null
+        //returns [r, g, b]
+    }
+
+    openPopUp(chara){
+
+        if(block_popup){
+
+            block_popup = false;
+            return;
+        }
+
+        popup.style.zIndex = 1000;
+        popup.style.opacity = 1;
+
+        document.getElementById("image").src = "../resources/" + chara.image;
+
+        document.getElementById("name").innerText = chara.name;
+        document.getElementById("outline").innerText = chara.biography;
+        document.getElementById("personality").innerText = chara.personality.join(", ")
+
+        document.getElementById("species").innerText = chara.species;
+        document.getElementById("age").innerText = chara.age;
+        document.getElementById("gender").innerText = chara.gender;
+        document.getElementById("occupation").innerText = chara.occupation;
+        document.getElementById("height").innerText = chara.height + " cm";
+        document.getElementById("weight").innerText = chara.weight + " kg";
+        document.getElementById("bloodtype").innerText = chara.bloodtype;
+        document.getElementById("birthdate").innerText = chara.birthdate;
+        document.getElementById("birthplace").innerText = chara.birthplace;
+
+        const notes = document.getElementById("notes");
+        if(chara.notes == ""){
+
+            notes.parentNode.style.display = "none";
+        }else{
+
+            notes.parentNode.style.display = "block";
+            notes.innerText = chara.notes;
+        }
+
+        document.getElementById("pinterest").onclick = () => {
+
+            if(chara.pinterest == "") alert("No folder specified");
+            else window.open(chara.pinterest, "_blank");
+        };
+
+        document.getElementById("spotify").onclick = () => {
+            
+            if(chara.spotify == "") alert("No playlist specified");
+            else window.open(chara.spotify, "_blank");
+        };
+
+        document.getElementById("likes").innerHTML = "<li>" + chara.likes.join("</li><li>") + "</li>";
+        document.getElementById("hates").innerHTML = "<li>" + chara.hates.join("</li><li>") + "</li>";
+
+        const rel = document.getElementById("relations");
+        rel.innerHTML = chara.relations.map(rel => `<p class="relation">Related to <a onclick="popupOf(${rel.to})" href="#">${this.idToName(rel.to)}</a>: ${rel.details}</p>`).join("");
+
+        if (chara.relations.length == 0) rel.innerHTML = "No relationships established"
+
+        const creator = document.getElementById("creators");
+        creator.innerHTML = chara.creators.map(c => `<p><b>${getCreator(c).name}</b>${
+            getCreator(c).socials.map(s => ` <a href="${s.link}">${s.name}</a>`).join(", ")
+        }</p>`).join("");
+    }
+
+    idToName(id){
+
+        return this.characters.find(c => c.id == id).name || "Not found";
+    }
+
+    getChara(id){
+
+        return this.characters.find(c => c.id == id) || null;
+    }
+
+    nameToId(name){
+
+        return this.characters.find(c => c.name == name).id || null;
+    }
+}
+
+let myworld = new World("");
+
+// Set up page
+document.getElementById("title").innerText = file;
+const tagHolder = document.getElementById("tags");
+const worldHolder = document.getElementById("worlds");
+
+data.dimensions.forEach(element => {
+
+    let world = new World(element.name);
+    myworld = world;
+    
+    let tab = document.createElement("button")
+    tab.className = "tooltip";
+    tab.onclick = () => {openWorld(event, element.name)}
+    tab.innerText = element.name;
+    
+    tagHolder.appendChild(tab);
+    
+    let content = document.createElement("div");
+    content.id = element.name;
+    content.className = "tabcontent";
+
+    content.innerHTML = "<h2 class='tooltip world_name'>"+element.name+"</h2>";
+
+    const outline = document.createElement("p");
+    outline.className = "world-outline";
+    outline.innerText = element.outline;
+    
+    content.appendChild(outline);
+    content.innerHTML += "<h3>World contributtors</h3>";
+
+    let creators = [];
+    for(let i = 0; i < myworld.characters.length; i++)    
+        for(let j = 0; j < myworld.characters[i].creators.length; j++){
+
+            const creator = myworld.characters[i].creators[j];
+            if(!creators.includes(creator)) creators.push(creator);
+        }
+
+    creators = creators.map(c => getCreator(c).name).join(", ");
+
+    const creatornames = document.createElement("p");
+    creatornames.innerText = creators;
+
+    content.appendChild(creatornames);
+    content.appendChild(document.createElement("hr"));
+
+    const controller = "<button class='button-30 controller' onclick='relationship_control()'>Hide all relationships</button><button onclick='reset_positions()' class='button-30'>Reset character positions</button><br><br><br>";
+    content.innerHTML += controller;
+
+    worldHolder.appendChild(content);
+
+    let dom = document.createElement("div");
+    dom.className = "chara-container";
+    
+    for (let index = 0; index < world.divisions.length; index++) dom.append(world.divisions[index]);
+
+    content.appendChild(dom);
+});
+
+function clearLines(color=null){
+
+    document.querySelectorAll(".controller").forEach(e => e.innerText = "Show all relationships");
+
+    lines = Array.from(document.getElementsByTagName('svg'));
+    for (var l of lines) {
+
+        flag = true;
+        if(color != null){
+
+            const list = l.querySelectorAll("svg>g>use");
+            for (let index = 0; index < list.length; index++) {
+                const g = list.item(index);                
+
+                const stroke_color = g.style.stroke;
+                console.log(stroke_color + " " + color);
+                if(stroke_color == color) {
+                    flag = false;
+                    break;
+                }
+            }
+            
+        }
+
+        if(flag) l.remove();
+    }
+}
+
+function openWorld(event, world){
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    clearLines();
+
+    let w = new World(world);
+    myworld = w;
+
+    document.getElementById(world).style.display = "block";
+
+    //After creation
+    w.establishRelations();
+    defineGrabbable();
+
+    //Lock page height
+    const n_char = Math.floor(myworld.characters.length / 2);
+    const height = n_char * (320 + 290);
+
+    document.getElementsByClassName("chara-container").item(0).style.height = height + "px";
+}
+
+function popupOf(who){
+
+    let chara = myworld.getChara(who);
+    myworld.openPopUp(chara);
+}
+
+function next_popup(){
+
+    const mychar = document.getElementById("name").innerText;
+    let id = myworld.nameToId(mychar) + 1;
+
+    if(id >= myworld.characters.length) id = 0;
+    popupOf(id);
+}
+
+function previous_popup(){
+
+    const mychar = document.getElementById("name").innerText;
+    let id = myworld.nameToId(mychar) - 1;
+
+    if(id < 0) id = myworld.characters.length-1;
+    popupOf(id);
+}
+
+function relationship_control(){
+
+    const text = document.getElementsByClassName("controller").item(0).innerText;
+    const state = text == "Hide all relationships";
+    document.getElementsByClassName("controller").item(0).innerText = state ? "Show all relationships" : "Hide all relationships";
+
+    if(state) clearLines();
+    else myworld.establishRelations();
+}
+
+function reset_positions() {
+
+    document.querySelectorAll(".chara").forEach(character => {
+
+        // Dont change if in different world
+        if(character.offsetParent == null) return;
+
+        character.style.left = 0;
+        character.style.top = 0;
+
+        clearLines();
+        myworld.establishRelations();
+    })
+}
+
+// Dragging and dropping elements
+function defineGrabbable(restore = false){
+
+    var draggableItems = Array.from(
+        document.querySelectorAll(".DraggableItem")
+      );
+    console.log(`There are ${draggableItems.length} draggable items.`);
+
+    //Loop over each draggable item and add the listeners
+    for (var i = 0; i < draggableItems.length; i++) {
+        var element = draggableItems[i];
+
+        //console.log(element.getBoundingClientRect());
+
+        if(element.offsetParent == null) continue;
+
+        if (!element.hasAttribute("rel-x")) element.setAttribute("rel-x", element.getBoundingClientRect().left);
+        if (!element.hasAttribute("rel-y")) element.setAttribute("rel-y", element.getBoundingClientRect().top + window.scrollY);
+
+        dragElement(element);
+    }
+
+    function dragElement(ele) {
+        //Listen for whenever the element is clicked
+        ele.addEventListener("mousedown", dragMouseDown);
+
+        //vars to hold the listeners after the mouse
+        var mouseMoveListener;
+        var mouseUpListener;
+
+        //Save the mouse offset on the element, so it will not snap to top left corner when starting to drag
+        var offsetX = 0,
+            offsetY = 0;
+
+        function dragMouseDown(e) {
+
+            var e = window.event;
+            if(e.which != 3) return;
+            
+            //Set the offsets
+            offsetX = e.offsetX;
+            offsetY = e.offsetY;
+            //Add the listeners
+            mouseMoveListener = window.addEventListener("mousemove", elementDrag);
+            mouseUpListener = window.addEventListener("mouseup", dragMouseUp);
+        }
+        function dragMouseUp(e) {
+
+            //Check placing validity
+            var e = window.event;
+            if(e.which != 3) return;
+
+            //remove the listeners, which stops teh element from following the mouse
+            mouseMoveListener = window.removeEventListener(
+                "mousemove",
+                elementDrag
+            );
+            mouseUpListener = window.removeEventListener("mouseup", dragMouseUp);
+
+            clearLines();
+            myworld.establishRelations();
+        }
+        function elementDrag(e) {
+
+            //move the element
+            ele.style.position = "relative";
+            ele.style.left = e.clientX - offsetX - ele.getAttribute("rel-x") + "px";
+            ele.style.top = e.clientY - offsetY - ele.getAttribute("rel-y") + window.scrollY + "px";
+        }
+    }
+}
+
+openWorld(event, data.dimensions[0].name);

@@ -1,0 +1,435 @@
+html, body {
+    margin: 0;
+    padding: 10px;
+}
+
+#title {
+    position: absolute;
+    left: 0%;
+    top: 0%;
+
+    width: 100%;
+
+    margin: 0;
+    padding: 5px 0;
+
+    background-color: rgb(211, 211, 211);
+    font-size: small;
+
+    font-family: Arial;
+    text-align: center;
+}
+
+body {font-family: Arial;width: 800px;margin: auto;}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+.tooltip {
+    position: relative;
+    
+  }
+  
+  /* Tooltip text */
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+  
+    /* Position the tooltip text */
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+  
+    /* Fade in tooltip */
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  /* Tooltip arrow */
+  .tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }
+
+
+  .world_name {
+    
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+  }
+
+  .container2{
+
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .chara-image {
+
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+	  object-position: center;
+    
+    border-radius: 50%;
+
+    border: 5px black solid;
+    padding:4px;
+    display:inline-block;  
+  }
+
+  .chara-name button {
+
+    margin-left: 10px;
+    font-size: large;
+  }
+
+  .chara-name{
+
+    text-align: center;
+    font-size: larger;
+    font-family: 'Segoe UI';
+  }
+
+  .chara {
+    width: fit-content;
+    animation: float 3s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
+    padding: 10px;
+    margin: 0px;
+    justify-content: center;
+
+    z-index: 20;
+    position:relative;
+  }
+
+  .chara:hover {
+
+    animation: none;
+    transform: scale(1.1, 1.1);
+  }
+
+  .chara-container {
+
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 150px 290px;
+  }
+
+  @keyframes float{
+
+    0% {
+      transform: translatey(0px);
+    }
+    50% {
+      transform: translatey(-10px);
+    }
+    100% {
+      transform: translatey(0px);
+    }
+  }
+
+  .container {
+
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .container > div {
+    flex: 1;
+  }
+
+  .container img {
+    
+    object-fit: cover;
+    width: 100%;
+    margin: 10px;
+  }
+
+  .container > p {
+    flex: 1;
+    text-align: justify;
+    padding: 20px;
+  }
+
+  .popup {
+
+    background-color: whitesmoke;
+    width: 80%;
+    height: 80%;
+
+    position: fixed;
+    top: 50%;  
+    left: 50%; 
+    transform: translate(-50%, -50%);
+
+    padding: 20px;
+
+    border-top-left-radius: 37px 140px;
+    border-top-right-radius: 23px 130px;
+    border-bottom-left-radius: 110px 19px;
+    border-bottom-right-radius: 120px 24px;
+
+    border: solid 3px #6e7491;
+    line-height: 28px;
+    box-shadow: 3px 15px 8px -10px rgba(0, 0, 0, 0.3);
+
+    overflow-y: scroll;
+
+    opacity: 0;
+    transition: opacity ease-in 0.3s;
+    z-index: -100;
+  }
+
+  #traits {
+    column-count: 3;
+  }
+
+  #relations {
+
+    display: flex;
+    justify-content: space-around;
+
+    flex-wrap: wrap;
+  }
+
+  .relation {
+    
+    padding: 10px;
+    background-color: #e4e4e4;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+    border-radius: 20px;
+  }
+
+  #name {
+
+    font-size: xxx-large;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+  }
+
+/* CSS */
+.close {
+  background: #FF4742;
+  border: 1px solid #FF4742;
+  border-radius: 6px;
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-family: nunito,roboto,proxima-nova,"proxima nova",sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 16px;
+  outline: 0;
+  padding: 12px 14px;
+  text-align: center;
+  text-rendering: geometricprecision;
+  text-transform: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+
+  height: 50px !important;
+}
+
+.close:hover,
+.close:active {
+  background-color: initial;
+  background-position: 0 0;
+  color: #FF4742;
+}
+
+.close:active {
+  opacity: .5;
+}
+
+.world-outline {
+
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+  white-space: normal;
+
+  line-height: 20px;
+}
+
+.button-30 {
+
+  align-items: center;
+  appearance: none;
+  background-color: #FCFCFD;
+  border-radius: 4px;
+  border-width: 0;
+  box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,rgba(45, 35, 66, 0.3) 0 7px 13px -3px,#D6D6E7 0 -3px 0 inset;
+  box-sizing: border-box;
+  color: #36395A;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: "JetBrains Mono",monospace;
+  height: 48px;
+  justify-content: center;
+  line-height: 1;
+  list-style: none;
+  overflow: hidden;
+  padding-left: 16px;
+  padding-right: 16px;
+  position: relative;
+  text-align: left;
+  text-decoration: none;
+  transition: box-shadow .15s,transform .15s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  will-change: box-shadow,transform;
+  font-size: 18px;
+
+  margin-right: 30px;
+}
+
+.button-30:focus {
+  box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+}
+
+.button-30:hover {
+  box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+  transform: translateY(-2px);
+}
+
+.button-30:active {
+  box-shadow: #D6D6E7 0 3px 7px inset;
+  transform: translateY(2px);
+}
+
+.button-4 {
+  appearance: none;
+  background-color: #FAFBFC;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+  box-sizing: border-box;
+  color: #24292E;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  list-style: none;
+  padding: 6px 16px;
+  position: relative;
+  transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+  word-wrap: break-word;
+}
+
+.button-4:hover {
+  background-color: #F3F4F6;
+  text-decoration: none;
+  transition-duration: 0.1s;
+}
+
+.button-4:disabled {
+  background-color: #FAFBFC;
+  border-color: rgba(27, 31, 35, 0.15);
+  color: #959DA5;
+  cursor: default;
+}
+
+.button-4:active {
+  background-color: #EDEFF2;
+  box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
+  transition: none 0s;
+}
+
+.button-4:focus {
+  outline: 1px transparent;
+}
+
+.button-4:before {
+  display: none;
+}
+
+.button-4:-webkit-details-marker {
+  display: none;
+}
+
+.icon {
+
+  width: 50px !important;
+  height: 50px !important;
+
+  margin: auto;
+  margin-left: 30px;
+
+  margin-top: 30px;
+
+  transition-duration: 500ms;
+  transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.icon:hover {
+
+  transform: translate(0, 10px) rotate(1deg);
+}

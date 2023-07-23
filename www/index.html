@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Relationship builder</title>
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="style.css" />
+    <script id="script" src="../data.json"></script>
+    <script src="lines/leader-line.min.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <script>
+      function close_popup() {
+        document.getElementById("popup").style.opacity = 0;
+        document.getElementById("popup").style.zIndex = -100;
+      }
+    </script>
+  </head>
+  <body>
+    <h1 id="title"></h1>
+    <br />
+    <a href="about.html">About the application</a>
+    <p>Click on the tabs to change dimension</p>
+    <p>Drag characters with right click to move them around</p>
+
+    <div id="tags" class="tab"></div>
+
+    <div id="worlds"></div>
+
+    <!-- POP UP -->
+
+    <div class="popup" id="popup">
+      <div class="container2">
+        <div class="container2">
+          <h1 id="name">Testing name</h1>
+          <img
+            class="icon"
+            src="https://upload.wikimedia.org/wikipedia/commons/0/08/Pinterest-logo.png"
+            id="pinterest"
+          />
+          <img
+            class="icon"
+            src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
+            id="spotify"
+          />
+        </div>
+        <div>
+          <button onclick="previous_popup()" class="close"><</button>
+          <button onclick="next_popup()" class="close">></button>
+          <button onclick="close_popup()" class="close">X</button>
+        </div>
+      </div>
+      <div class="container">
+        <div>
+          <h2>Background</h2>
+          <p id="outline">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor
+            assumenda aliquam ea perspiciatis amet perferendis, sapiente
+            consequuntur adipisci vitae eum accusamus eius distinctio, commodi
+            ducimus. Quae error ipsam quibusdam labore eveniet numquam fuga
+            deserunt facere temporibus harum magni voluptate voluptas alias, vel
+            id dolore officiis, dolorem iure doloribus debitis aliquid
+            exercitationem quis. Illo debitis nobis rem autem eius asperiores
+            quidem eligendi. Voluptatem consequatur, ex eveniet ipsa quos, nihil
+            ad voluptatibus tempore praesentium voluptates commodi enim magnam
+            dignissimos quia, perspiciatis nam. Consequatur facilis suscipit
+            tenetur dicta soluta ratione perferendis eum repudiandae vitae
+            nostrum modi asperiores aliquam maiores itaque voluptatem magnam
+            dolores rerum voluptatum veniam voluptate id, maxime ut explicabo?
+            Praesentium consectetur aliquam sed dicta quae, enim ipsam illo
+            totam. Vitae doloribus ducimus aliquam fuga, voluptatum alias
+            veritatis, quaerat fugiat laudantium vel sunt fugit accusamus
+            tempora quidem corporis voluptate delectus, quam eveniet sed eius?
+            Quaerat saepe atque totam, iure culpa ipsum deleniti eveniet maxime?
+          </p>
+          <h2>Personality</h2>
+          <p id="personality">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa natus
+            possimus minima repudiandae assumenda voluptas dicta facere
+          </p>
+
+          <h2>Traits</h2>
+          <div id="traits">
+            <p><b>Species</b>: <span id="species">test</span></p>
+            <p><b>Age</b>: <span id="age">test</span></p>
+            <p><b>Gender</b>: <span id="gender">test</span></p>
+            <p><b>Occupation</b>: <span id="occupation">test</span></p>
+            <p><b>Height</b>: <span id="height">test</span></p>
+            <p><b>Weight</b>: <span id="weight">test</span></p>
+            <p><b>Blood type</b>: <span id="bloodtype">test</span></p>
+            <p><b>Birth date</b>: <span id="birthdate">test</span></p>
+            <p><b>Birth place</b>: <span id="birthplace">test</span></p>
+          </div>
+
+          <h2>Preferences</h2>
+          <div>
+            <h4>Likes</h4>
+            <ul id="likes">
+              <li>One</li>
+              <li>Two</li>
+              <li>Three</li>
+            </ul>
+            <h4>Hates</h4>
+            <ul id="hates">
+              <li>One</li>
+              <li>Two</li>
+              <li>Three</li>
+            </ul>
+          </div>
+
+          <h2>Relations</h2>
+          <div id="relations">
+            <p class="relation">Related to Character: Friends</p>
+            <p class="relation">Related to Other Character: Siblings</p>
+            <p class="relation">Related to Yet Another Character: Child</p>
+          </div>
+
+          <h2>Creators</h2>
+          <div id="creators">
+            <p><b>MarySlaOq</b> <a href="www.twitter.com">Twitter</a></p>
+          </div>
+        </div>
+        <div>
+          <img id="image" src="../resources/saloman.png" alt="" srcset="" />
+
+          <div>
+            <h2>Notes</h2>
+            <p id="notes"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script src="parser.js"></script>
+</html>
