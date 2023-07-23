@@ -124,7 +124,7 @@ class World {
             container.id = this.name+ "c"+chara.id;
             
             let chara_image = document.createElement("img");
-            chara_image.src = "resources/" + chara.image;
+            chara_image.src = "/resources/" + chara.image;
             chara_image.className = "chara-image";
             chara_image.style.borderColor = chara.highlight;
 
@@ -230,7 +230,7 @@ class World {
         popup.style.zIndex = 1000;
         popup.style.opacity = 1;
 
-        document.getElementById("image").src = "resources/" + chara.image;
+        document.getElementById("image").src = "/resources/" + chara.image;
 
         document.getElementById("name").innerText = chara.name;
         document.getElementById("outline").innerText = chara.biography;
