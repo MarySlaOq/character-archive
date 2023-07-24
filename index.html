@@ -23,6 +23,9 @@
 
     <script>
       function close_popup() {
+        document.getElementById("blinds").style.opacity = 0;
+        document.getElementById("blinds").style.zIndex = -200;
+
         document.getElementById("popup").style.opacity = 0;
         document.getElementById("popup").style.zIndex = -100;
       }
@@ -41,6 +44,7 @@
 
     <!-- POP UP -->
 
+    <div id="blinds"></div>
     <div class="popup" id="popup">
       <div class="container2">
         <div class="container2">

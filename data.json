@@ -431,6 +431,11 @@ data = {
                     "highlight": "blue"
                 }
             ]
+        },
+        {
+            "name": "World 3",
+            "outline": "Alexia, Jonathan, Max, and Harry met at an orphanage and, after not being adopted and let go, they decided to get together and really become a family. They meet when Alexia was only 9, while Harry had 11 and Jonathan and Max were 13.",
+            "characters": []
         }
     ],
     "settings": {

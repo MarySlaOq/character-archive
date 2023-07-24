@@ -10,6 +10,15 @@ const color_codes = {
 // Prevent right click
 document.addEventListener('contextmenu', event => event.preventDefault());
 
+// Create window resize dragging safety
+window.addEventListener("resize", (event) => {
+
+    defineGrabbable(true, 
+        0, 
+        0
+    );
+})
+
 var block_popup = false;
 
 const popup = document.getElementById("popup");
@@ -104,8 +113,7 @@ class World {
     setupCharacters(){
 
         if(this.characters.length == 0){
-            this.output = "<p>No characters to be displayed</p>";
-            return [];
+            return ["No characters to be displayed"];
         }
 
         //Order characters by role relevance and alphabetically
@@ -230,6 +238,9 @@ class World {
         popup.style.zIndex = 1000;
         popup.style.opacity = 1;
 
+        document.getElementById("blinds").style.opacity = 1;
+        document.getElementById("blinds").style.zIndex = 200;
+
         document.getElementById("image").src = "resources/" + chara.image;
 
         document.getElementById("name").innerText = chara.name;
@@ -298,6 +309,43 @@ class World {
     }
 }
 
+function switchView(view){
+
+    const panel = [
+        document.getElementById(`${myworld.name}-cv`),
+        document.getElementById(`${myworld.name}-wo`),
+        document.getElementById(`${myworld.name}-et`)
+    ];
+
+    for (let i = 0; i < panel.length; i++) panel[i].className = "button-6";
+    panel[view].className += " active";
+
+    // Fetch views
+    const character_view = document.getElementById(`${myworld.name}-chara-container`);
+
+    switch (view) {
+        // Character display
+        case 0:
+            character_view.style.display = "block";
+            myworld.establishRelations();
+            
+            break;
+        // World overview
+        case 1:
+            character_view.style.display = "none";
+            clearLines();
+
+            break;
+        // Event timeline
+        case 2:
+            character_view.style.display = "none";
+            clearLines();
+
+            break;
+    }
+}
+
+// Start template world
 let myworld = new World("");
 
 // Set up page
@@ -344,19 +392,37 @@ data.dimensions.forEach(element => {
     creatornames.innerText = creators;
 
     content.appendChild(creatornames);
+
+    // Add view switch panels
+    const view_panel = `
+        <button onclick='switchView(0)' id="${myworld.name}-cv" class='button-6'>Character view</button>
+        <button onclick='switchView(1)' id="${myworld.name}-wo" class='button-6'>World overview</button>
+        <button onclick='switchView(2)' id="${myworld.name}-et" class='button-6'>Event timeline</button>
+    `;
+
+    content.innerHTML += view_panel;
     content.appendChild(document.createElement("hr"));
 
-    const controller = "<button class='button-30 controller' onclick='relationship_control()'>Hide all relationships</button><button onclick='reset_positions()' class='button-30'>Reset character positions</button><br><br><br>";
-    content.innerHTML += controller;
+    const cView = document.createElement("div");
+    const controller = `
+        <div>
+            <button class='button-6 controller' onclick='relationship_control()'>Hide all relationships</button>
+            <button onclick='reset_positions()' class='button-6'>Reset character positions</button>
 
+            <br><br><br>
+        </div>`;
+    cView.innerHTML += controller;
+    
     worldHolder.appendChild(content);
-
+    
     let dom = document.createElement("div");
     dom.className = "chara-container";
     
     for (let index = 0; index < world.divisions.length; index++) dom.append(world.divisions[index]);
-
-    content.appendChild(dom);
+    
+    cView.id = myworld.name + "-" + dom.className;
+    cView.append(dom);
+    content.appendChild(cView);
 });
 
 function clearLines(color=null){
@@ -387,6 +453,7 @@ function clearLines(color=null){
     }
 }
 
+// Open new world
 function openWorld(event, world){
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
@@ -416,6 +483,8 @@ function openWorld(event, world){
     const height = n_char * (320 + 290);
 
     //document.getElementsByClassName("chara-container").item(0).style.height = height + "px";
+
+    switchView(0);
 }
 
 function popupOf(who){
@@ -468,7 +537,7 @@ function reset_positions() {
 }
 
 // Dragging and dropping elements
-function defineGrabbable(restore = false){
+function defineGrabbable(restore = false, xx=0, yy=0){
 
     var draggableItems = Array.from(
         document.querySelectorAll(".DraggableItem")
@@ -483,8 +552,8 @@ function defineGrabbable(restore = false){
 
         if(element.offsetParent == null) continue;
 
-        if (!element.hasAttribute("rel-x")) element.setAttribute("rel-x", element.getBoundingClientRect().left);
-        if (!element.hasAttribute("rel-y")) element.setAttribute("rel-y", element.getBoundingClientRect().top + window.scrollY);
+        if (!element.hasAttribute("rel-x") || restore) element.setAttribute("rel-x", element.getBoundingClientRect().left);
+        if (!element.hasAttribute("rel-y") || restore) element.setAttribute("rel-y", element.getBoundingClientRect().top + window.scrollY);
 
         dragElement(element);
     }
