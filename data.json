@@ -57,11 +57,11 @@ data = {
                     "relations": [
                         {
                             "to": 1,
-                            "details": "Childhood friends"
+                            "details": "3"
                         },
                         {
                             "to":4,
-                            "details": "Mentor figure"
+                            "details": "4"
                         }
                     ],
                     "likes": ["Food", "Fighting", "Acheron"],
@@ -91,11 +91,11 @@ data = {
                     "relations": [
                         {
                             "to": 0,
-                            "details": "Childhood friends"
+                            "details": "3"
                         },
                         {
                             "to": 4,
-                            "details": "Mentor figure"
+                            "details": "4"
                         }
                     ],
                     "likes": [],
@@ -151,11 +151,11 @@ data = {
                     "relations": [
                         {
                             "to": 2,
-                            "details": "Heir/Creation"
+                            "details": "2"
                         },
                         {
                             "to": 4,
-                            "details": "Superior"
+                            "details": "1"
                         }
                     ],
                     "likes": [],
@@ -185,11 +185,11 @@ data = {
                     "relations": [
                         {
                             "to": 3,
-                            "details": "Friend of parents"
+                            "details": "5"
                         },
                         {
                             "to": 1,
-                            "details": "Superior"
+                            "details": "1"
                         }
                     ],
                     "likes": [],
@@ -219,7 +219,7 @@ data = {
                     "relations": [
                         {
                             "to": 0,
-                            "details": "Ex-lovers"
+                            "details": "6"
                         }
                     ],
                     "likes": [],
@@ -249,7 +249,7 @@ data = {
                     "relations": [
                         {
                             "to": 0,
-                            "details": "Friend and companion and sidekick"
+                            "details": "0"
                         }
                     ],
                     "likes": [],
@@ -287,15 +287,15 @@ data = {
                     "relations": [
                         {
                             "to": 1,
-                            "details": "Siblings"
+                            "details": "7"
                         },
                         {
                             "to": 2,
-                            "details": "Siblings"
+                            "details": "7"
                         },
                         {
                             "to": 3,
-                            "details": "Siblings"
+                            "details": "7"
                         }
                     ],
                     "likes": ["Plants and gardening",
@@ -331,15 +331,15 @@ data = {
                     "relations": [
                         {
                             "to": 0,
-                            "details": "Siblings"
+                            "details": "7"
                         },
                         {
                             "to": 2,
-                            "details": "Siblings"
+                            "details": "7"
                         },
                         {
                             "to": 3,
-                            "details": "Siblings"
+                            "details": "7"
                         }
                     ],
                     "likes": ["Drawing", "Language learning", "Cherries"],
@@ -369,15 +369,15 @@ data = {
                     "relations": [
                         {
                             "to": 1,
-                            "details": "Siblings"
+                            "details": "7"
                         },
                         {
                             "to": 0,
-                            "details": "Siblings"
+                            "details": "7"
                         },
                         {
                             "to": 3,
-                            "details": "Siblings"
+                            "details": "7"
                         }
                     ],
                     "likes": ["Running",
@@ -414,15 +414,15 @@ data = {
                     "relations": [
                         {
                             "to": 1,
-                            "details": "Siblings"
+                            "details": "7"
                         },
                         {
                             "to": 2,
-                            "details": "Siblings"
+                            "details": "7"
                         },
                         {
                             "to": 0,
-                            "details": "Siblings"
+                            "details": "7"
                         }
                     ],
                     "likes": [],
@@ -441,6 +441,40 @@ data = {
             "events": []
         }
     ],
+    "relations": {
+        "0": {
+            "name": "Companion",
+            "color": "cyan"
+        },
+        "1": {
+            "name": "Superior",
+            "color": "purple"
+        },
+        "2": {
+            "name": "Heir",
+            "color": "pink"
+        },
+        "3": {
+            "name": "Childhood friends",
+            "color": "gold"
+        },
+        "4": {
+            "name": "Mentor",
+            "color": "purple"
+        },
+        "5": {
+            "name": "Friend of parents",
+            "color": "salmon"
+        },
+        "6": {
+            "name": "Ex-lovers",
+            "color": "palevioletred"
+        },
+        "7": {
+            "name": "Siblings",
+            "color": "paleturquoise"
+        }
+    },
     "settings": {
         "arrow_animation": true,
         "line_weight": 8,

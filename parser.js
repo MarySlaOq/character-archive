@@ -28,6 +28,11 @@ function getCreator(id){
     return data.people.find(p => p.id == id);
 }
 
+function getRelationshipData(id){
+
+    return data.relations[id];
+}
+
 const roles = ["Main character", "Supporting character", "Arc character", "Background character"];
 class World {
 
@@ -178,9 +183,11 @@ class World {
 
                 const start = document.getElementById(this.name + 'c' + chara.id);
                 const end = document.getElementById(this.name + 'c' + relation.to);
+
+                const relationData = getRelationshipData(relation.details);
                 
                 const settings = {
-                    color: chara.highlight,
+                    color: relationData.color,
                     size: data.settings.line_weight,
                     path: "sway",
                     startPlug: 'square',
@@ -196,8 +203,8 @@ class World {
                         // Double arrow
                         settings.startPlug = "arrow1";
                         // Inbetween color
-                        const color1 = this.hexToRgb(color_codes[chara.highlight]);
-                        const color2 = this.hexToRgb(color_codes[this.getChara(relation.to).highlight]);
+                        const color1 = this.hexToRgb(color_codes[relationData.color]);
+                        const color2 = this.hexToRgb(color_codes[getRelationshipData(mutual.details).color]);
     
                         const new_color = [
                             (color1[0] + color2[0]) / 2,
@@ -212,7 +219,7 @@ class World {
                     }
                 }
 
-                if(data.settings.labels) settings["middleLabel"] = relation.details;
+                if(data.settings.labels) settings["middleLabel"] = relationData.name;
                 
                 //Draw relation lines
                 if(relation.drawn == undefined) {
@@ -309,7 +316,7 @@ class World {
         document.getElementById("hates").innerHTML = "<li>" + chara.hates.join("</li><li>") + "</li>";
 
         const rel = document.getElementById("relations");
-        rel.innerHTML = chara.relations.map(rel => `<p class="relation">Related to <a onclick="popupOf(${rel.to})" href="#0">${this.idToName(rel.to)}</a>: ${rel.details}</p>`).join("");
+        rel.innerHTML = chara.relations.map(rel => `<p class="relation">Related to <a onclick="popupOf(${rel.to})" href="#0">${this.idToName(rel.to)}</a>: ${getRelationshipData(rel.details).name}</p>`).join("");
 
         if (chara.relations.length == 0) rel.innerHTML = "No relationships established"
 
@@ -667,7 +674,6 @@ function defineGrabbable(restore = false, xx=0, yy=0){
         }
     }
 }
-
 
 // Open first world
 openWorld(event, data.dimensions[0].name);
