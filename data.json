@@ -219,7 +219,7 @@ data = {
                     "relations": [
                         {
                             "to": 0,
-                            "details": "Friend and companion and sidekick"
+                            "details": "Ex-lovers"
                         }
                     ],
                     "likes": [],
@@ -227,7 +227,7 @@ data = {
                     "notes": "He is Saloman's ex-boyfriend",
                     "pinterest": "",
                     "spotify": "",
-                    "highlight": "black"
+                    "highlight": "purple"
                 },
                 {
                     "id": 6,
@@ -436,7 +436,7 @@ data = {
     "settings": {
         "arrow_animation": true,
         "line_weight": 8,
-        "labels": true,
+        "labels": false,
         "sort_characters_alphabetically": true,
         "mix_mutual_relationships": true
     }
