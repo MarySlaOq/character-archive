@@ -499,3 +499,9 @@ input[type="range"]::-moz-range-thumb {
   opacity: 0;
   transition: opacity 100ms;
 }
+
+.blocked {
+
+  background-color: gray !important;
+  opacity: 0.5;
+}

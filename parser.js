@@ -42,6 +42,9 @@ class World {
 
     height = -1;
 
+    world = {};
+    events = [];
+
     constructor(name){
 
         if(name=="") return;
@@ -51,6 +54,8 @@ class World {
         this.name = dim.name;
         this.outline = dim.outline;
         this.characters = dim.characters;
+        this.world = dim.world;
+        this.events = dim.events;
 
         this.divisions = this.setupCharacters();
     }
@@ -227,6 +232,24 @@ class World {
         //returns [r, g, b]
     }
 
+    replaceNameWithHyperLinks(text, self="") {
+
+        if(!data.settings.show_hyperlinks_in_character_bio) return text;
+
+        for (let index = 0; index < this.characters.length; index++) {
+            const chara = this.characters[index];
+
+            if(self != "" && chara.name == self) continue;
+            
+            text = text.replaceAll(
+                chara.name,
+                `<a href='#0' onclick="popupOf('${chara.id}')">${chara.name}</a>`
+            );
+        }
+
+        return text;
+    }
+
     openPopUp(chara){
 
         if(block_popup){
@@ -234,6 +257,9 @@ class World {
             block_popup = false;
             return;
         }
+
+
+        popup.scrollTop = 0;
 
         popup.style.zIndex = 1000;
         popup.style.opacity = 1;
@@ -244,7 +270,7 @@ class World {
         document.getElementById("image").src = "resources/" + chara.image;
 
         document.getElementById("name").innerText = chara.name;
-        document.getElementById("outline").innerText = chara.biography;
+        document.getElementById("outline").innerHTML = this.replaceNameWithHyperLinks(chara.biography, chara.name);
         document.getElementById("personality").innerText = chara.personality.join(", ")
 
         document.getElementById("species").innerText = chara.species;
@@ -283,7 +309,7 @@ class World {
         document.getElementById("hates").innerHTML = "<li>" + chara.hates.join("</li><li>") + "</li>";
 
         const rel = document.getElementById("relations");
-        rel.innerHTML = chara.relations.map(rel => `<p class="relation">Related to <a onclick="popupOf(${rel.to})" href="#">${this.idToName(rel.to)}</a>: ${rel.details}</p>`).join("");
+        rel.innerHTML = chara.relations.map(rel => `<p class="relation">Related to <a onclick="popupOf(${rel.to})" href="#0">${this.idToName(rel.to)}</a>: ${rel.details}</p>`).join("");
 
         if (chara.relations.length == 0) rel.innerHTML = "No relationships established"
 
@@ -317,29 +343,44 @@ function switchView(view){
         document.getElementById(`${myworld.name}-et`)
     ];
 
-    for (let i = 0; i < panel.length; i++) panel[i].className = "button-6";
+    if(panel[view].className.includes("blocked")) {
+
+        alert(`${myworld.name}'s file does not have a "${panel[view].innerText}" attribute configured yet`);
+        return;
+    }
+
+    for (let i = 0; i < panel.length; i++) panel[i].className = panel[i].className.replace("active", "");
     panel[view].className += " active";
 
     // Fetch views
     const character_view = document.getElementById(`${myworld.name}-chara-container`);
+    const world_view = document.getElementById(`${myworld.name}-world-container`);
+    const event_view = document.getElementById(`${myworld.name}-event-container`);
 
     switch (view) {
         // Character display
         case 0:
             character_view.style.display = "block";
+            world_view.style.display = "none";
+            event_view.style.display = "none";
             myworld.establishRelations();
             
             break;
         // World overview
         case 1:
+            world_view.style.display = "block";
             character_view.style.display = "none";
+            event_view.style.display = "none";
             clearLines();
 
             break;
         // Event timeline
         case 2:
+            event_view.style.display = "block";
             character_view.style.display = "none";
+            world_view.style.display = "none";
             clearLines();
+
 
             break;
     }
@@ -395,15 +436,19 @@ data.dimensions.forEach(element => {
 
     // Add view switch panels
     const view_panel = `
-        <button onclick='switchView(0)' id="${myworld.name}-cv" class='button-6'>Character view</button>
-        <button onclick='switchView(1)' id="${myworld.name}-wo" class='button-6'>World overview</button>
-        <button onclick='switchView(2)' id="${myworld.name}-et" class='button-6'>Event timeline</button>
+        <button onclick='switchView(0)' id="${myworld.name}-cv" class='button-6${myworld.characters == undefined ? " blocked" : ""}'>Character view</button>
+        <button onclick='switchView(1)' id="${myworld.name}-wo" class='button-6${myworld.world == undefined ? " blocked" : ""}'>World overview</button>
+        <button onclick='switchView(2)' id="${myworld.name}-et" class='button-6${myworld.events == undefined ? " blocked" : ""}'>Event timeline</button>
     `;
 
     content.innerHTML += view_panel;
     content.appendChild(document.createElement("hr"));
 
+    // ---------CHARACTER VIEW---------
+
     const cView = document.createElement("div");
+    cView.id = myworld.name + "-" + "chara-container";
+
     const controller = `
         <div>
             <button class='button-6 controller' onclick='relationship_control()'>Hide all relationships</button>
@@ -419,10 +464,25 @@ data.dimensions.forEach(element => {
     dom.className = "chara-container";
     
     for (let index = 0; index < world.divisions.length; index++) dom.append(world.divisions[index]);
-    
-    cView.id = myworld.name + "-" + dom.className;
     cView.append(dom);
+
+    // ---------WORLD OVERVIEW---------
+    const wView = document.createElement("div");
+    wView.id = myworld.name + "-" + "world-container";
+
+    // ---------EVENT TIMELINE---------
+    const eView = document.createElement("div");
+    eView.id = myworld.name + "-" + "event-container";
+    
+    const title = document.createElement("h2");
+    title.innerText = myworld.name + "' chronological events"
+
+    eView.appendChild(title);
+
+    // Append views
     content.appendChild(cView);
+    content.appendChild(wView);
+    content.appendChild(eView);
 });
 
 function clearLines(color=null){
@@ -608,4 +668,6 @@ function defineGrabbable(restore = false, xx=0, yy=0){
     }
 }
 
+
+// Open first world
 openWorld(event, data.dimensions[0].name);

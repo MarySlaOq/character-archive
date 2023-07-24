@@ -259,7 +259,9 @@ data = {
                     "spotify": "",
                     "highlight": "black"
                 }
-            ]
+            ],
+            "world": {},
+            "events": [],
         },
         {
             "name": "World 2",
@@ -312,7 +314,7 @@ data = {
                 {
                     "id": 1,
                     "name": "Harry",
-                    "biography": "Second youngest of four siblings. Harry met Alexia and Jonathan and Max at an orphanage and, after not being adopted and let go, they decided to get together and really become a family. Harry was 11 when he met Jonathan and Max (13) and Alexia (9). Harry, when an adult, is an unemployed artist, who occasionally does traditional commissions.",
+                    "biography": "Second youngest of four siblings. Harry, as an adult, is an unemployed artist, who occasionally does traditional commissions.",
                     "personality": ["Sometimes cold", "Blunt", "Introverted", "Socially awkward"],
                     "species": "Human/Vampire",
                     "age": "varies",
@@ -398,9 +400,9 @@ data = {
                     "biography": "Oldest of four siblings. Jonathan, as an adult, becomes a professional volleyball player and engages in a polyamorous marriage",
                     "personality": ["Angry >:(", "Short-tempered", "Loyal", "Good leader", "Polite when needed"],
                     "species": "Human",
-                    "age": "",
-                    "gender": "",
-                    "occupation": "",
+                    "age": "varies",
+                    "gender": "M",
+                    "occupation": "Volleyball player",
                     "height": 0,
                     "weight": 0,
                     "bloodtype": "",
@@ -435,7 +437,8 @@ data = {
         {
             "name": "World 3",
             "outline": "Alexia, Jonathan, Max, and Harry met at an orphanage and, after not being adopted and let go, they decided to get together and really become a family. They meet when Alexia was only 9, while Harry had 11 and Jonathan and Max were 13.",
-            "characters": []
+            "characters": [],
+            "events": []
         }
     ],
     "settings": {
@@ -443,6 +446,7 @@ data = {
         "line_weight": 8,
         "labels": false,
         "sort_characters_alphabetically": true,
-        "mix_mutual_relationships": true
+        "mix_mutual_relationships": true,
+        "show_hyperlinks_in_character_bio": true
     }
 }
