@@ -672,7 +672,7 @@ data = {
         },
         "10": {
             "name": "Child Figure",
-            "color": "palepink"
+            "color": "pink"
         },
     },
     "settings": {
