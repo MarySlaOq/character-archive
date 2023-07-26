@@ -621,6 +621,8 @@ input[type="range"]::-moz-range-thumb {
   border: 4px dashed rgb(139, 139, 139);
 
   padding-bottom: 30px;
+
+  display: none;
 }
 
 .flag {

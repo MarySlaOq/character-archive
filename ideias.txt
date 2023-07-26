@@ -1,0 +1,5 @@
+ - Calendar with specific colors n holidays
+ - Zoom in in map and show
+ - linguas
+ - City related facilities show when pin selected
+ - character sorter

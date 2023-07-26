@@ -313,8 +313,9 @@ data = {
                                     ],
                                     "climate": "cold maybe?",
                                     "history": "hm yes",
-                                    "flag": "",
-                                    "scenery": ""
+                                    "flag": "saloman.png",
+                                    "scenery": "saloman.png",
+                                    "animals": []
                                 }
                             },
                             {
@@ -322,7 +323,23 @@ data = {
                                 "y": 50,
                                 "location": "Center island",
                                 "description": "The island in the center, must be pretty important",
-                                "type": "0"
+                                "type": "0",
+                                "region_data": {
+                                    "area": 200,
+                                    "population": 1200,
+                                    "bodies_of_water": ["none", "there is no water here", "lol"],
+                                    "demonym": "leftcontinentians",
+                                    "politics": "rulled by a middle god named deez nuts",
+                                    "economy": "terrible",
+                                    "reputation": ":flex:",
+                                    "climate": "HOT HOT HOT?????",
+                                    "history": "hm NO",
+                                    "flag": "saloman.png",
+                                    "scenery": "saloman.png",
+                                    "money": "Tâlen/Tâlens",
+                                    "language": "ikkkuuuu",
+                                    "animals": []
+                                }
                             }
                         ],
                     }, 
@@ -343,6 +360,7 @@ data = {
                 ]
             },
             "events": [],
+            "calendar": []
         },
         {
             "name": "World 2",

@@ -53,6 +53,7 @@ class World {
 
     world = {};
     events = [];
+    calendar = [];
 
     constructor(name){
 
@@ -66,6 +67,7 @@ class World {
 
         this.world = dim.world;
         this.events = dim.events;
+        this.calendar = dim.calendar;
 
         this.divisions = this.setupCharacters();
     }
@@ -299,13 +301,14 @@ class World {
             // Draw region information
             const region = document.createElement("div");
             region.className = "region-data";
+            region.id = myworld.name + "region-data";
 
             region.innerHTML = `
                 <div id="details" class="container3">
-                    <h2>Region name</h2>
+                    <h2 id="${myworld.name}region_name">Region name</h2>
                     <img src="https://images.jifo.co/141438036_1685123167974.svg" class="flag" id='${myworld.name}flag' />
                 </div>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore veritatis inventore sed ullam enim, dolor at culpa in, quod deserunt blanditiis! Pariatur officiis ipsa, facilis repellat odio sint inventore voluptatibus culpa sunt vero recusandae! Fugiat sapiente voluptas alias exercitationem eos tempora provident, ipsam, optio, modi vel deserunt iste repellat voluptatibus.</p>
+                <p id="${myworld.name}desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore veritatis inventore sed ullam enim, dolor at culpa in, quod deserunt blanditiis! Pariatur officiis ipsa, facilis repellat odio sint inventore voluptatibus culpa sunt vero recusandae! Fugiat sapiente voluptas alias exercitationem eos tempora provident, ipsam, optio, modi vel deserunt iste repellat voluptatibus.</p>
                 <div class="traits">
                     <p><i class="fas fa-arrows"></i> <b>Area</b> <span id='${myworld.name}area'>100</span> m²</p>
                     <p><i class="fas fa-users"></i> <b>Population</b> <span id='${myworld.name}pop'>100</span> inhabitants</p>
@@ -314,16 +317,30 @@ class World {
                     <p><i class="fas fa-balance-scale"></i> <b>Politics</b> <span id='${myworld.name}pol'></span></p>
                     <p><i class="fas fa-coins"></i> <b>Economy</b> <span id='${myworld.name}econ'></span></p>
                     <p><i class="fas fa-trophy"></i> <b>Reputation</b> <span id='${myworld.name}rep'></span></p>
-                    <p><i class="fas fa-calendar"></i> <b>Holidays</b> <span id='${myworld.name}hol'></span></p>
                     <p><i class="fas fa-sun"></i> <b>Climate</b> <span id='${myworld.name}cli'></span></p>
+                    <p><i class="fa-solid fa-money-bill"></i> <b>Money</b> <span id='${myworld.name}mon'></span></p>
+                    <p><i class="fa-solid fa-language"></i> <b>Language</b> <span id='${myworld.name}lang'></span></p>
                 </div>
                 <p><i class="fas fa-book"></i> <b>History</b> <br><br>
                     <span id='${myworld.name}hist'>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore veritatis inventore sed ullam enim, dolor at culpa in, quod deserunt blanditiis! Pariatur officiis ipsa, facilis repellat odio sint inventore voluptatibus culpa sunt vero recusandae! Fugiat sapiente voluptas alias exercitationem eos tempora provident, ipsam, optio, modi vel deserunt iste repellat voluptatibus.
                     </span>
                 </p>
-                <img src="https://i.kym-cdn.com/entries/icons/facebook/000/034/683/fumo.jpg">
-            `;
+                <img id="${myworld.name}landscape" src="https://i.kym-cdn.com/entries/icons/facebook/000/034/683/fumo.jpg">
+                <p><i class="fa-solid fa-paw"></i> <b>Animals</b> <br><br>
+                    <span id='${myworld.name}ani'>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore veritatis inventore sed ullam enim, dolor at culpa in, quod deserunt blanditiis! Pariatur officiis ipsa, facilis repellat odio sint inventore voluptatibus culpa sunt vero recusandae! Fugiat sapiente voluptas alias exercitationem eos tempora provident, ipsam, optio, modi vel deserunt iste repellat voluptatibus.
+                    </span>
+                </p>
+                <img id="${myworld.name}landscape" src="https://i.kym-cdn.com/entries/icons/facebook/000/034/683/fumo.jpg" />
+                <p><i class="fa-solid fa-shirt"></i> <b>Clothing</b> <br><br>
+                    <span id='${myworld.name}cloth'>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore veritatis inventore sed ullam enim, dolor at culpa in, quod deserunt blanditiis! Pariatur officiis ipsa, facilis repellat odio sint inventore voluptatibus culpa sunt vero recusandae! Fugiat sapiente voluptas alias exercitationem eos tempora provident, ipsam, optio, modi vel deserunt iste repellat voluptatibus.
+                    </span>
+                </p>
+                <img id="${myworld.name}landscape" src="https://i.kym-cdn.com/entries/icons/facebook/000/034/683/fumo.jpg">
+                
+                `;
 
             mapElement.appendChild(region);
             container.appendChild(mapElement);
@@ -375,10 +392,10 @@ class World {
 
                 // Set text
                 document.getElementById("location").innerText = mapInfo.location;
-                document.getElementById("description").innerHTML = mapInfo.description + "<br><br><br><span><strong>click to read more</strong></span>";
+                document.getElementById("description").innerHTML = mapInfo.description + (mapInfo.region_data == undefined ? "" : "<br><br><br><span><strong>click to read more</strong></span>");
                 document.getElementById("division-type").innerText = type.name;
 
-                mapPopup.style.opacity=1;
+                mapPopup.style.opacity = 1;
                         
                 const mapDimensions = mapPopup.getBoundingClientRect();
 
@@ -386,9 +403,41 @@ class World {
                 mapPopup.style.top = (yy - mapDimensions.height) + "px";
             });
 
+            if(mapInfo.region_data != undefined ){
+
+                pin.addEventListener("click", () => {
+    
+                    document.getElementById(myworld.name + "region-data").style.display = "block";
+
+                    const y = document.getElementById("details").getBoundingClientRect().top + window.scrollY;
+
+                    window.scroll({
+                        top: y,
+                        behavior: 'smooth'
+                    });
+
+                    document.getElementById(`${myworld.name}region_name`).innerText = mapInfo.location;
+                    document.getElementById(`${myworld.name}desc`).innerText = mapInfo.description;
+                    document.getElementById(`${myworld.name}area`).innerText = mapInfo.region_data.area;
+                    document.getElementById(`${myworld.name}pop`).innerText = mapInfo.region_data.population;
+                    document.getElementById(`${myworld.name}water`).innerText = mapInfo.region_data.bodies_of_water.join(", ");
+                    document.getElementById(`${myworld.name}den`).innerText = mapInfo.region_data.demonym;
+                    document.getElementById(`${myworld.name}pol`).innerText = mapInfo.region_data.politics;
+                    document.getElementById(`${myworld.name}econ`).innerText = mapInfo.region_data.economy;
+                    document.getElementById(`${myworld.name}rep`).innerText = mapInfo.region_data.reputation;
+                    document.getElementById(`${myworld.name}cli`).innerText = mapInfo.region_data.climate;
+                    document.getElementById(`${myworld.name}mon`).innerText = mapInfo.region_data.money;
+                    document.getElementById(`${myworld.name}lang`).innerText = mapInfo.region_data.language;
+
+                    document.getElementById(`${myworld.name}hist`).innerText = mapInfo.region_data.history;
+                    document.getElementById(`${myworld.name}flag`).src = getResource(mapInfo.region_data.flag);
+                    document.getElementById(`${myworld.name}landscape`).src = getResource(mapInfo.region_data.scenery);
+                });
+            }
+
             pin.addEventListener("mouseleave", () => {
                 mapPopup.style.opacity=0;
-            })
+            });
         });
     }
 
@@ -517,7 +566,8 @@ function switchView(view){
     const panel = [
         document.getElementById(`${myworld.name}-cv`),
         document.getElementById(`${myworld.name}-wo`),
-        document.getElementById(`${myworld.name}-et`)
+        document.getElementById(`${myworld.name}-et`),
+        document.getElementById(`${myworld.name}-cl`)
     ];
 
     if(panel[view].className.includes("blocked")) {
@@ -533,6 +583,7 @@ function switchView(view){
     const character_view = document.getElementById(`${myworld.name}-chara-container`);
     const world_view = document.getElementById(`${myworld.name}-world-container`);
     const event_view = document.getElementById(`${myworld.name}-event-container`);
+    const calendar_view = document.getElementById(`${myworld.name}-calendar-container`);
 
     switch (view) {
         // Character display
@@ -540,6 +591,7 @@ function switchView(view){
             character_view.style.display = "block";
             world_view.style.display = "none";
             event_view.style.display = "none";
+            calendar_view.style.display = "none";
             myworld.establishRelations();
             
             break;
@@ -548,6 +600,7 @@ function switchView(view){
             world_view.style.display = "block";
             character_view.style.display = "none";
             event_view.style.display = "none";
+            calendar_view.style.display = "none";
             clearLines();
 
             myworld.positionAllMapPins();
@@ -558,6 +611,16 @@ function switchView(view){
             event_view.style.display = "block";
             character_view.style.display = "none";
             world_view.style.display = "none";
+            calendar_view.style.display = "none";
+            clearLines();
+
+            break;
+        // Callendar
+        case 3:
+            calendar_view.style.display = "block";
+            character_view.style.display = "none";
+            world_view.style.display = "none";
+            event_view.style.display = "none";
             clearLines();
 
             break;
@@ -663,6 +726,7 @@ data.dimensions.forEach(element => {
         <button onclick='switchView(0)' id="${myworld.name}-cv" class='button-6${myworld.characters == undefined ? " blocked" : ""}'>Character view</button>
         <button onclick='switchView(1)' id="${myworld.name}-wo" class='button-6${myworld.world == undefined ? " blocked" : ""}'>World overview</button>
         <button onclick='switchView(2)' id="${myworld.name}-et" class='button-6${myworld.events == undefined ? " blocked" : ""}'>Event timeline</button>
+        <button onclick='switchView(3)' id="${myworld.name}-cl" class='button-6${myworld.calendar == undefined ? " blocked" : ""}'>Callendar</button>
     `;
 
     content.innerHTML += view_panel;
@@ -712,11 +776,22 @@ data.dimensions.forEach(element => {
     title.innerText = myworld.name + "'s chronological events"
     
     eView.appendChild(title);
+
+    // --------- CALLENDAR---------
+    const clView = document.createElement("div");
+    clView.id = myworld.name + "-" + "calendar-container";
+    
+    var title = document.createElement("h2");
+    title = document.createElement("h2");
+    title.innerText = myworld.name + "'s holidays n shit"
+    
+    clView.appendChild(title);
     
     // Append views
     content.appendChild(cView);
     content.appendChild(wView);
     content.appendChild(eView);
+    content.appendChild(clView);
 });
 
 function clearLines(color=null){
