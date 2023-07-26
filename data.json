@@ -40,6 +40,7 @@ data = {
                 {
                     "id": 0,
                     "name": "Saloman",
+                    "full_name" : "ifk‎jnvjerke",
                     "biography": "Saloman is a vagrant adventurer whose arm and eye were replaced by his travelling companion Acheron. He is the sole survivor of a horrible human experiment that took place when he was younger. After escaping from his captors he meets Sasha and together they search for Mary and the jewels which will help free her from her seal.",
                     "personality": ["Hot-headed", "Hands-on", "Blunt", "Loyal", "Caring"],
                     "species": "Human",
@@ -74,6 +75,7 @@ data = {
                 {
                     "id": 1,
                     "name": "Sasha",
+                    "full_name" : "",
                     "biography": "Sasha was one of the first people Saloman met after escaping his captors. Sasha and Saloman form a lifelong relationship through various hardships and care for eachother very much, Sasha is a more rational and level-headed person, even thought she may be taken in the heat of the moment from time to time. Once gratuated, she turn to work as Mary's secretary alongside Ethan, but she still aids Saloman in adventures when she's freed from her waves of paperwork.",
                     "personality": [],
                     "species": "Human",
@@ -108,6 +110,7 @@ data = {
                 {
                     "id": 2,
                     "name": "Sora",
+                    "full_name" : "",
                     "biography": "The daughter of Mary, supreme Goddess of the world. She was created as a statue but given conscience through Mary's blood, thus conferring her a pale stone like appearance, but she still feels warm to touch. When she's hurt Sora can resculpt her body parts, but still feels pain, despite not having any internal organs, appart from a jewel in the heart's place.",
                     "personality": ["Lazy"],
                     "species": "Statue",
@@ -134,6 +137,7 @@ data = {
                 {
                     "id": 3,
                     "name": "Mary",
+                    "full_name" : "",
                     "biography": "Mary's parents were the former rulers of this world, after she was born her body was sealed in a statue, and after being freed by Saloman, Sasha and Acheron she took over regency of this world and created Sora. Now she works alongside Ethan to mantain a just a fair world, unaware of the man's foul deeds with her parents.",
                     "personality": ["Honest", "Just", "Earnest"],
                     "species": "Goddess",
@@ -168,6 +172,7 @@ data = {
                 {
                     "id": 4,
                     "name": "Ethan",
+                    "full_name" : "",
                     "biography": "A multidimensional traveller who took a liking to Saloman's dimensions. Ethan was associated to Mary's parents, former rulers of this world, and led the human experiment which Saloman was subjected to. After the passing of Mary's parents he is now working as a secretary for their daughter, having a lot of influence in the world.",
                     "personality": [],
                     "species": "???",
@@ -202,6 +207,7 @@ data = {
                 {
                     "id": 5,
                     "name": "Felix",
+                    "full_name" : "",
                     "biography": "",
                     "personality": [],
                     "species": "Human",
@@ -232,6 +238,7 @@ data = {
                 {
                     "id": 6,
                     "name": "Acheron",
+                    "full_name" : "",
                     "biography": "",
                     "personality": [],
                     "species": "Monster, former human",
@@ -261,6 +268,23 @@ data = {
                 }
             ],
             "world": {
+                "divisions": [
+                    {
+                        "id": 0,
+                        "name": "Nations, Higher Gods",
+                        "hue": 0
+                    },
+                    {
+                        "id": 1,
+                        "name": "Cities, Middle Gods",
+                        "hue": 200
+                    }, 
+                    {
+                        "id": 2,
+                        "name": "Communities, Minor Gods",
+                        "hue": 300
+                    }
+                ],
                 "maps": [
                     {
                         "name": "General map",
@@ -271,15 +295,36 @@ data = {
                                 "x": 20,
                                 "y": 20,
                                 "location": "Left continents",
-                                "description": "Imagina que isto é uma descrição grande e bem pensada"
+                                "description": "Imagina que isto é uma descrição grande e bem pensada",
+                                "type": "1",
+                                "region_data": {
+                                    "area": 200,
+                                    "population": 1200,
+                                    "bodies_of_water": ["none", "there is no water here", "lol"],
+                                    "demonym": "leftcontinentians",
+                                    "politics": "rulled by a middle god named deez",
+                                    "economy": "terrible",
+                                    "reputation": ":skull:",
+                                    "local_holidays": [
+                                        {
+                                            "date": "3/11",
+                                            "name": "feliz dia 3 do 11"
+                                        }
+                                    ],
+                                    "climate": "cold maybe?",
+                                    "history": "hm yes",
+                                    "flag": "",
+                                    "scenery": ""
+                                }
                             },
                             {
                                 "x": 50,
                                 "y": 50,
                                 "location": "Center island",
-                                "description": "The island in the center, must be pretty important"
+                                "description": "The island in the center, must be pretty important",
+                                "type": "0"
                             }
-                        ]
+                        ],
                     }, 
                     {
                         "name": "This other map that doesn't yet exist",
@@ -290,7 +335,8 @@ data = {
                                 "x": 48,
                                 "y": 28,
                                 "location": "Casa do bernas (maid café)",
-                                "description": "É aqui que o bernas veste-se de maid e serve os seus oomfies vestido de maid :3"
+                                "description": "É aqui que o bernas veste-se de maid e serve os seus oomfies vestido de maid :3",
+                                "type": "0"
                             }
                         ]
                     }
@@ -300,11 +346,12 @@ data = {
         },
         {
             "name": "World 2",
-            "outline": "Alexia, Jonathan, Max, and Harry met at an orphanage and, after not being adopted and let go, they decided to get together and really become a family. They meet when Alexia was only 9, while Harry had 11 and Jonathan and Max were 13.",
+            "outline": "Various characters vive their lives in the normal world, having some challanges ahead. Alexia, Jonathan, Max, and Harry met at an orphanage and, after not being adopted and let go, they decided to get together and really become a family. They meet when Alexia was only 9, while Harry had 11 and Jonathan and Max were 13.",
             "characters": [
                 {
                     "id": 0,
                     "name": "Alexia",
+                    "full_name" : "",
                     "biography": "Youngest of four siblings. As a teenager, she kept bringing stray cats to their house, making Harry's allergies worse. She goes to the army to learn how to be a surgeon and, after some years, she comes back and work at a local hospital. Alexia gets married to her commander that decides to become a PE teacher after getting out of the army. After getting married, she moves to a small house with her wife, where she plants some biological fruit and legumes and adopts a stray cat.",
                     "personality": ["Nice", "Polite", "Caring", "Sarcastic", "Loving", "Determined"],
                     "species": "Human",
@@ -349,6 +396,7 @@ data = {
                 {
                     "id": 1,
                     "name": "Harry",
+                    "full_name" : "",
                     "biography": "Second youngest of four siblings. Harry, as an adult, is an unemployed artist, who occasionally does traditional commissions.",
                     "personality": ["Sometimes cold", "Blunt", "Introverted", "Socially awkward"],
                     "species": "Human/Vampire",
@@ -387,6 +435,7 @@ data = {
                 {
                     "id": 2,
                     "name": "Max",
+                    "full_name" : "",
                     "biography": "Second oldest of the four siblings. As a teenager, he kept indulging himself in new hobbies, like cooking, dancing and ended up learning Korean when he had a K-Pop phase. At 18, he got a job in the morning at a coffee shop, in the afternoon had classes, and at night worked as a bartender (and sometimes stripper himself) in a strip club to gain money to open his own restaurant. After buying the restaurant, which has a small flat on the third floor, he invited his best friend that he met on said strip club to be his business partner.",
                     "personality": ["Nice", "Funny", "Creative", "Easy-going", "Loyal", "Emotinally intelligent", "Trouble understanding social queues"],
                     "species": "Human",
@@ -432,6 +481,7 @@ data = {
                 {
                     "id": 3,
                     "name": "Jonathan",
+                    "full_name" : "",
                     "biography": "Oldest of four siblings. Jonathan, as an adult, becomes a professional volleyball player and engages in a polyamorous marriage",
                     "personality": ["Angry >:(", "Short-tempered", "Loyal", "Good leader", "Polite when needed"],
                     "species": "Human",
@@ -466,6 +516,109 @@ data = {
                     "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/jonathan/",
                     "spotify": "https://open.spotify.com/playlist/2gTlRM0uHA2gzheuAi8X1l?si=0663950f46c34e5f",
                     "highlight": "blue"
+                },
+                {
+                    "id": 4,
+                    "name": "Adril",
+                    "hitname": "",
+                    "full_name" : "Adril Andrei-ovich Vitserki",
+                    "biography": "Viktoriya's half-younger brother. After spending 16 years in Russia, he moves to Germanyafter his mom died, where he worked as an errand boy and sometimes killed people for a gang. When he is about 25 he flies from Germany to England and starts working as an hitmen. Five years later Viktoriya joins him and they form a small bussiness.",
+                    "personality": ["Resting bitch face", "Tired", "Loyal", "Good leader", "Daddy", ""],
+                    "species": "Human",
+                    "age": "35",
+                    "gender": "M",
+                    "occupation": "Hitmen",
+                    "height": 0,
+                    "weight": 0,
+                    "bloodtype": "",
+                    "birthdate": "April 5th 1985",
+                    "birthplace": "Khabarovsk, Russia",
+                    "creators": [0],
+                    "role": 0,
+                    "image": "jonathan.jpg",
+                    "relations": [
+                        {
+                            "to": 5,
+                            "details": "7"
+                        },
+                    ],
+                    "likes": [],
+                    "hates": [],
+                    "notes": "He usually uses gun weapons in his killings",
+                    "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/adril/",
+                    "spotify": "https://open.spotify.com/playlist/1MMhCzR6EnNFsnW6VwmaNQ?si=a9be0bb6327e4581",
+                    "highlight": "blue"
+                },
+                {
+                    "id": 5,
+                    "name": "Viktoriya",
+                    "hitname": "Bloody Angel",
+                    "full_name" : "Viktoriya Andrei-ovna Vitserki",
+                    "biography": "Adril's half-older sister. After being abused by her blood parents, she ends up killing her father who murderher mother at the age of 9. Spending some time in a recovery facility, she gets adopted by her father's second wife at 13, when Adril is 10. Spending somte time there, after their mother dies when Viktoriya is 19, she sees Adril part ways with her and fly off to Germany and flyes to the USA. In America, she starts killing people for fun and ends up being called Bloody Angel. After building a reputation, she makes a small bussiness of being a hitwoman until she us 33, where she flies to England to murder with Adril. Being both seen as Angels of Death.",
+                    "personality": ["Provocative", "Manipulative", "Unloyal", "Childish", "Mommy"],
+                    "species": "Human",
+                    "age": "38",
+                    "gender": "F",
+                    "occupation": "Hitwoman/Serial Killer",
+                    "height": 0,
+                    "weight": 0,
+                    "bloodtype": "",
+                    "birthdate": "1982",
+                    "birthplace": "Khabarovsk, Russia",
+                    "creators": [0],
+                    "role": 0,
+                    "image": "jonathan.jpg",
+                    "relations": [
+                        {
+                            "to": 4,
+                            "details": "7"
+                        },
+                    ],
+                    "likes": [],
+                    "hates": [],
+                    "notes": "She usually uses weapons with blades in her killings",
+                    "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/viktoriya/",
+                    "spotify": "https://open.spotify.com/playlist/3i5wFg8sOuKsh1vqCTjsEW?si=3762f4c878d5497b",
+                    "highlight": "blue"
+                },
+                {
+                    "id": 6,
+                    "name": "Petter",
+                    "full_name" : "Petter Lysander",
+                    "biography": "Gets adopted at 7 by harry, who homeschools him until hes 10. Gets caught trying to steal Adril and Viktoriya when hes 8, so Adril takes him in and starts teaching him about stealing and weapons and self defense. Adril and harry start 'sharing custody' of him. One time in a mission with Adril, Petter finds an unusual dog at a dog fight and adopts him, calling him Cerebrus. He engages in school at 11, having to re-do fifth grade and meeting Kael, his best friend. During the time he's at the murder's house, he starts getting tortured by Viktoriya when hes 11, who experiments her torture methods on him to do later in others. Not being able to bear the abuse, he runs away at 18 to another city with the help of Kael.",
+                    "personality": ["anxious", "kind", "socially awkward", "animal lover", "baby"],
+                    "species": "Human",
+                    "age": "varies",
+                    "gender": "F",
+                    "occupation": "Pickpocket. Adril and Viktoriya's errand boy/helper. Police cadet. Veterinarian.",
+                    "height": 0,
+                    "weight": 0,
+                    "bloodtype": "",
+                    "birthdate": "November 17th 2009",
+                    "birthplace": "Unkown",
+                    "creators": [0],
+                    "role": 0,
+                    "image": "petter.png",
+                    "relations": [
+                        {
+                            "to": 4,
+                            "details": "10"
+                        },
+                        {
+                            "to": 5,
+                            "details": "9"
+                        },
+                        {
+                            "to": 1,
+                            "details": "10"
+                        },
+                    ],
+                    "likes": [],
+                    "hates": [],
+                    "notes": "He likes animals so much he's probably a furry",
+                    "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/petter/",
+                    "spotify": "https://open.spotify.com/playlist/7tMldXqZTFGmdT23WuRhZj?si=cc3b7368b2234d3e",
+                    "highlight": "blue"
                 }
             ],
         },
@@ -495,7 +648,7 @@ data = {
         },
         "4": {
             "name": "Mentor",
-            "color": "purple"
+            "color": "red"
         },
         "5": {
             "name": "Friend of parents",
@@ -508,13 +661,25 @@ data = {
         "7": {
             "name": "Siblings",
             "color": "paleturquoise"
-        }
+        },
+        "8": {
+            "name": "Parental Figure",
+            "color": "palered"
+        },
+        "9": {
+            "name": "Toy",
+            "color": "grey"
+        },
+        "10": {
+            "name": "Child Figure",
+            "color": "palepink"
+        },
     },
     "settings": {
         "arrow_animation": true,
         "line_weight": 8,
         "labels": false,
-        "sort_characters_alphabetically": true,
+        "sort_characters_alphabetically": false,
         "mix_mutual_relationships": true,
         "show_hyperlinks_in_character_bio": true
     }

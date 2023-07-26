@@ -1,6 +1,9 @@
 const file = document.getElementById("script").src;
 console.log(data);
 
+// Hello hello <3 hai o7
+//lets get back to work!! :flex:
+
 const color_codes = {
     "aliceblue":"#f0f8ff", "antiquewhite":"#faebd7", "aqua":"#00ffff", "aquamarine":"#7fffd4", "azure":"#f0ffff", "beige":"#f5f5dc", "bisque":"#ffe4c4", "black":"#000000", "blanchedalmond":"#ffebcd", "blue":"#0000ff", "blueviolet":"#8a2be2", "brown":"#a52a2a", "burlywood":"#deb887", "cadetblue":"#5f9ea0", "chartreuse":"#7fff00", "chocolate":"#d2691e", "coral":"#ff7f50", "cornflowerblue":"#6495ed", "cornsilk":"#fff8dc", "crimson":"#dc143c", "cyan":"#00ffff", "darkblue":"#00008b", "darkcyan":"#008b8b", "darkgoldenrod":"#b8860b", "darkgray":"#a9a9a9", "darkgreen":"#006400", "darkkhaki":"#bdb76b", "darkmagenta":"#8b008b", "darkolivegreen":"#556b2f", "darkorange":"#ff8c00", "darkorchid":"#9932cc", "darkred":"#8b0000", "darksalmon":"#e9967a", "darkseagreen":"#8fbc8f", "darkslateblue":"#483d8b", "darkslategray":"#2f4f4f", "darkturquoise":"#00ced1", "darkviolet":"#9400d3", "deeppink":"#ff1493", "deepskyblue":"#00bfff", "dimgray":"#696969", "dodgerblue":"#1e90ff", "firebrick":"#b22222", "floralwhite":"#fffaf0", "forestgreen":"#228b22", "fuchsia":"#ff00ff", "gainsboro":"#dcdcdc", "ghostwhite":"#f8f8ff", "gold":"#ffd700", "goldenrod":"#daa520", "gray":"#808080", "green":"#008000", "greenyellow":"#adff2f",
      "honeydew":"#f0fff0", "hotpink":"#ff69b4", "indianred ":"#cd5c5c", "indigo":"#4b0082", "ivory":"#fffff0", "khaki":"#f0e68c", "lavender":"#e6e6fa", "lavenderblush":"#fff0f5", "lawngreen":"#7cfc00", "lemonchiffon":"#fffacd", "lightblue":"#add8e6", "lightcoral":"#f08080", "lightcyan":"#e0ffff", "lightgoldenrodyellow":"#fafad2", "lightgrey":"#d3d3d3", "lightgreen":"#90ee90", "lightpink":"#ffb6c1", "lightsalmon":"#ffa07a", "lightseagreen":"#20b2aa", "lightskyblue":"#87cefa", "lightslategray":"#778899", "lightsteelblue":"#b0c4de", "lightyellow":"#ffffe0", "lime":"#00ff00", "limegreen":"#32cd32", "linen":"#faf0e6", "magenta":"#ff00ff", "maroon":"#800000", "mediumaquamarine":"#66cdaa", "mediumblue":"#0000cd", "mediumorchid":"#ba55d3", "mediumpurple":"#9370d8", "mediumseagreen":"#3cb371", "mediumslateblue":"#7b68ee",  "mediumspringgreen":"#00fa9a", "mediumturquoise":"#48d1cc", "mediumvioletred":"#c71585", "midnightblue":"#191970", "mintcream":"#f5fffa", "mistyrose":"#ffe4e1", "moccasin":"#ffe4b5", "navajowhite":"#ffdead", "navy":"#000080", "oldlace":"#fdf5e6", "olive":"#808000", "olivedrab":"#6b8e23", "orange":"#ffa500", "orangered":"#ff4500", "orchid":"#da70d6", "palegoldenrod":"#eee8aa",
@@ -242,8 +245,9 @@ class World {
         if(this.world == undefined) {return container}
 
         container.innerHTML += `
-            <button class="button-6" onclick="previous_map()">Previous</button>
-            <button class="button-6" onclick="next_map()">Next</button>
+            <button class='button-30' onclick="toggle_pins()" id="${myworld.name}pin_toggle">Hide pins</button>
+            <button class="button-30" onclick="previous_map()">Previous</button>
+            <button class="button-30" onclick="next_map()">Next</button>
         `;
         
         for (let index = 0; index < this.world.maps.length; index++) {
@@ -271,6 +275,10 @@ class World {
                     const pin = mapData.pins[j];
                     const pinElement = document.createElement("img");
 
+                    // Set pin type
+                    const type = this.getDivision(pin.type);
+                    pinElement.style.filter = "hue-rotate("+type.hue+"deg)";
+
                     pinElement.className = "map-pin tooltip";
                     pinElement.id = myworld.name + "w-p" + pin.location;
                     pinElement.setAttribute("origin", mapData.name);
@@ -287,6 +295,37 @@ class World {
             }
             
             mapElement.appendChild(mapImage);
+
+            // Draw region information
+            const region = document.createElement("div");
+            region.className = "region-data";
+
+            region.innerHTML = `
+                <div class="container3">
+                    <h2>Region name</h2>
+                    <img src="https://images.jifo.co/141438036_1685123167974.svg" class="flag" id='${myworld.name}flag' />
+                </div>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore veritatis inventore sed ullam enim, dolor at culpa in, quod deserunt blanditiis! Pariatur officiis ipsa, facilis repellat odio sint inventore voluptatibus culpa sunt vero recusandae! Fugiat sapiente voluptas alias exercitationem eos tempora provident, ipsam, optio, modi vel deserunt iste repellat voluptatibus.</p>
+                <div class="traits">
+                    <p><i class="fas fa-arrows"></i> <b>Area</b> <span id='${myworld.name}area'>100</span> m²</p>
+                    <p><i class="fas fa-users"></i> <b>Population</b> <span id='${myworld.name}pop'>100</span> inhabitants</p>
+                    <p><i class="fas fa-tint"></i> <b>Bodies of water</b> <span id='${myworld.name}water'>1, 2, 3</span></p>
+                    <p><i class="fas fa-male"></i> <b>Denonym</b> <span id='${myworld.name}den'></span></p>
+                    <p><i class="fas fa-balance-scale"></i> <b>Politics</b> <span id='${myworld.name}pol'></span></p>
+                    <p><i class="fas fa-coins"></i> <b>Economy</b> <span id='${myworld.name}econ'></span></p>
+                    <p><i class="fas fa-trophy"></i> <b>Reputation</b> <span id='${myworld.name}rep'></span></p>
+                    <p><i class="fas fa-calendar"></i> <b>Holidays</b> <span id='${myworld.name}hol'></span></p>
+                    <p><i class="fas fa-sun"></i> <b>Climate</b> <span id='${myworld.name}cli'></span></p>
+                </div>
+                <p><i class="fas fa-book"></i> <b>History</b> <br><br>
+                    <span id='${myworld.name}hist'>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore veritatis inventore sed ullam enim, dolor at culpa in, quod deserunt blanditiis! Pariatur officiis ipsa, facilis repellat odio sint inventore voluptatibus culpa sunt vero recusandae! Fugiat sapiente voluptas alias exercitationem eos tempora provident, ipsam, optio, modi vel deserunt iste repellat voluptatibus.
+                    </span>
+                </p>
+                <img src="https://i.kym-cdn.com/entries/icons/facebook/000/034/683/fumo.jpg">
+            `;
+
+            mapElement.appendChild(region);
             container.appendChild(mapElement);
         }
 
@@ -332,9 +371,12 @@ class World {
             // Define click
             pin.addEventListener("mouseover", () => {
 
+                const type = this.getDivision(mapInfo.type);
+
                 // Set text
                 document.getElementById("location").innerText = mapInfo.location;
-                document.getElementById("description").innerText = mapInfo.description;
+                document.getElementById("description").innerHTML = mapInfo.description + "<br><br><br><span><strong>click to read more</strong></span>";
+                document.getElementById("division-type").innerText = type.name;
 
                 mapPopup.style.opacity=1;
                         
@@ -405,6 +447,7 @@ class World {
         document.getElementById("bloodtype").innerText = chara.bloodtype;
         document.getElementById("birthdate").innerText = chara.birthdate;
         document.getElementById("birthplace").innerText = chara.birthplace;
+        document.getElementById("fullname").innerHTML = chara.full_name;
 
         const notes = document.getElementById("notes");
         if(chara.notes == ""){
@@ -461,6 +504,11 @@ class World {
 
         const world = this.world.maps.find(m => m.name == map);
         return world.pins.find(p => p.location == pin);
+    }
+
+    getDivision(type) {
+
+        return this.world.divisions.find(d => d.id == type);
     }
 }
 
@@ -627,8 +675,8 @@ data.dimensions.forEach(element => {
 
     const controller = `
         <div>
-            <button class='button-6 controller' onclick='relationship_control()'>Hide all relationships</button>
-            <button onclick='reset_positions()' class='button-6'>Reset character positions</button>
+            <button class='button-30 controller' onclick='relationship_control()'>Hide all relationships</button>
+            <button onclick='reset_positions()' class='button-30'>Reset character positions</button>
 
             <br><br><br>
         </div>`;
@@ -648,7 +696,7 @@ data.dimensions.forEach(element => {
     
     const map_container = document.createElement("div");
     map_container.className = "map-container";
-    map_container.innerHTML += "<h2>" +myworld.name+ "'s cartography</h2>";
+    //map_container.innerHTML += "<h2>" +myworld.name+ "'s cartography</h2>";
 
     let map_data = myworld.drawMaps();
     map_container.appendChild(map_data);
@@ -765,6 +813,24 @@ function relationship_control(){
 
     if(state) clearLines();
     else myworld.establishRelations();
+}
+
+function toggle_pins(){
+
+    const button = document.getElementById(`${myworld.name}pin_toggle`);
+    const state = button.innerText == "Hide pins";
+
+    button.innerText = state ? "Show pins" : "Hide pins";
+
+    document.querySelectorAll(".map-pin").forEach(pin => {
+
+        if(!pin.id.includes(myworld.name + "w-p")) return;
+        
+        if(!state) pin.style.display = "block";
+        else pin.style.display = "none";
+
+        myworld.positionAllMapPins();
+    });
 }
 
 function reset_positions() {

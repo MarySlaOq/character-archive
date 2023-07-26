@@ -239,6 +239,10 @@ body {font-family: Arial;width: 800px;margin: auto;}
     column-count: 3;
   }
 
+  .traits {
+    column-count: 2;
+  }
+
   #relations {
 
     display: flex;
@@ -536,8 +540,7 @@ input[type="range"]::-moz-range-thumb {
 
 .map-pin:hover {
 
-  filter: contrast(160%);
-  animation-play-state: paused;
+  transform: rotate(10deg);
 }
 
 @keyframes rock{
@@ -559,11 +562,17 @@ input[type="range"]::-moz-range-thumb {
   transition: opacity 0.3s;
 }
 
-.map-popup h2 {
+.map-popup span {
+  color: rgb(85, 85, 85);
+}
+
+.map-popup div {
   text-align: center;
   background-color: rgb(211, 211, 211);
   margin: 0%;
   padding: 10px;
+
+  line-height: 5px;
 
   border-radius: 20px 20px 0 0;
 
@@ -590,4 +599,34 @@ input[type="range"]::-moz-range-thumb {
   border-width: 15px;
   border-style: solid;
   border-color: #e9e9e9 transparent transparent transparent;
+}
+
+#fullname {
+
+  margin: -5px;
+  color: rgb(97, 97, 97);
+
+  margin-left: 5px;
+}
+
+.region-data {
+
+  padding: 5px 20px;
+  margin: 20px;
+  border: 4px dashed rgb(139, 139, 139);
+
+  padding-bottom: 30px;
+}
+
+.flag {
+
+  margin: auto 0;
+  width: 50px !important;
+  margin-left: 50px;
+}
+
+.container3 {
+
+  display: flex;
+  justify-content: center;
 }
