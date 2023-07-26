@@ -301,7 +301,7 @@ class World {
             region.className = "region-data";
 
             region.innerHTML = `
-                <div class="container3">
+                <div id="details" class="container3">
                     <h2>Region name</h2>
                     <img src="https://images.jifo.co/141438036_1685123167974.svg" class="flag" id='${myworld.name}flag' />
                 </div>
