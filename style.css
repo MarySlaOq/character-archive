@@ -505,3 +505,89 @@ input[type="range"]::-moz-range-thumb {
   background-color: gray !important;
   opacity: 0.5;
 }
+
+.map-element {
+
+  margin-top: 40px;
+  display: none;
+}
+
+.map-active {
+
+  display: block;
+}
+
+.map-element img {
+
+  width: 100%;
+}
+
+.map-pin {
+
+  position: absolute;
+  width: 30px !important;
+
+  transform-origin: bottom center;
+  /*animation: rock 2s linear infinite;*/
+  animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  transition-duration: 500ms;
+}
+
+.map-pin:hover {
+
+  filter: contrast(160%);
+  animation-play-state: paused;
+}
+
+@keyframes rock{
+
+  0% {transform: rotate(-10deg);}
+  50% {transform: rotate(10deg);}
+  100% {transform: rotate(-10deg);}
+}
+
+.map-popup {
+  
+  position: absolute;
+  top: 50px;
+  left: 50px;
+
+  width: 300px;
+
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.map-popup h2 {
+  text-align: center;
+  background-color: rgb(211, 211, 211);
+  margin: 0%;
+  padding: 10px;
+
+  border-radius: 20px 20px 0 0;
+
+  transform-origin: bottom center;
+}
+
+.map-popup p {
+  text-align: left;
+  margin: 0%;
+  padding: 10px;
+
+  padding-bottom:  20px;
+
+  background-color: #e9e9e9;
+  border-radius: 0 0 20px 20px;
+}
+
+.map-popup::after{
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -15px;
+  border-width: 15px;
+  border-style: solid;
+  border-color: #e9e9e9 transparent transparent transparent;
+}

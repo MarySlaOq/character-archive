@@ -260,7 +260,42 @@ data = {
                     "highlight": "black"
                 }
             ],
-            "world": {},
+            "world": {
+                "maps": [
+                    {
+                        "name": "General map",
+                        "image": "map.png",
+                        "description": "A general map of all the continents ans oceans and their respective shape in this world",
+                        "pins": [
+                            {
+                                "x": 20,
+                                "y": 20,
+                                "location": "Left continents",
+                                "description": "Imagina que isto é uma descrição grande e bem pensada"
+                            },
+                            {
+                                "x": 50,
+                                "y": 50,
+                                "location": "Center island",
+                                "description": "The island in the center, must be pretty important"
+                            }
+                        ]
+                    }, 
+                    {
+                        "name": "This other map that doesn't yet exist",
+                        "image": "othermap.jpg",
+                        "description": "Another very cute and funny description",
+                        "pins": [
+                            {
+                                "x": 48,
+                                "y": 28,
+                                "location": "Casa do bernas (maid café)",
+                                "description": "É aqui que o bernas veste-se de maid e serve os seus oomfies vestido de maid :3"
+                            }
+                        ]
+                    }
+                ]
+            },
             "events": [],
         },
         {
@@ -432,7 +467,7 @@ data = {
                     "spotify": "https://open.spotify.com/playlist/2gTlRM0uHA2gzheuAi8X1l?si=0663950f46c34e5f",
                     "highlight": "blue"
                 }
-            ]
+            ],
         },
         {
             "name": "World 3",

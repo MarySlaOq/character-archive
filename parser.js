@@ -20,17 +20,18 @@ window.addEventListener("resize", (event) => {
 })
 
 var block_popup = false;
+var my_top = -1;
 
 const popup = document.getElementById("popup");
+const mapPopup = document.getElementById("map-popup");
 
-function getCreator(id){
+function getCreator(id){ return data.people.find(p => p.id == id); }
 
-    return data.people.find(p => p.id == id);
-}
+function getRelationshipData(id){ return data.relations[id]; }
 
-function getRelationshipData(id){
+function getResource(name){
 
-    return data.relations[id];
+    return "resources/" + name;
 }
 
 const roles = ["Main character", "Supporting character", "Arc character", "Background character"];
@@ -59,6 +60,7 @@ class World {
         this.name = dim.name;
         this.outline = dim.outline;
         this.characters = dim.characters;
+
         this.world = dim.world;
         this.events = dim.events;
 
@@ -142,7 +144,7 @@ class World {
             container.id = this.name+ "c"+chara.id;
             
             let chara_image = document.createElement("img");
-            chara_image.src = "resources/" + chara.image;
+            chara_image.src = getResource(chara.image);
             chara_image.className = "chara-image";
             chara_image.style.borderColor = chara.highlight;
 
@@ -231,6 +233,120 @@ class World {
                         );
                 }
             });
+        });        
+    }
+
+    drawMaps() {
+
+        const container = document.createElement("div");
+        if(this.world == undefined) {return container}
+
+        container.innerHTML += `
+            <button class="button-6" onclick="previous_map()">Previous</button>
+            <button class="button-6" onclick="next_map()">Next</button>
+        `;
+        
+        for (let index = 0; index < this.world.maps.length; index++) {
+            const mapData = this.world.maps[index];
+            
+            const mapElement = document.createElement("div");
+            mapElement.className = "map-element" + (index == 0 ? " map-active" : "");
+            mapElement.id = this.name + "w-m" + index;
+
+            const mapName = document.createElement("h3");
+            mapName.innerText = mapData.name;
+
+            const mapImage = document.createElement("img");
+            mapImage.className = "map-image";
+            mapImage.src = getResource(mapData.image);
+
+            mapElement.appendChild(mapName);
+            mapElement.innerHTML += "<p>"+mapData.description+"</p>";
+
+            if(mapData.pins != undefined) {
+
+                //Draw pins
+                for (let j = 0; j < mapData.pins.length; j++) {
+                    
+                    const pin = mapData.pins[j];
+                    const pinElement = document.createElement("img");
+
+                    pinElement.className = "map-pin tooltip";
+                    pinElement.id = myworld.name + "w-p" + pin.location;
+                    pinElement.setAttribute("origin", mapData.name);
+
+                    const tooltip = document.createElement("span");
+                    tooltip.innerText = pin.location;
+                    tooltip.className = "tooltiptext";
+
+                    pinElement.src = "https://upload.wikimedia.org/wikipedia/commons/e/ed/Map_pin_icon.svg";
+
+                    pinElement.appendChild(tooltip);
+                    mapElement.appendChild(pinElement);
+                }
+            }
+            
+            mapElement.appendChild(mapImage);
+            container.appendChild(mapElement);
+        }
+
+        return container;
+    }
+
+    positionAllMapPins() {
+
+        if(this.world == undefined || this.world.maps == undefined) return;
+        
+        // Position all this map's pins
+
+        [...document.querySelectorAll(".map-pin")]
+        .filter(node => node.id.includes(myworld.name + "w-p") && node.offsetParent != null)
+        .forEach(pin => {
+
+            const pin_bounds = pin.parentElement.querySelector("img").getBoundingClientRect();
+            const map_bounds = pin.parentElement.querySelector(".map-image").getBoundingClientRect();
+            
+            var xx = map_bounds.left;
+            var yy = (map_bounds.top + window.scrollY);
+
+            // Center the pin
+            xx = xx - pin_bounds.width / 2;
+            yy = yy - pin_bounds.height;
+
+            // Get pin data
+            const location = pin.id.split("w-p")[1];
+            const map = pin.getAttribute("origin");
+
+            const mapInfo = this.getMapPin(map, location);
+
+            // Move percentage
+            const moveHorizontal = map_bounds.width * (mapInfo.x / 100);
+            const moveVertical = map_bounds.height * (mapInfo.y / 100);
+
+            xx += moveHorizontal;
+            yy += moveVertical;
+            
+            pin.style.left = xx + "px";
+            pin.style.top = yy + "px";
+
+            // Define click
+            pin.addEventListener("mouseover", () => {
+
+                // Set text
+                document.getElementById("location").innerText = mapInfo.location;
+                document.getElementById("description").innerText = mapInfo.description;
+
+                mapPopup.style.opacity=1;
+                        
+                const mapDimensions = mapPopup.getBoundingClientRect();
+
+                mapPopup.style.left = (xx - mapDimensions.width / 2 + pin_bounds.width / 2) + "px";
+                mapPopup.style.top = (yy - mapDimensions.height) + "px";
+            });
+
+            pin.addEventListener("mouseleave", () => {
+                mapPopup.style.opacity=0;
+            })
         });
     }
 
@@ -274,7 +390,7 @@ class World {
         document.getElementById("blinds").style.opacity = 1;
         document.getElementById("blinds").style.zIndex = 200;
 
-        document.getElementById("image").src = "resources/" + chara.image;
+        document.getElementById("image").src = getResource(chara.image);
 
         document.getElementById("name").innerText = chara.name;
         document.getElementById("outline").innerHTML = this.replaceNameWithHyperLinks(chara.biography, chara.name);
@@ -340,6 +456,12 @@ class World {
 
         return this.characters.find(c => c.name == name).id || null;
     }
+
+    getMapPin(map, pin){
+
+        const world = this.world.maps.find(m => m.name == map);
+        return world.pins.find(p => p.location == pin);
+    }
 }
 
 function switchView(view){
@@ -380,6 +502,8 @@ function switchView(view){
             event_view.style.display = "none";
             clearLines();
 
+            myworld.positionAllMapPins();
+
             break;
         // Event timeline
         case 2:
@@ -388,9 +512,54 @@ function switchView(view){
             world_view.style.display = "none";
             clearLines();
 
-
             break;
     }
+}
+
+function previous_map(){
+
+    document.querySelectorAll(".map-active").forEach(active_map => {
+
+        if(active_map.id.includes(myworld.name)){
+
+            // Found current map
+            const id = active_map.id.split("w-m")[1];
+
+            let next = id - 1;
+            active_map.className = active_map.className.replace("map-active", "");
+
+            var next_map = document.getElementById(myworld.name + "w-m" + next);
+            if(next_map == null) next_map = document.getElementById(myworld.name + "w-m" + (myworld.world.maps.length-1));
+
+            next_map.classList.add("map-active");
+            return;
+        }    
+    });
+
+    myworld.positionAllMapPins();
+}
+
+function next_map(){
+
+    document.querySelectorAll(".map-active").forEach(active_map => {
+
+        if(active_map.id.includes(myworld.name)){
+
+            // Found current map
+            const id = active_map.id.split("w-m")[1];
+
+            let next = (parseInt(id) + 1);
+            active_map.className = active_map.className.replace("map-active", "");
+
+            var next_map = document.getElementById(myworld.name + "w-m" + next.toString());
+            if(next_map == null) next_map = document.getElementById(myworld.name + "w-m0");
+
+            next_map.classList.add("map-active");
+            return;
+        }
+    });
+
+    myworld.positionAllMapPins();
 }
 
 // Start template world
@@ -476,16 +645,26 @@ data.dimensions.forEach(element => {
     // ---------WORLD OVERVIEW---------
     const wView = document.createElement("div");
     wView.id = myworld.name + "-" + "world-container";
+    
+    const map_container = document.createElement("div");
+    map_container.className = "map-container";
+    map_container.innerHTML += "<h2>" +myworld.name+ "'s cartography</h2>";
 
+    let map_data = myworld.drawMaps();
+    map_container.appendChild(map_data);
+
+    wView.appendChild(map_container);
+    
     // ---------EVENT TIMELINE---------
     const eView = document.createElement("div");
     eView.id = myworld.name + "-" + "event-container";
     
-    const title = document.createElement("h2");
-    title.innerText = myworld.name + "' chronological events"
-
+    var title = document.createElement("h2");
+    title = document.createElement("h2");
+    title.innerText = myworld.name + "'s chronological events"
+    
     eView.appendChild(title);
-
+    
     // Append views
     content.appendChild(cView);
     content.appendChild(wView);
@@ -521,7 +700,7 @@ function clearLines(color=null){
 }
 
 // Open new world
-function openWorld(event, world){
+function openWorld(event, world, view=0){
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
 
@@ -544,14 +723,14 @@ function openWorld(event, world){
     //After creation
     w.establishRelations();
     defineGrabbable();
-
+    
     //Lock page height
     const n_char = Math.floor(myworld.characters.length / 2);
     const height = n_char * (320 + 290);
-
+    
     //document.getElementsByClassName("chara-container").item(0).style.height = height + "px";
-
-    switchView(0);
+    
+    switchView(view);
 }
 
 function popupOf(who){
@@ -676,4 +855,4 @@ function defineGrabbable(restore = false, xx=0, yy=0){
 }
 
 // Open first world
-openWorld(event, data.dimensions[0].name);
+openWorld(event, data.dimensions[0].name, 1);
