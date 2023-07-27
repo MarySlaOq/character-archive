@@ -342,21 +342,178 @@ data = {
                                 }
                             }
                         ],
-                    }, 
-                    {
-                        "name": "This other map that doesn't yet exist",
-                        "image": "othermap.jpg",
-                        "description": "Another very cute and funny description",
+                    },{
+                        "name": "Underneath map",
+                        "image": "map.png",
+                        "description": "A general map of all the continents ans oceans and their respective shape in this world",
                         "pins": [
                             {
-                                "x": 48,
-                                "y": 28,
-                                "location": "Casa do bernas (maid café)",
-                                "description": "É aqui que o bernas veste-se de maid e serve os seus oomfies vestido de maid :3",
-                                "type": "0"
+                                "x": 20,
+                                "y": 20,
+                                "location": "Left continents",
+                                "description": "Imagina que isto é uma descrição grande e bem pensada",
+                                "type": "1",
+                                "region_data": {
+                                    "area": 200,
+                                    "population": 1200,
+                                    "bodies_of_water": ["none", "there is no water here", "lol"],
+                                    "demonym": "leftcontinentians",
+                                    "politics": "rulled by a middle god named deez nuts",
+                                    "economy": "terrible",
+                                    "reputation": ":skull:",
+                                    "local_holidays": [
+                                        {
+                                            "date": "3/11",
+                                            "name": "feliz dia 3 do 11"
+                                        }
+                                    ],
+                                    "climate": "cold maybe?",
+                                    "history": "hm yes",
+                                    "flag": "saloman.png",
+                                    "scenery": "saloman.png",
+                                    "animals": []
+                                }
+                            },
+                            {
+                                "x": 50,
+                                "y": 50,
+                                "location": "Center island",
+                                "description": "The island in the center, must be pretty important",
+                                "type": "0",
+                                "region_data": {
+                                    "area": 200,
+                                    "population": 1200,
+                                    "bodies_of_water": ["none", "there is no water here", "lol"],
+                                    "demonym": "leftcontinentians",
+                                    "politics": "rulled by a middle god named deez nuts",
+                                    "economy": "terrible",
+                                    "reputation": ":flex:",
+                                    "climate": "HOT HOT HOT?????",
+                                    "history": "hm NO",
+                                    "flag": "saloman.png",
+                                    "scenery": "saloman.png",
+                                    "money": "Tâlen/Tâlens",
+                                    "language": "ikkkuuuu",
+                                    "animals": []
+                                }
                             }
-                        ]
-                    }
+                        ],
+                    },
+                    {
+                        "name": "Sky map",
+                        "image": "map.png",
+                        "description": "A general map of all the continents ans oceans and their respective shape in this world",
+                        "pins": [
+                            {
+                                "x": 20,
+                                "y": 20,
+                                "location": "Left continents",
+                                "description": "Imagina que isto é uma descrição grande e bem pensada",
+                                "type": "1",
+                                "region_data": {
+                                    "area": 200,
+                                    "population": 1200,
+                                    "bodies_of_water": ["none", "there is no water here", "lol"],
+                                    "demonym": "leftcontinentians",
+                                    "politics": "rulled by a middle god named deez nuts",
+                                    "economy": "terrible",
+                                    "reputation": ":skull:",
+                                    "local_holidays": [
+                                        {
+                                            "date": "3/11",
+                                            "name": "feliz dia 3 do 11"
+                                        }
+                                    ],
+                                    "climate": "cold maybe?",
+                                    "history": "hm yes",
+                                    "flag": "saloman.png",
+                                    "scenery": "saloman.png",
+                                    "animals": []
+                                }
+                            },
+                            {
+                                "x": 50,
+                                "y": 50,
+                                "location": "Center island",
+                                "description": "The island in the center, must be pretty important",
+                                "type": "0",
+                                "region_data": {
+                                    "area": 200,
+                                    "population": 1200,
+                                    "bodies_of_water": ["none", "there is no water here", "lol"],
+                                    "demonym": "leftcontinentians",
+                                    "politics": "rulled by a middle god named deez nuts",
+                                    "economy": "terrible",
+                                    "reputation": ":flex:",
+                                    "climate": "HOT HOT HOT?????",
+                                    "history": "hm NO",
+                                    "flag": "saloman.png",
+                                    "scenery": "saloman.png",
+                                    "money": "Tâlen/Tâlens",
+                                    "language": "ikkkuuuu",
+                                    "animals": []
+                                }
+                            }
+                        ],
+                    },
+                    {
+                        "name": "Abbandoned Labs",
+                        "image": "map.png",
+                        "description": "A general map of all the continents ans oceans and their respective shape in this world",
+                        "pins": [
+                            {
+                                "x": 20,
+                                "y": 20,
+                                "location": "Left continents",
+                                "description": "Imagina que isto é uma descrição grande e bem pensada",
+                                "type": "1",
+                                "region_data": {
+                                    "area": 200,
+                                    "population": 1200,
+                                    "bodies_of_water": ["none", "there is no water here", "lol"],
+                                    "demonym": "leftcontinentians",
+                                    "politics": "rulled by a middle god named deez nuts",
+                                    "economy": "terrible",
+                                    "reputation": ":skull:",
+                                    "local_holidays": [
+                                        {
+                                            "date": "3/11",
+                                            "name": "feliz dia 3 do 11"
+                                        }
+                                    ],
+                                    "climate": "cold maybe?",
+                                    "history": "hm yes",
+                                    "flag": "saloman.png",
+                                    "scenery": "saloman.png",
+                                    "animals": []
+                                }
+                            },
+                            {
+                                "x": 50,
+                                "y": 50,
+                                "location": "Center island",
+                                "description": "The island in the center, must be pretty important",
+                                "type": "0",
+                                "region_data": {
+                                    "area": 200,
+                                    "population": 1200,
+                                    "bodies_of_water": ["none", "there is no water here", "lol"],
+                                    "demonym": "leftcontinentians",
+                                    "politics": "rulled by a middle god named deez nuts",
+                                    "economy": "terrible",
+                                    "reputation": ":flex:",
+                                    "climate": "HOT HOT HOT?????",
+                                    "history": "hm NO",
+                                    "flag": "saloman.png",
+                                    "scenery": "saloman.png",
+                                    "money": "Tâlen/Tâlens",
+                                    "language": "ikkkuuuu",
+                                    "animals": []
+                                }
+                            }
+                        ],
+                    },
+                    
                 ]
             },
             "events": [],
@@ -639,8 +796,34 @@ data = {
                     "highlight": "blue"
                 }
             ],
+            "world": {
+                "divisions": [
+                    {
+                        "id": 0,
+                        "name": "Casas",
+                        "hue": 0
+                    }
+                ],
+                "maps": [
+                    {
+                        "name": "This other map that doesn't yet exist",
+                        "image": "othermap.jpg",
+                        "description": "Another very cute and funny description",
+                        "pins": [
+                            {
+                                "x": 48,
+                                "y": 28,
+                                "location": "Casa do bernas (maid café)",
+                                "description": "É aqui que o bernas veste-se de maid e serve os seus oomfies vestido de maid :3",
+                                "type": "0"
+                            }
+                        ]
+                    }
+                ]
+            }
         },
         {
+            
             "name": "World 3",
             "outline": "Alexia, Jonathan, Max, and Harry met at an orphanage and, after not being adopted and let go, they decided to get together and really become a family. They meet when Alexia was only 9, while Harry had 11 and Jonathan and Max were 13.",
             "characters": [],

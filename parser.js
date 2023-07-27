@@ -138,6 +138,7 @@ class World {
         if(data.settings.sort_characters_alphabetically) this.sortCharactersByName();
 
         this.output = `<p>Showing ${this.characters.length} characters</p>`;
+
         let chars = [];
 
         for (let index = 0; index < this.characters.length; index++) {
@@ -181,7 +182,11 @@ class World {
         return chars;
     }
 
+    subtitles = [];
+
     establishRelations(){
+
+        this.subtitles = [];
 
         document.querySelectorAll(".controller").forEach(e => e.innerText = "Hide all relationships");
         
@@ -191,7 +196,9 @@ class World {
                 const start = document.getElementById(this.name + 'c' + chara.id);
                 const end = document.getElementById(this.name + 'c' + relation.to);
 
+                
                 const relationData = getRelationshipData(relation.details);
+                if(!this.subtitles.includes(relation.details)) this.subtitles.push(relation.details);
                 
                 const settings = {
                     color: relationData.color,
@@ -235,10 +242,26 @@ class World {
                         start,
                         end,
                         settings
-                        );
+                    );
                 }
             });
-        });        
+        });
+        
+        // Draw subtitles
+        document.querySelectorAll(".subtitles").forEach(sub => {
+
+            if(sub.offsetParent == null) return;
+
+            let innerHTML = "";
+            for (let index = 0; index < this.subtitles.length; index++) {
+                const subtitle = this.subtitles[index];
+                
+                const details = getRelationshipData(subtitle);
+                innerHTML += "<div class='subtitle'> <div class='circle' style='background-color: "+ details.color +"'></div> <span>"+ details.name +"</span> </div>";
+            }
+
+            sub.innerHTML = innerHTML;
+        })
     }
 
     drawMaps() {
@@ -524,7 +547,7 @@ class World {
         document.getElementById("hates").innerHTML = "<li>" + chara.hates.join("</li><li>") + "</li>";
 
         const rel = document.getElementById("relations");
-        rel.innerHTML = chara.relations.map(rel => `<p class="relation">Related to <a onclick="popupOf(${rel.to})" href="#0">${this.idToName(rel.to)}</a>: ${getRelationshipData(rel.details).name}</p>`).join("");
+        rel.innerHTML = chara.relations.map(rel => `<p class="relation"><img src="${getResource(this.getChara(rel.to).image)}" /> Related to <a onclick="popupOf(${rel.to})" href="#0">${this.idToName(rel.to)}</a>: ${getRelationshipData(rel.details).name}</p>`).join("");
 
         if (chara.relations.length == 0) rel.innerHTML = "No relationships established"
 
@@ -726,7 +749,7 @@ data.dimensions.forEach(element => {
         <button onclick='switchView(0)' id="${myworld.name}-cv" class='button-6${myworld.characters == undefined ? " blocked" : ""}'>Character view</button>
         <button onclick='switchView(1)' id="${myworld.name}-wo" class='button-6${myworld.world == undefined ? " blocked" : ""}'>World overview</button>
         <button onclick='switchView(2)' id="${myworld.name}-et" class='button-6${myworld.events == undefined ? " blocked" : ""}'>Event timeline</button>
-        <button onclick='switchView(3)' id="${myworld.name}-cl" class='button-6${myworld.calendar == undefined ? " blocked" : ""}'>Callendar</button>
+        <button onclick='switchView(3)' id="${myworld.name}-cl" class='button-6${myworld.calendar == undefined ? " blocked" : ""}'>Calendar</button>
     `;
 
     content.innerHTML += view_panel;
@@ -741,6 +764,12 @@ data.dimensions.forEach(element => {
         <div>
             <button class='button-30 controller' onclick='relationship_control()'>Hide all relationships</button>
             <button onclick='reset_positions()' class='button-30'>Reset character positions</button>
+
+            <div class="subtitles">
+                <div class="subtitle"> <div class="circle"></div> <span>Text</span></div>
+                <div class="subtitle"> <div class="circle"></div> <span>Text</span></div>
+                <div class="subtitle"> <div class="circle"></div> <span>Text</span></div>
+            </div>
 
             <br><br><br>
         </div>`;
