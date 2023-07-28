@@ -273,6 +273,8 @@ class World {
             <button class='button-30' onclick="toggle_pins()" id="${myworld.name}pin_toggle">Hide pins</button>
             <button class="button-30" onclick="previous_map()">Previous</button>
             <button class="button-30" onclick="next_map()">Next</button>
+            <br><br>
+            <button class="button-30" onmouseup="unmerge()" onmousedown="merge_maps()">Merge maps (hold)</button>
         `;
         
         for (let index = 0; index < this.world.maps.length; index++) {
@@ -382,6 +384,8 @@ class World {
         .filter(node => node.id.includes(myworld.name + "w-p") && node.offsetParent != null)
         .forEach(pin => {
 
+            pin.style.opacity = 1;
+
             const pin_bounds = pin.parentElement.querySelector("img").getBoundingClientRect();
             const map_bounds = pin.parentElement.querySelector(".map-image").getBoundingClientRect();
             
@@ -461,6 +465,16 @@ class World {
             pin.addEventListener("mouseleave", () => {
                 mapPopup.style.opacity=0;
             });
+        });
+    }
+
+    clearPins(){
+
+        [...document.querySelectorAll(".map-pin")]
+        .filter(node => node.id.includes(myworld.name + "w-p") && node.offsetParent != null)
+        .forEach(pin => {
+
+            pin.style.opacity = 0;
         });
     }
 
@@ -883,6 +897,67 @@ function openWorld(event, world, view=0){
     //document.getElementsByClassName("chara-container").item(0).style.height = height + "px";
     
     switchView(view);
+}
+
+// Merge all the maps
+function merge_maps(){
+
+    myworld.clearPins();
+
+    //Close region data pop up
+    document.getElementById(myworld.name + "region-data").style.display = "none";
+
+    const start_height = document.getElementById(myworld.name).getBoundingClientRect().height;
+
+    const otherMaps = [];
+    const offsets = [];
+
+    let map_n = 1;
+
+    var currentMap = null;
+
+    document.querySelectorAll(".map-image").forEach(map => {
+
+        if(currentMap==null) currentMap = map.offsetParent != null ? map : null;
+        if(map.parentElement.id.split("w-m")[0] != myworld.name || map.offsetParent != null) return;
+        
+        const img = document.createElement("img");
+        img.className = "map-merging";
+        img.src = map.src;
+        
+        otherMaps.push(img);
+
+        map_n++;
+    });
+
+    if(map_n==1 || currentMap == null) return;
+
+    map_n = 1 / map_n;
+    otherMaps.forEach(map => {
+
+        const drawnMap = currentMap.parentNode.appendChild(map);
+        const height = drawnMap.getBoundingClientRect().height;
+
+        offsets.push(height);
+        // mais 3.5 porque offsets gostam de me comer o cu
+        const this_height = offsets.reduce((a, b) => a + b + 3.5, 0);
+
+        drawnMap.style.bottom = this_height + "px";
+        drawnMap.style.opacity = map_n;
+    });
+
+    document.getElementById(myworld.name).style.height = start_height + "px";
+}
+
+function unmerge(){
+
+    myworld.positionAllMapPins();
+    document.querySelectorAll(".map-merging").forEach(map => {
+
+        map.remove();
+    });
+
+    document.getElementById(myworld.name).style.removeProperty("height");
 }
 
 function popupOf(who){

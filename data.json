@@ -344,7 +344,7 @@ data = {
                         ],
                     },{
                         "name": "Underneath map",
-                        "image": "map.png",
+                        "image": "othermap.jpg",
                         "description": "A general map of all the continents ans oceans and their respective shape in this world",
                         "pins": [
                             {
@@ -401,7 +401,7 @@ data = {
                     },
                     {
                         "name": "Sky map",
-                        "image": "map.png",
+                        "image": "othermap.jpg",
                         "description": "A general map of all the continents ans oceans and their respective shape in this world",
                         "pins": [
                             {

@@ -681,3 +681,10 @@ input[type="range"]::-moz-range-thumb {
   display: flex;
   justify-content: center;
 }
+
+.map-merging {
+
+  position: relative;
+  margin: 0%;
+  padding: 0%;
+}
