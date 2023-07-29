@@ -16,6 +16,9 @@ document.addEventListener('contextmenu', event => event.preventDefault());
 // Create window resize dragging safety
 window.addEventListener("resize", (event) => {
 
+    // Deal with absolute position shit
+    myworld.positionAllMapPins();
+
     defineGrabbable(true, 
         0, 
         0
@@ -54,6 +57,8 @@ class World {
     world = {};
     events = [];
     calendar = [];
+    
+    animals = [];
 
     constructor(name){
 
@@ -68,6 +73,8 @@ class World {
         this.world = dim.world;
         this.events = dim.events;
         this.calendar = dim.calendar;
+
+        this.animals = animals[name];
 
         this.divisions = this.setupCharacters();
     }
@@ -185,6 +192,8 @@ class World {
     subtitles = [];
 
     establishRelations(){
+
+        clearLines();
 
         this.subtitles = [];
 
@@ -353,11 +362,9 @@ class World {
                 </p>
                 <img id="${myworld.name}landscape" src="https://i.kym-cdn.com/entries/icons/facebook/000/034/683/fumo.jpg">
                 <p><i class="fa-solid fa-paw"></i> <b>Animals</b> <br><br>
-                    <span id='${myworld.name}ani'>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore veritatis inventore sed ullam enim, dolor at culpa in, quod deserunt blanditiis! Pariatur officiis ipsa, facilis repellat odio sint inventore voluptatibus culpa sunt vero recusandae! Fugiat sapiente voluptas alias exercitationem eos tempora provident, ipsam, optio, modi vel deserunt iste repellat voluptatibus.
-                    </span>
+                    <div class="animals" id='${myworld.name}ani'>
+                    </div>
                 </p>
-                <img id="${myworld.name}landscape" src="https://i.kym-cdn.com/entries/icons/facebook/000/034/683/fumo.jpg" />
                 <p><i class="fa-solid fa-shirt"></i> <b>Clothing</b> <br><br>
                     <span id='${myworld.name}cloth'>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore veritatis inventore sed ullam enim, dolor at culpa in, quod deserunt blanditiis! Pariatur officiis ipsa, facilis repellat odio sint inventore voluptatibus culpa sunt vero recusandae! Fugiat sapiente voluptas alias exercitationem eos tempora provident, ipsam, optio, modi vel deserunt iste repellat voluptatibus.
@@ -459,6 +466,53 @@ class World {
                     document.getElementById(`${myworld.name}hist`).innerText = mapInfo.region_data.history;
                     document.getElementById(`${myworld.name}flag`).src = getResource(mapInfo.region_data.flag);
                     document.getElementById(`${myworld.name}landscape`).src = getResource(mapInfo.region_data.scenery);
+
+                    // Get region animals
+                    const animal_container = document.getElementById(`${myworld.name}ani`);
+                    animal_container.innerHTML = "";
+                    if(myworld.animals == undefined || mapInfo.region_data.animals.length == 0) {
+
+                        animal_container.innerHTML = "This region doesn't have animals assigned"
+                    }else mapInfo.region_data.animals.forEach(animal => {
+
+                        const ani = myworld.animals[animal.toString()];
+                        
+                        const container = document.createElement("div");
+                        container.className = "animal-card";
+                        container.innerHTML = `
+                            <img src='${getResource(ani.image)}' />
+                            <h3>${ani.name}</h3>
+                            <p>${ani.outline.substring(0, 200) + (ani.outline.length >= 200 ? "..." : "")}</p>
+                            <!-- more info -->
+                            <div></div>
+                        `;
+
+                        const readmore = document.createElement("button");
+                        readmore.className = "button-6";
+                        readmore.innerText = "Read more";
+
+                        readmore.onclick = () => {
+
+                            if(readmore.innerText == "Read more"){
+                                
+                                // Amplify this shit
+                                readmore.innerText = "Read less";
+                                container.style.width = "100%";
+                                
+                                container.querySelector("p").innerText = ani.outline;
+
+                            }else {
+
+                                // Back to normal
+                                readmore.innerText = "Read more";
+                                container.style.width = "45%";
+                                container.querySelector("p").innerText = ani.outline.substring(0, 200) + (ani.outline.length >= 200 ? "..." : "");
+                            }
+                        }
+
+                        container.appendChild(readmore);
+                        animal_container.appendChild(container);
+                    });
                 });
             }
 
@@ -899,10 +953,19 @@ function openWorld(event, world, view=0){
     switchView(view);
 }
 
+document.addEventListener("mouseup", () => {
+    if(ismerging) {
+        ismerging = false;
+        unmerge();
+    }
+});
+
+let ismerging = false;
 // Merge all the maps
 function merge_maps(){
 
     myworld.clearPins();
+    ismerging = true;
 
     //Close region data pop up
     document.getElementById(myworld.name + "region-data").style.display = "none";
@@ -1005,10 +1068,11 @@ function toggle_pins(){
 
         if(!pin.id.includes(myworld.name + "w-p")) return;
         
-        if(!state) pin.style.display = "block";
+        if(!state) {
+            pin.style.display = "block";
+            myworld.positionAllMapPins();
+        }
         else pin.style.display = "none";
-
-        myworld.positionAllMapPins();
     });
 }
 
@@ -1090,6 +1154,8 @@ function defineGrabbable(restore = false, xx=0, yy=0){
             myworld.establishRelations();
         }
         function elementDrag(e) {
+
+            console.log(ele.getAttribute("rel-x"));
 
             //move the element
             ele.style.position = "relative";

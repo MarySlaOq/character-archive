@@ -315,7 +315,7 @@ data = {
                                     "history": "hm yes",
                                     "flag": "saloman.png",
                                     "scenery": "saloman.png",
-                                    "animals": []
+                                    "animals": [0]
                                 }
                             },
                             {
@@ -338,7 +338,7 @@ data = {
                                     "scenery": "saloman.png",
                                     "money": "Tâlen/Tâlens",
                                     "language": "ikkkuuuu",
-                                    "animals": []
+                                    "animals": [0, 1]
                                 }
                             }
                         ],
@@ -405,35 +405,8 @@ data = {
                         "description": "A general map of all the continents ans oceans and their respective shape in this world",
                         "pins": [
                             {
-                                "x": 20,
+                                "x": 70,
                                 "y": 20,
-                                "location": "Left continents",
-                                "description": "Imagina que isto é uma descrição grande e bem pensada",
-                                "type": "1",
-                                "region_data": {
-                                    "area": 200,
-                                    "population": 1200,
-                                    "bodies_of_water": ["none", "there is no water here", "lol"],
-                                    "demonym": "leftcontinentians",
-                                    "politics": "rulled by a middle god named deez nuts",
-                                    "economy": "terrible",
-                                    "reputation": ":skull:",
-                                    "local_holidays": [
-                                        {
-                                            "date": "3/11",
-                                            "name": "feliz dia 3 do 11"
-                                        }
-                                    ],
-                                    "climate": "cold maybe?",
-                                    "history": "hm yes",
-                                    "flag": "saloman.png",
-                                    "scenery": "saloman.png",
-                                    "animals": []
-                                }
-                            },
-                            {
-                                "x": 50,
-                                "y": 50,
                                 "location": "Center island",
                                 "description": "The island in the center, must be pretty important",
                                 "type": "0",

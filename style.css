@@ -688,3 +688,19 @@ input[type="range"]::-moz-range-thumb {
   margin: 0%;
   padding: 0%;
 }
+
+.animals {
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.animal-card {
+
+  width: 45%;
+  text-align: justify;
+  margin: 10px;
+
+  transition-duration: 1s;
+}

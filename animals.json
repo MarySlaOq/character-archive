@@ -1,0 +1,16 @@
+animals = {
+    "World 1": [
+        {
+            "id": 0,
+            "name": "Dandelion dragons",
+            "outline": " They're about the size of your palm, the wings are dandelion leafs. They hide the body on the soil, only with the tail that has a dandelion being visible. They aren't very strong alone, but since dandelions are always together, they are often in groups and kill preys together. They're venomous, alone can't make someone sleep, just get tired, but a whole lot of them can make the body of the prey stop functioning If they sense their tail pulling them from the soul or being cut, they'll leave the ground and attack. The tail grows back, like a lizard, but the wings dont",
+            "image": "dragon.png"
+        },
+        {
+            "id": 1,
+            "name": "No name yet",
+            "outline": "They live in desertic regions and behave like ostriches, but can be ridden like camels. They use their tails to feel when a sandstrorm might be coming. When they feel one, they dig a hole with their paws submerging them, they contract their body and hide their head and tail between their wings.",
+            "image": "nonameyet.png"
+        }
+    ]
+}
