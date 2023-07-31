@@ -17,7 +17,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
 window.addEventListener("resize", (event) => {
 
     // Deal with absolute position shit
-    myworld.positionAllMapPins();
+    mapZoomOut();
 
     defineGrabbable(true, 
         0, 
@@ -338,9 +338,12 @@ class World {
             region.id = myworld.name + "region-data";
 
             region.innerHTML = `
-                <div id="details" class="container3">
-                    <h2 id="${myworld.name}region_name">Region name</h2>
-                    <img src="https://images.jifo.co/141438036_1685123167974.svg" class="flag" id='${myworld.name}flag' />
+                <div class="container2 m10">
+                    <div id="details" class="container3">
+                        <h2 id="${myworld.name}region_name">Region name</h2>
+                        <img src="https://images.jifo.co/141438036_1685123167974.svg" class="flag" id='${myworld.name}flag' />
+                    </div>
+                    <button class="close" onclick="mapZoomOut()">Return to full map</button>
                 </div>
                 <p id="${myworld.name}desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore veritatis inventore sed ullam enim, dolor at culpa in, quod deserunt blanditiis! Pariatur officiis ipsa, facilis repellat odio sint inventore voluptatibus culpa sunt vero recusandae! Fugiat sapiente voluptas alias exercitationem eos tempora provident, ipsam, optio, modi vel deserunt iste repellat voluptatibus.</p>
                 <div class="traits">
@@ -360,7 +363,6 @@ class World {
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore veritatis inventore sed ullam enim, dolor at culpa in, quod deserunt blanditiis! Pariatur officiis ipsa, facilis repellat odio sint inventore voluptatibus culpa sunt vero recusandae! Fugiat sapiente voluptas alias exercitationem eos tempora provident, ipsam, optio, modi vel deserunt iste repellat voluptatibus.
                     </span>
                 </p>
-                <img id="${myworld.name}landscape" src="https://i.kym-cdn.com/entries/icons/facebook/000/034/683/fumo.jpg">
                 <p><i class="fa-solid fa-paw"></i> <b>Animals</b> <br><br>
                     <div class="animals" id='${myworld.name}ani'>
                     </div>
@@ -371,9 +373,7 @@ class World {
                     </span>
                 </p>
                 <img id="${myworld.name}landscape" src="https://i.kym-cdn.com/entries/icons/facebook/000/034/683/fumo.jpg">
-                
                 `;
-
             mapElement.appendChild(region);
             container.appendChild(mapElement);
         }
@@ -440,35 +440,34 @@ class World {
             if(mapInfo.region_data != undefined ){
 
                 pin.addEventListener("click", () => {
-    
-                    document.getElementById(myworld.name + "region-data").style.display = "block";
 
-                    const y = document.getElementById("details").getBoundingClientRect().top + window.scrollY;
+                    // Pin click
+                    // Set the elements in the info tab
 
-                    window.scroll({
-                        top: y,
-                        behavior: 'smooth'
-                    });
+                    const current_region_data = document.querySelector(".map-active" + " .region-data");
+                    current_region_data.style.display = "block";
 
-                    document.getElementById(`${myworld.name}region_name`).innerText = mapInfo.location;
-                    document.getElementById(`${myworld.name}desc`).innerText = mapInfo.description;
-                    document.getElementById(`${myworld.name}area`).innerText = mapInfo.region_data.area;
-                    document.getElementById(`${myworld.name}pop`).innerText = mapInfo.region_data.population;
-                    document.getElementById(`${myworld.name}water`).innerText = mapInfo.region_data.bodies_of_water.join(", ");
-                    document.getElementById(`${myworld.name}den`).innerText = mapInfo.region_data.demonym;
-                    document.getElementById(`${myworld.name}pol`).innerText = mapInfo.region_data.politics;
-                    document.getElementById(`${myworld.name}econ`).innerText = mapInfo.region_data.economy;
-                    document.getElementById(`${myworld.name}rep`).innerText = mapInfo.region_data.reputation;
-                    document.getElementById(`${myworld.name}cli`).innerText = mapInfo.region_data.climate;
-                    document.getElementById(`${myworld.name}mon`).innerText = mapInfo.region_data.money;
-                    document.getElementById(`${myworld.name}lang`).innerText = mapInfo.region_data.language;
+                    const y = document.querySelector(".map-active" + " .region-data #details").getBoundingClientRect().top + window.scrollY;
 
-                    document.getElementById(`${myworld.name}hist`).innerText = mapInfo.region_data.history;
-                    document.getElementById(`${myworld.name}flag`).src = getResource(mapInfo.region_data.flag);
-                    document.getElementById(`${myworld.name}landscape`).src = getResource(mapInfo.region_data.scenery);
+                    current_region_data.querySelector(`[id="${myworld.name}region_name"]`).innerText = mapInfo.location;
+                    current_region_data.querySelector(`[id="${myworld.name}desc"]`).innerText = mapInfo.description;
+                    current_region_data.querySelector(`[id="${myworld.name}area"]`).innerText = mapInfo.region_data.area;
+                    current_region_data.querySelector(`[id="${myworld.name}pop"]`).innerText = mapInfo.region_data.population;
+                    current_region_data.querySelector(`[id="${myworld.name}water"]`).innerText = mapInfo.region_data.bodies_of_water.join(", ");
+                    current_region_data.querySelector(`[id="${myworld.name}den"]`).innerText = mapInfo.region_data.demonym;
+                    current_region_data.querySelector(`[id="${myworld.name}pol"]`).innerText = mapInfo.region_data.politics;
+                    current_region_data.querySelector(`[id="${myworld.name}econ"]`).innerText = mapInfo.region_data.economy;
+                    current_region_data.querySelector(`[id="${myworld.name}rep"]`).innerText = mapInfo.region_data.reputation;
+                    current_region_data.querySelector(`[id="${myworld.name}cli"]`).innerText = mapInfo.region_data.climate;
+                    current_region_data.querySelector(`[id="${myworld.name}mon"]`).innerText = mapInfo.region_data.money;
+                    current_region_data.querySelector(`[id="${myworld.name}lang"]`).innerText = mapInfo.region_data.language;
+
+                    current_region_data.querySelector(`[id="${myworld.name}hist"]`).innerText = mapInfo.region_data.history;
+                    current_region_data.querySelector(`[id="${myworld.name}flag"]`).src = getResource(mapInfo.region_data.flag);
+                    current_region_data.querySelector(`[id="${myworld.name}landscape"]`).src = getResource(mapInfo.region_data.scenery);
 
                     // Get region animals
-                    const animal_container = document.getElementById(`${myworld.name}ani`);
+                    const animal_container = current_region_data.querySelector(`[id="${myworld.name}ani"]`);
                     animal_container.innerHTML = "";
                     if(myworld.animals == undefined || mapInfo.region_data.animals.length == 0) {
 
@@ -513,13 +512,31 @@ class World {
                         container.appendChild(readmore);
                         animal_container.appendChild(container);
                     });
+
+                    //Show zoomed map
+                    const map = this.getCurrentMap();
+                    this.clearPins();
+
+                    map.src = getResource(mapInfo.region_data.scenery);
+
+                    //Scroll to them
+                    window.scroll({
+                        top: y,
+                        behavior: 'smooth'
+                    });
                 });
             }
 
             pin.addEventListener("mouseleave", () => {
                 mapPopup.style.opacity=0;
             });
+
         });
+    }
+
+    getCurrentMap(){
+
+        return [...document.querySelectorAll(".map-image")].find(m => m.offsetParent != null);
     }
 
     clearPins(){
@@ -611,8 +628,11 @@ class World {
             else window.open(chara.spotify, "_blank");
         };
 
-        document.getElementById("likes").innerHTML = "<li>" + chara.likes.join("</li><li>") + "</li>";
-        document.getElementById("hates").innerHTML = "<li>" + chara.hates.join("</li><li>") + "</li>";
+        document.getElementById("likes").innerHTML = "";
+        document.getElementById("hates").innerHTML = "";
+        
+        if(chara.likes.length > 0) document.getElementById("likes").innerHTML = "<li>" + chara.likes.join("</li><li>") + "</li>";
+        if(chara.hates.length > 0) document.getElementById("hates").innerHTML = "<li>" + chara.hates.join("</li><li>") + "</li>";
 
         const rel = document.getElementById("relations");
         rel.innerHTML = chara.relations.map(rel => `<p class="relation"><img src="${getResource(this.getChara(rel.to).image)}" /> Related to <a onclick="popupOf(${rel.to})" href="#0">${this.idToName(rel.to)}</a>: ${getRelationshipData(rel.details).name}</p>`).join("");
@@ -650,6 +670,32 @@ class World {
 
         return this.world.divisions.find(d => d.id == type);
     }
+
+    getMapDataFromIndex(index) {
+
+        return this.world.maps[parseInt(index)];
+    }
+} 
+
+function mapZoomOut(){
+
+    // Zoom out of map
+    const map = myworld.getCurrentMap();
+    let mapid = map.parentElement.id.split("w-m")[1];
+
+    const myData = myworld.getMapDataFromIndex(mapid);
+
+    map.src = getResource(myData.image);
+    myworld.positionAllMapPins();
+
+    //Clear region data
+    const frame = document.querySelector(`.map-active .region-data`);
+    frame.style.display = "none";
+
+    window.scroll({
+        top: map.getBoundingClientRect().top + window.screenY,
+        behavior: "smooth"
+    });
 }
 
 function switchView(view){
@@ -720,6 +766,7 @@ function switchView(view){
 
 function previous_map(){
 
+    mapZoomOut();
     document.querySelectorAll(".map-active").forEach(active_map => {
 
         if(active_map.id.includes(myworld.name)){
@@ -743,6 +790,7 @@ function previous_map(){
 
 function next_map(){
 
+    mapZoomOut();
     document.querySelectorAll(".map-active").forEach(active_map => {
 
         if(active_map.id.includes(myworld.name)){
@@ -968,7 +1016,7 @@ function merge_maps(){
     ismerging = true;
 
     //Close region data pop up
-    document.getElementById(myworld.name + "region-data").style.display = "none";
+    mapZoomOut();
 
     const start_height = document.getElementById(myworld.name).getBoundingClientRect().height;
 
