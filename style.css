@@ -709,3 +709,41 @@ input[type="range"]::-moz-range-thumb {
 
   margin: 10px;
 }
+
+.box{
+    position: relative;
+    width: fit-content;
+}
+
+.input {
+    padding: 10px;
+    width: 100px;
+    height: 40px;
+    background: none;
+    border: 1px solid #36395A;
+    border-radius: 50px;
+    box-sizing: border-box;
+    font-family: monospace;
+    font-size: 20px;
+    color: #36395A;
+    outline: none;
+    transition: .5s;
+}
+.box:hover input{
+    width: 350px;
+    background: #ffffff;
+    border-radius: 10px;
+}
+.box i{
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translate(-50%,-50%);
+    font-size: 26px;
+    color: #36395A;
+    transition: .2s;
+}
+.box:hover i{
+    opacity: 0;
+    z-index: -1;
+}

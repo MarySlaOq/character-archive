@@ -17,12 +17,9 @@ document.addEventListener('contextmenu', event => event.preventDefault());
 window.addEventListener("resize", (event) => {
 
     // Deal with absolute position shit
+    reset_positions();
+    defineGrabbable();
     mapZoomOut();
-
-    defineGrabbable(true, 
-        0, 
-        0
-    );
 })
 
 var block_popup = false;
@@ -203,8 +200,10 @@ class World {
             chara.relations.forEach(relation => {
 
                 const start = document.getElementById(this.name + 'c' + chara.id);
-                const end = document.getElementById(this.name + 'c' + relation.to);
+                if(start.style.display == "none") return;
 
+                const end = document.getElementById(this.name + 'c' + relation.to);
+                if(end.style.display == "none") return;
                 
                 const relationData = getRelationshipData(relation.details);
                 if(!this.subtitles.includes(relation.details)) this.subtitles.push(relation.details);
@@ -881,6 +880,14 @@ data.dimensions.forEach(element => {
             <button class='button-30 controller' onclick='relationship_control()'>Hide all relationships</button>
             <button onclick='reset_positions()' class='button-30'>Reset character positions</button>
 
+            <br /><br /><br />
+            <! -- form for shit and maybe el menu -->
+            <div class="box">
+                <form name="search">
+                    <input maxlength=80 id="${myworld.name}search" type="text" placeholder="Search" oninput="searchUpdate()" class="input" name="txt">
+                </form>
+            </div>
+
             <div class="subtitles">
                 <div class="subtitle"> <div class="circle"></div> <span>Text</span></div>
                 <div class="subtitle"> <div class="circle"></div> <span>Text</span></div>
@@ -1071,6 +1078,21 @@ function unmerge(){
     document.getElementById(myworld.name).style.removeProperty("height");
 }
 
+function searchUpdate(prompt=null){
+
+    prompt = prompt==null ? document.getElementById(myworld.name + "search").value.toLowerCase() : prompt;
+    reset_positions();
+    
+    myworld.characters.forEach(chara => {
+
+        let name = chara.name.toString().toLowerCase();
+        console.log(prompt);
+        document.getElementById(`${myworld.name}c${chara.id}`).style.display = name.includes(prompt) ? "block" : "none";
+    });
+
+    myworld.establishRelations();
+}
+
 function popupOf(who){
 
     let chara = myworld.getChara(who);
@@ -1155,8 +1177,8 @@ function defineGrabbable(restore = false, xx=0, yy=0){
 
         if(element.offsetParent == null) continue;
 
-        if (!element.hasAttribute("rel-x") || restore) element.setAttribute("rel-x", element.getBoundingClientRect().left);
-        if (!element.hasAttribute("rel-y") || restore) element.setAttribute("rel-y", element.getBoundingClientRect().top + window.scrollY);
+        element.setAttribute("rel-x", element.getBoundingClientRect().left);
+        element.setAttribute("rel-y", element.getBoundingClientRect().top + window.scrollY);
 
         dragElement(element);
     }
@@ -1214,4 +1236,4 @@ function defineGrabbable(restore = false, xx=0, yy=0){
 }
 
 // Open first world
-openWorld(event, data.dimensions[0].name, 1);
+openWorld(event, data.dimensions[0].name, 0);
