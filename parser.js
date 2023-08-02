@@ -879,6 +879,8 @@ data.dimensions.forEach(element => {
         <div>
             <button class='button-30 controller' onclick='relationship_control()'>Hide all relationships</button>
             <button onclick='reset_positions()' class='button-30'>Reset character positions</button>
+            <button type='button' class='char_sorter'>Open</button> <div class='content'>
+                <p>Lorem gejk</p></div> 
 
             <br /><br /><br />
             <! -- form for shit and maybe el menu -->
