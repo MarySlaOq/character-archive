@@ -761,9 +761,12 @@ input[type="range"]::-moz-range-thumb {
 .char_sorter:hover {
   background-color: #ccc;
 }
-.content {
+.sorter_content {
+
+  position: absolute;
   padding: 0 18px;
   display: none;
   overflow: hidden;
   background-color: #f1f1f1;
+  z-index: 100;
 }

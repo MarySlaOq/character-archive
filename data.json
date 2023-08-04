@@ -70,6 +70,7 @@ data = {
                     "notes": "",
                     "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/saloman/",
                     "spotify": "https://open.spotify.com/playlist/4FmIaQM0z4L5qvqd1VfOHU?si=039f9dd66510443a",
+                    "tags": ["HElla hot"],
                     "highlight": "greenyellow"
                 },
                 {
@@ -105,6 +106,7 @@ data = {
                     "notes": "",
                     "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/sasha/",
                     "spotify": "https://open.spotify.com/playlist/5cl1sNdKxVp7tyirZoF3Pj?si=7453ae1f5b474903",
+                    "tags": [],
                     "highlight": "salmon"
                 },
                 {
@@ -132,6 +134,7 @@ data = {
                     "notes": "",
                     "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/sora/",
                     "spotify": "",
+                    "tags": [],
                     "highlight": "cyan"
                 },
                 {
@@ -167,6 +170,7 @@ data = {
                     "notes": "Mary was born biologically",
                     "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/mary/",
                     "spotify": "https://open.spotify.com/playlist/0exULt7DOEfz9Pg2L7ut1W?si=c899df592b91408d",
+                    "tags": ["MOMMY SORRY?? MOMMY MOMMY SORRY"],
                     "highlight": "gold"
                 },
                 {
@@ -202,6 +206,7 @@ data = {
                     "notes": "Ethan is blind",
                     "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/ethan/",
                     "spotify": "",
+                    "tags": ["FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU"],
                     "highlight": "darkslateblue"
                 },
                 {
@@ -233,6 +238,7 @@ data = {
                     "notes": "He is Saloman's ex-boyfriend",
                     "pinterest": "",
                     "spotify": "",
+                    "tags": [],
                     "highlight": "purple"
                 },
                 {
@@ -264,6 +270,7 @@ data = {
                     "notes": "Acheron was originally human",
                     "pinterest": "",
                     "spotify": "",
+                    "tags": [],
                     "highlight": "black"
                 }
             ],
@@ -539,6 +546,7 @@ data = {
                     "notes": "",
                     "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/alexia/",
                     "spotify": "https://open.spotify.com/playlist/71QeeFgEcfEGkiUHUA6PzL?si=42e6b42f0d314ec0",
+                    "tags": [],
                     "highlight": "green"
                 },
                 {
@@ -578,6 +586,7 @@ data = {
                     "notes": "",
                     "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/harry/",
                     "spotify": "https://open.spotify.com/playlist/6OLllDa2wXVGhMlnwlklmO?si=48346335594844d6",
+                    "tags": [],
                     "highlight": "black"
                 },
                 {
@@ -624,6 +633,7 @@ data = {
                     "notes": "",
                     "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/max/",
                     "spotify": "https://open.spotify.com/playlist/0jwQ2wIylTlAo8j8UIo189?si=c36686ae22a140b7",
+                    "tags": [],
                     "highlight": "red"
                 },
                 {
@@ -663,6 +673,7 @@ data = {
                     "notes": "",
                     "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/jonathan/",
                     "spotify": "https://open.spotify.com/playlist/2gTlRM0uHA2gzheuAi8X1l?si=0663950f46c34e5f",
+                    "tags": [],
                     "highlight": "blue"
                 },
                 {
@@ -695,6 +706,7 @@ data = {
                     "notes": "He usually uses gun weapons in his killings",
                     "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/adril/",
                     "spotify": "https://open.spotify.com/playlist/1MMhCzR6EnNFsnW6VwmaNQ?si=a9be0bb6327e4581",
+                    "tags": [],
                     "highlight": "blue"
                 },
                 {
@@ -727,6 +739,7 @@ data = {
                     "notes": "She usually uses weapons with blades in her killings",
                     "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/viktoriya/",
                     "spotify": "https://open.spotify.com/playlist/3i5wFg8sOuKsh1vqCTjsEW?si=3762f4c878d5497b",
+                    "tags": [],
                     "highlight": "blue"
                 },
                 {
@@ -766,6 +779,7 @@ data = {
                     "notes": "He likes animals so much he's probably a furry",
                     "pinterest": "https://www.pinterest.pt/MiriamSkyler/roupa-desenhos/petter/",
                     "spotify": "https://open.spotify.com/playlist/7tMldXqZTFGmdT23WuRhZj?si=cc3b7368b2234d3e",
+                    "tags": [],
                     "highlight": "blue"
                 }
             ],

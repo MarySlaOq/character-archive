@@ -571,6 +571,23 @@ class World {
         return text;
     }
 
+    setupTagFilters() {
+
+        // Set up tag filters
+        var uniqueTags = [...new Set(this.characters.map(c => c.tags).flat(1))];
+
+        const sorter = document.getElementById(this.name + "chara-sorter");
+        sorter.innerHTML = "";
+
+        uniqueTags.forEach(tag => {
+
+            const ele = document.createElement("p");
+            ele.innerText = tag;
+
+            sorter.appendChild(ele);
+        });
+    }
+
     openPopUp(chara){
 
         if(block_popup){
@@ -879,8 +896,9 @@ data.dimensions.forEach(element => {
         <div>
             <button class='button-30 controller' onclick='relationship_control()'>Hide all relationships</button>
             <button onclick='reset_positions()' class='button-30'>Reset character positions</button>
-            <button type='button' class='char_sorter'>Open</button> <div class='content'>
-                <p>Lorem gejk</p></div> 
+            <button type='button' class='char_sorter'>Open</button> 
+            <div class='sorter_content' id="${myworld.name}chara-sorter">
+            </div> 
 
             <br /><br /><br />
             <! -- form for shit and maybe el menu -->
@@ -946,6 +964,8 @@ data.dimensions.forEach(element => {
     content.appendChild(wView);
     content.appendChild(eView);
     content.appendChild(clView);
+
+    myworld.setupTagFilters();
 });
 
 function clearLines(color=null){
@@ -1179,6 +1199,8 @@ function defineGrabbable(restore = false, xx=0, yy=0){
 
         if(element.offsetParent == null) continue;
 
+        console.log("cum");
+
         element.setAttribute("rel-x", element.getBoundingClientRect().left);
         element.setAttribute("rel-y", element.getBoundingClientRect().top + window.scrollY);
 
@@ -1227,7 +1249,7 @@ function defineGrabbable(restore = false, xx=0, yy=0){
         }
         function elementDrag(e) {
 
-            console.log(ele.getAttribute("rel-x"));
+            //console.log(ele.getAttribute("rel-x"));
 
             //move the element
             ele.style.position = "relative";
@@ -1236,6 +1258,22 @@ function defineGrabbable(restore = false, xx=0, yy=0){
         }
     }
 }
+
+var coll = document.getElementsByClassName("char_sorter");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+} 
 
 // Open first world
 openWorld(event, data.dimensions[0].name, 0);
