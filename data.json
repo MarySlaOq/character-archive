@@ -321,7 +321,7 @@ data = {
                                     "climate": "cold maybe?",
                                     "history": "hm yes",
                                     "flag": "saloman.png",
-                                    "scenery": "saloman.png",
+                                    "scenery": ["saloman.png", "kael.png"],
                                     "animals": [0]
                                 }
                             },
@@ -342,7 +342,7 @@ data = {
                                     "climate": "HOT HOT HOT?????",
                                     "history": "hm NO",
                                     "flag": "saloman.png",
-                                    "scenery": "saloman.png",
+                                    "scenery": ["saloman.png", "petter.png"],
                                     "money": "Tâlen/Tâlens",
                                     "language": "ikkkuuuu",
                                     "animals": [0, 1]
@@ -377,7 +377,7 @@ data = {
                                     "climate": "cold maybe?",
                                     "history": "hm yes",
                                     "flag": "saloman.png",
-                                    "scenery": "saloman.png",
+                                    "scenery": ["saloman.png"],
                                     "animals": []
                                 }
                             },
@@ -398,7 +398,7 @@ data = {
                                     "climate": "HOT HOT HOT?????",
                                     "history": "hm NO",
                                     "flag": "saloman.png",
-                                    "scenery": "saloman.png",
+                                    "scenery": ["saloman.png"],
                                     "money": "Tâlen/Tâlens",
                                     "language": "ikkkuuuu",
                                     "animals": []
@@ -428,7 +428,7 @@ data = {
                                     "climate": "HOT HOT HOT?????",
                                     "history": "hm NO",
                                     "flag": "saloman.png",
-                                    "scenery": "saloman.png",
+                                    "scenery": ["saloman.png"],
                                     "money": "Tâlen/Tâlens",
                                     "language": "ikkkuuuu",
                                     "animals": []
@@ -464,7 +464,7 @@ data = {
                                     "climate": "cold maybe?",
                                     "history": "hm yes",
                                     "flag": "saloman.png",
-                                    "scenery": "saloman.png",
+                                    "scenery": ["saloman.png"],
                                     "animals": []
                                 }
                             },
@@ -485,7 +485,7 @@ data = {
                                     "climate": "HOT HOT HOT?????",
                                     "history": "hm NO",
                                     "flag": "saloman.png",
-                                    "scenery": "saloman.png",
+                                    "scenery": ["saloman.png"],
                                     "money": "Tâlen/Tâlens",
                                     "language": "ikkkuuuu",
                                     "animals": []

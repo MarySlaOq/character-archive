@@ -295,6 +295,9 @@ class World {
             const mapName = document.createElement("h3");
             mapName.innerText = mapData.name;
 
+            const slideContainer = document.createElement("div");
+            slideContainer.id = myworld.name + "slide";
+
             const mapImage = document.createElement("img");
             mapImage.className = "map-image";
             mapImage.src = getResource(mapData.image);
@@ -329,7 +332,8 @@ class World {
                 }
             }
             
-            mapElement.appendChild(mapImage);
+            slideContainer.appendChild(mapImage);
+            mapElement.appendChild(slideContainer);
 
             // Draw region information
             const region = document.createElement("div");
@@ -463,7 +467,6 @@ class World {
 
                     current_region_data.querySelector(`[id="${myworld.name}hist"]`).innerText = mapInfo.region_data.history;
                     current_region_data.querySelector(`[id="${myworld.name}flag"]`).src = getResource(mapInfo.region_data.flag);
-                    current_region_data.querySelector(`[id="${myworld.name}landscape"]`).src = getResource(mapInfo.region_data.scenery);
 
                     // Get region animals
                     const animal_container = current_region_data.querySelector(`[id="${myworld.name}ani"]`);
@@ -516,7 +519,26 @@ class World {
                     const map = this.getCurrentMap();
                     this.clearPins();
 
-                    map.src = getResource(mapInfo.region_data.scenery);
+                    map.src = getResource(mapInfo.region_data.scenery[0]);
+                    map.parentElement.querySelectorAll("img").forEach(i => {
+                        if(i != map) i.remove();
+                    });
+
+                    mapInfo.region_data.scenery.forEach(m => {
+
+                        if(m==mapInfo.region_data.scenery[0]) return;
+
+                        const mapImage = document.createElement("img");
+                        mapImage.src = getResource(m);
+                        mapImage.className = "map-image";
+
+                        map.parentElement.appendChild(mapImage);
+                        $(`[id='${myworld.name}slide']`).cycle({ 
+                            fx:    'zoom', 
+                            sync:  false, 
+                            delay: -2000 
+                        });
+                    });
 
                     //Scroll to them
                     window.scroll({
@@ -695,23 +717,24 @@ class World {
 
 function mapZoomOut(){
 
+    $(`[id='${myworld.name}slide']`).cycle('destroy'); 
+
     // Zoom out of map
     const map = myworld.getCurrentMap();
-    let mapid = map.parentElement.id.split("w-m")[1];
+    let mapid = map.parentElement.parentElement.id.split("w-m")[1];
 
     const myData = myworld.getMapDataFromIndex(mapid);
 
-    map.src = getResource(myData.image);
+    // remove slide show images
+    map.parentElement.innerHTML = "<img class=\"map-image\" src=\""+getResource(myData.image)+"\">";
+
+    document.getElementById(myworld.name + "slide").style.removeProperty("height");
+
     myworld.positionAllMapPins();
 
     //Clear region data
     const frame = document.querySelector(`.map-active .region-data`);
     frame.style.display = "none";
-
-    window.scroll({
-        top: map.getBoundingClientRect().top + window.screenY,
-        behavior: "smooth"
-    });
 }
 
 function switchView(view){
@@ -1041,11 +1064,11 @@ let ismerging = false;
 // Merge all the maps
 function merge_maps(){
 
-    myworld.clearPins();
-    ismerging = true;
-
     //Close region data pop up
     mapZoomOut();
+
+    myworld.clearPins();
+    ismerging = true;
 
     const start_height = document.getElementById(myworld.name).getBoundingClientRect().height;
 
@@ -1059,7 +1082,7 @@ function merge_maps(){
     document.querySelectorAll(".map-image").forEach(map => {
 
         if(currentMap==null) currentMap = map.offsetParent != null ? map : null;
-        if(map.parentElement.id.split("w-m")[0] != myworld.name || map.offsetParent != null) return;
+        if(map.parentElement.parentElement.id.split("w-m")[0] != myworld.name || map.offsetParent != null) return;
         
         const img = document.createElement("img");
         img.className = "map-merging";
@@ -1273,7 +1296,7 @@ for (i = 0; i < coll.length; i++) {
       content.style.display = "block";
     }
   });
-} 
+}
 
 // Open first world
-openWorld(event, data.dimensions[0].name, 0);
+openWorld(event, data.dimensions[0].name, 1);
