@@ -6,7 +6,32 @@
 */
 
 data = {
-    "people": [],
+    "people": [
+        {
+            "id": 0,
+            "name": "MarySlaOq",
+            "socials": [
+                {
+                    "name": "Twitter",
+                    "link": "https://twitter.com/ghostyshrimp"
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "name": "Test",
+            "socials": [
+                {
+                    "name": "Twitter",
+                    "link": "https://twitter.com/home"
+                },
+                {
+                    "name": "Reddit",
+                    "link": "https://www.reddit.com/"
+                }
+            ]
+        }
+    ],
     "dimensions":[
         {
             "name": "World 1",
@@ -792,7 +817,52 @@ data = {
             "events": []
         }
     ],
-    "relations": {},
+    "relations": {
+        "0": {
+            "name": "Companion",
+            "color": "cyan"
+        },
+        "1": {
+            "name": "Superior",
+            "color": "purple"
+        },
+        "2": {
+            "name": "Heir",
+            "color": "pink"
+        },
+        "3": {
+            "name": "Childhood friends",
+            "color": "gold"
+        },
+        "4": {
+            "name": "Mentor",
+            "color": "red"
+        },
+        "5": {
+            "name": "Friend of parents",
+            "color": "salmon"
+        },
+        "6": {
+            "name": "Ex-lovers",
+            "color": "palevioletred"
+        },
+        "7": {
+            "name": "Siblings",
+            "color": "paleturquoise"
+        },
+        "8": {
+            "name": "Parental Figure",
+            "color": "palered"
+        },
+        "9": {
+            "name": "Toy",
+            "color": "grey"
+        },
+        "10": {
+            "name": "Child Figure",
+            "color": "pink"
+        },
+    },
     "settings": {
         "arrow_animation": true,
         "line_weight": 8,

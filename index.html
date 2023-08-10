@@ -5,6 +5,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Relationship builder</title>
 
+    <!-- User data in files-->
+    <script src="animals.json"></script>
+    <script id="script" src="data.json"></script>
+
+    <script src="utils.js"></script>
+    <script src="secrets.js"></script>
+    <script src="parser.js"></script>
+
+    <!-- include firebase -->
+    <script type="module"></script>
+
+    <script src="database.js"></script>
+
+    <script type="module" async>
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
+      import {
+        getDatabase,
+        ref,
+        child,
+        get,
+      } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js";
+
+      var connection = false;
+      var loaded;
+
+      const sleep = (milliseconds) => {
+        return new Promise((resolve) => setTimeout(resolve, milliseconds));
+      };
+
+      // Get the database info
+      const fetchAllDataBaseInfo = (database, app) => {
+        popUpNotification("Connected to database successfully", 0);
+        sleep(2000).then(() => {
+          // Get people
+          const dbRef = ref(database);
+          get(child(dbRef, `people`))
+            .then((snapshot) => {
+              if (snapshot.exists()) {
+                data.people = snapshot.val();
+                popUpNotification("People information loaded", 0);
+
+                get(child(dbRef, `relations`)).then((snapshot) => {
+                  if (snapshot.exists()) {
+                    data.relations = { ...snapshot.val() };
+
+                    popUpNotification("Character relations loaded", 0);
+
+                    get(child(dbRef, `settings`)).then((snapshot) => {
+                      if (snapshot.exists()) {
+                        data.settings = { ...snapshot.val() };
+
+                        popUpNotification("Character relations loaded", 0);
+
+                        get(child(dbRef, `animals`)).then((snapshot) => {
+                          if (snapshot.exists()) {
+                            data.animals = { ...snapshot.val() };
+
+                            popUpNotification("Animal information loaded", 0);
+
+                            parse();
+                          } else {
+                            popUpNotification("Could not load animals", 1);
+                          }
+                        });
+                      } else {
+                        popUpNotification("Could not load settings", 1);
+                      }
+                    });
+                  } else {
+                    popUpNotification("Could not load relations", 1);
+                  }
+                });
+
+                loaded = true;
+              } else {
+                popUpNotification("Could not load people", 1);
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        });
+      };
+
+      try {
+        const app = initializeApp(firebaseConfig);
+        connection = true;
+
+        const analytics = getAnalytics(app);
+
+        const database = getDatabase(app);
+        fetchAllDataBaseInfo(database, app);
+      } catch (err) {
+        console.error(err);
+        popUpNotification("Could not connect to database", 1);
+      }
+    </script>
+
     <!-- include jquery -->
 
     <script
@@ -16,9 +115,6 @@
     <script src="cycle.js"></script>
 
     <link rel="stylesheet" href="style.css" />
-
-    <script src="animals.json"></script>
-    <script id="script" src="data.json"></script>
 
     <script src="lines/leader-line.min.js"></script>
 
@@ -50,6 +146,8 @@
     <div id="tags" class="tab"></div>
 
     <div id="worlds"></div>
+
+    <div class="loader" id="loader"></div>
 
     <!-- POP UPs -->
 
@@ -150,6 +248,4 @@
       </div>
     </div>
   </body>
-
-  <script src="parser.js"></script>
 </html>

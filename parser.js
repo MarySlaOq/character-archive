@@ -4,10 +4,24 @@ console.log(data);
 // Hello hello <3 hai o7
 //lets get back to work!! :flex:
 
+const roles = ["Main character", "Supporting character", "Arc character", "Background character"];
+function getCreator(id){ return data.people.find(p => p.id == id); }
+function getRelationshipData(id){ return data.relations[id]; }
+function getResource(name){
+
+    return "resources/" + name;
+}
+
+var block_popup = false;
+var my_top = -1;
+
+var popup = document.getElementById("popup");
+var mapPopup = document.getElementById("map-popup");
+
 const color_codes = {
-     "aliceblue":"#f0f8ff", "antiquewhite":"#faebd7", "aqua":"#00ffff", "aquamarine":"#7fffd4", "azure":"#f0ffff", "beige":"#f5f5dc", "bisque":"#ffe4c4", "black":"#000000", "blanchedalmond":"#ffebcd", "blue":"#0000ff", "blueviolet":"#8a2be2", "brown":"#a52a2a", "burlywood":"#deb887", "cadetblue":"#5f9ea0", "chartreuse":"#7fff00", "chocolate":"#d2691e", "coral":"#ff7f50", "cornflowerblue":"#6495ed", "cornsilk":"#fff8dc", "crimson":"#dc143c", "cyan":"#00ffff", "darkblue":"#00008b", "darkcyan":"#008b8b", "darkgoldenrod":"#b8860b", "darkgray":"#a9a9a9", "darkgreen":"#006400", "darkkhaki":"#bdb76b", "darkmagenta":"#8b008b", "darkolivegreen":"#556b2f", "darkorange":"#ff8c00", "darkorchid":"#9932cc", "darkred":"#8b0000", "darksalmon":"#e9967a", "darkseagreen":"#8fbc8f", "darkslateblue":"#483d8b", "darkslategray":"#2f4f4f", "darkturquoise":"#00ced1", "darkviolet":"#9400d3", "deeppink":"#ff1493", "deepskyblue":"#00bfff", "dimgray":"#696969", "dodgerblue":"#1e90ff", "firebrick":"#b22222", "floralwhite":"#fffaf0", "forestgreen":"#228b22", "fuchsia":"#ff00ff", "gainsboro":"#dcdcdc", "ghostwhite":"#f8f8ff", "gold":"#ffd700", "goldenrod":"#daa520", "gray":"#808080", "green":"#008000", "greenyellow":"#adff2f",
-     "honeydew":"#f0fff0", "hotpink":"#ff69b4", "indianred ":"#cd5c5c", "indigo":"#4b0082", "ivory":"#fffff0", "khaki":"#f0e68c", "lavender":"#e6e6fa", "lavenderblush":"#fff0f5", "lawngreen":"#7cfc00", "lemonchiffon":"#fffacd", "lightblue":"#add8e6", "lightcoral":"#f08080", "lightcyan":"#e0ffff", "lightgoldenrodyellow":"#fafad2", "lightgrey":"#d3d3d3", "lightgreen":"#90ee90", "lightpink":"#ffb6c1", "lightsalmon":"#ffa07a", "lightseagreen":"#20b2aa", "lightskyblue":"#87cefa", "lightslategray":"#778899", "lightsteelblue":"#b0c4de", "lightyellow":"#ffffe0", "lime":"#00ff00", "limegreen":"#32cd32", "linen":"#faf0e6", "magenta":"#ff00ff", "maroon":"#800000", "mediumaquamarine":"#66cdaa", "mediumblue":"#0000cd", "mediumorchid":"#ba55d3", "mediumpurple":"#9370d8", "mediumseagreen":"#3cb371", "mediumslateblue":"#7b68ee",  "mediumspringgreen":"#00fa9a", "mediumturquoise":"#48d1cc", "mediumvioletred":"#c71585", "midnightblue":"#191970", "mintcream":"#f5fffa", "mistyrose":"#ffe4e1", "moccasin":"#ffe4b5", "navajowhite":"#ffdead", "navy":"#000080", "oldlace":"#fdf5e6", "olive":"#808000", "olivedrab":"#6b8e23", "orange":"#ffa500", "orangered":"#ff4500", "orchid":"#da70d6", "palegoldenrod":"#eee8aa",
-     "palegreen":"#98fb98", "paleturquoise":"#afeeee", "palevioletred":"#d87093", "papayawhip":"#ffefd5", "peachpuff":"#ffdab9", "peru":"#cd853f", "pink":"#ffc0cb", "plum":"#dda0dd", "powderblue":"#b0e0e6", "purple":"#800080", "rebeccapurple":"#663399", "red":"#ff0000", "rosybrown":"#bc8f8f", "royalblue":"#4169e1", "saddlebrown":"#8b4513", "salmon":"#fa8072", "sandybrown":"#f4a460", "seagreen":"#2e8b57", "seashell":"#fff5ee", "sienna":"#a0522d", "silver":"#c0c0c0", "skyblue":"#87ceeb", "slateblue":"#6a5acd", "slategray":"#708090", "snow":"#fffafa", "springgreen":"#00ff7f", "steelblue":"#4682b4", "tan":"#d2b48c", "teal":"#008080", "thistle":"#d8bfd8", "tomato":"#ff6347", "turquoise":"#40e0d0", "violet":"#ee82ee", "wheat":"#f5deb3", "white":"#ffffff", "whitesmoke":"#f5f5f5", "yellow":"#ffff00", "yellowgreen":"#9acd32"
+    "aliceblue":"#f0f8ff", "antiquewhite":"#faebd7", "aqua":"#00ffff", "aquamarine":"#7fffd4", "azure":"#f0ffff", "beige":"#f5f5dc", "bisque":"#ffe4c4", "black":"#000000", "blanchedalmond":"#ffebcd", "blue":"#0000ff", "blueviolet":"#8a2be2", "brown":"#a52a2a", "burlywood":"#deb887", "cadetblue":"#5f9ea0", "chartreuse":"#7fff00", "chocolate":"#d2691e", "coral":"#ff7f50", "cornflowerblue":"#6495ed", "cornsilk":"#fff8dc", "crimson":"#dc143c", "cyan":"#00ffff", "darkblue":"#00008b", "darkcyan":"#008b8b", "darkgoldenrod":"#b8860b", "darkgray":"#a9a9a9", "darkgreen":"#006400", "darkkhaki":"#bdb76b", "darkmagenta":"#8b008b", "darkolivegreen":"#556b2f", "darkorange":"#ff8c00", "darkorchid":"#9932cc", "darkred":"#8b0000", "darksalmon":"#e9967a", "darkseagreen":"#8fbc8f", "darkslateblue":"#483d8b", "darkslategray":"#2f4f4f", "darkturquoise":"#00ced1", "darkviolet":"#9400d3", "deeppink":"#ff1493", "deepskyblue":"#00bfff", "dimgray":"#696969", "dodgerblue":"#1e90ff", "firebrick":"#b22222", "floralwhite":"#fffaf0", "forestgreen":"#228b22", "fuchsia":"#ff00ff", "gainsboro":"#dcdcdc", "ghostwhite":"#f8f8ff", "gold":"#ffd700", "goldenrod":"#daa520", "gray":"#808080", "green":"#008000", "greenyellow":"#adff2f",
+    "honeydew":"#f0fff0", "hotpink":"#ff69b4", "indianred ":"#cd5c5c", "indigo":"#4b0082", "ivory":"#fffff0", "khaki":"#f0e68c", "lavender":"#e6e6fa", "lavenderblush":"#fff0f5", "lawngreen":"#7cfc00", "lemonchiffon":"#fffacd", "lightblue":"#add8e6", "lightcoral":"#f08080", "lightcyan":"#e0ffff", "lightgoldenrodyellow":"#fafad2", "lightgrey":"#d3d3d3", "lightgreen":"#90ee90", "lightpink":"#ffb6c1", "lightsalmon":"#ffa07a", "lightseagreen":"#20b2aa", "lightskyblue":"#87cefa", "lightslategray":"#778899", "lightsteelblue":"#b0c4de", "lightyellow":"#ffffe0", "lime":"#00ff00", "limegreen":"#32cd32", "linen":"#faf0e6", "magenta":"#ff00ff", "maroon":"#800000", "mediumaquamarine":"#66cdaa", "mediumblue":"#0000cd", "mediumorchid":"#ba55d3", "mediumpurple":"#9370d8", "mediumseagreen":"#3cb371", "mediumslateblue":"#7b68ee",  "mediumspringgreen":"#00fa9a", "mediumturquoise":"#48d1cc", "mediumvioletred":"#c71585", "midnightblue":"#191970", "mintcream":"#f5fffa", "mistyrose":"#ffe4e1", "moccasin":"#ffe4b5", "navajowhite":"#ffdead", "navy":"#000080", "oldlace":"#fdf5e6", "olive":"#808000", "olivedrab":"#6b8e23", "orange":"#ffa500", "orangered":"#ff4500", "orchid":"#da70d6", "palegoldenrod":"#eee8aa",
+    "palegreen":"#98fb98", "paleturquoise":"#afeeee", "palevioletred":"#d87093", "papayawhip":"#ffefd5", "peachpuff":"#ffdab9", "peru":"#cd853f", "pink":"#ffc0cb", "plum":"#dda0dd", "powderblue":"#b0e0e6", "purple":"#800080", "rebeccapurple":"#663399", "red":"#ff0000", "rosybrown":"#bc8f8f", "royalblue":"#4169e1", "saddlebrown":"#8b4513", "salmon":"#fa8072", "sandybrown":"#f4a460", "seagreen":"#2e8b57", "seashell":"#fff5ee", "sienna":"#a0522d", "silver":"#c0c0c0", "skyblue":"#87ceeb", "slateblue":"#6a5acd", "slategray":"#708090", "snow":"#fffafa", "springgreen":"#00ff7f", "steelblue":"#4682b4", "tan":"#d2b48c", "teal":"#008080", "thistle":"#d8bfd8", "tomato":"#ff6347", "turquoise":"#40e0d0", "violet":"#ee82ee", "wheat":"#f5deb3", "white":"#ffffff", "whitesmoke":"#f5f5f5", "yellow":"#ffff00", "yellowgreen":"#9acd32"
 }
 
 // Prevent right click
@@ -20,24 +34,286 @@ window.addEventListener("resize", (event) => {
     reset_positions();
     defineGrabbable();
     mapZoomOut();
-})
+});
 
-var block_popup = false;
-var my_top = -1;
+function mapZoomOut(){
 
-const popup = document.getElementById("popup");
-const mapPopup = document.getElementById("map-popup");
+    $(`[id='${myworld.name}slide']`).cycle('destroy'); 
 
-function getCreator(id){ return data.people.find(p => p.id == id); }
+    // Zoom out of map
+    const map = myworld.getCurrentMap();
+    let mapid = map.parentElement.parentElement.id.split("w-m")[1];
 
-function getRelationshipData(id){ return data.relations[id]; }
+    const myData = myworld.getMapDataFromIndex(mapid);
 
-function getResource(name){
+    // remove slide show images
+    map.parentElement.innerHTML = "<img class=\"map-image\" src=\""+getResource(myData.image)+"\">";
 
-    return "resources/" + name;
+    document.getElementById(myworld.name + "slide").style.removeProperty("height");
+
+    myworld.positionAllMapPins();
+
+    //Clear region data
+    const frame = document.querySelector(`.map-active .region-data`);
+    frame.style.display = "none";
 }
 
-const roles = ["Main character", "Supporting character", "Arc character", "Background character"];
+function previous_map(){
+
+    mapZoomOut();
+    document.querySelectorAll(".map-active").forEach(active_map => {
+
+        if(active_map.id.includes(myworld.name)){
+
+            // Found current map
+            const id = active_map.id.split("w-m")[1];
+
+            let next = id - 1;
+            active_map.className = active_map.className.replace("map-active", "");
+
+            var next_map = document.getElementById(myworld.name + "w-m" + next);
+            if(next_map == null) next_map = document.getElementById(myworld.name + "w-m" + (myworld.world.maps.length-1));
+
+            next_map.classList.add("map-active");
+            return;
+        }    
+    });
+
+    myworld.positionAllMapPins();
+}
+
+function next_map(){
+
+    mapZoomOut();
+    document.querySelectorAll(".map-active").forEach(active_map => {
+
+        if(active_map.id.includes(myworld.name)){
+
+            // Found current map
+            const id = active_map.id.split("w-m")[1];
+
+            let next = (parseInt(id) + 1);
+            active_map.className = active_map.className.replace("map-active", "");
+
+            var next_map = document.getElementById(myworld.name + "w-m" + next.toString());
+            if(next_map == null) next_map = document.getElementById(myworld.name + "w-m0");
+
+            next_map.classList.add("map-active");
+            return;
+        }
+    });
+
+    myworld.positionAllMapPins();
+}
+
+function reset_positions() {
+
+    document.querySelectorAll(".chara").forEach(character => {
+
+        // Dont change if in different world
+        if(character.offsetParent == null) return;
+
+        character.style.left = 0;
+        character.style.top = 0;
+
+        clearLines();
+        myworld.establishRelations();
+    })
+}
+
+let ismerging = false;
+// Merge all the maps
+function merge_maps(){
+
+    //Close region data pop up
+    mapZoomOut();
+
+    myworld.clearPins();
+    ismerging = true;
+
+    const start_height = document.getElementById(myworld.name).getBoundingClientRect().height;
+
+    const otherMaps = [];
+    const offsets = [];
+
+    let map_n = 1;
+
+    var currentMap = null;
+
+    document.querySelectorAll(".map-image").forEach(map => {
+
+        if(currentMap==null) currentMap = map.offsetParent != null ? map : null;
+        if(map.parentElement.parentElement.id.split("w-m")[0] != myworld.name || map.offsetParent != null) return;
+        
+        const img = document.createElement("img");
+        img.className = "map-merging";
+        img.src = map.src;
+        
+        otherMaps.push(img);
+
+        map_n++;
+    });
+
+    if(map_n==1 || currentMap == null) return;
+
+    map_n = 1 / map_n;
+    otherMaps.forEach(map => {
+
+        const drawnMap = currentMap.parentNode.appendChild(map);
+        const height = drawnMap.getBoundingClientRect().height;
+
+        offsets.push(height);
+        // mais 3.5 porque offsets gostam de me comer o cu
+        const this_height = offsets.reduce((a, b) => a + b + 3.5, 0);
+
+        drawnMap.style.bottom = this_height + "px";
+        drawnMap.style.opacity = map_n;
+    });
+
+    document.getElementById(myworld.name).style.height = start_height + "px";
+}
+
+function unmerge(){
+
+    myworld.positionAllMapPins();
+    document.querySelectorAll(".map-merging").forEach(map => {
+
+        map.remove();
+    });
+
+    document.getElementById(myworld.name).style.removeProperty("height");
+}
+
+function searchUpdate(prompt=null){
+
+    prompt = prompt==null ? document.getElementById(myworld.name + "search").value.toLowerCase() : prompt;
+    reset_positions();
+    
+    myworld.characters.forEach(chara => {
+
+        let name = chara.name.toString().toLowerCase();
+        console.log(prompt);
+        document.getElementById(`${myworld.name}c${chara.id}`).style.display = name.includes(prompt) ? "block" : "none";
+    });
+
+    myworld.establishRelations();
+}
+
+function popupOf(who){
+
+    let chara = myworld.getChara(who);
+    myworld.openPopUp(chara);
+}
+
+function next_popup(){
+
+    const mychar = document.getElementById("name").innerText;
+    let id = myworld.nameToId(mychar) + 1;
+
+    if(id >= myworld.characters.length) id = 0;
+    popupOf(id);
+}
+
+function previous_popup(){
+
+    const mychar = document.getElementById("name").innerText;
+    let id = myworld.nameToId(mychar) - 1;
+
+    if(id < 0) id = myworld.characters.length-1;
+    popupOf(id);
+}
+
+function relationship_control(){
+
+    const text = document.getElementsByClassName("controller").item(0).innerText;
+    const state = text == "Hide all relationships";
+    document.getElementsByClassName("controller").item(0).innerText = state ? "Show all relationships" : "Hide all relationships";
+
+    if(state) clearLines();
+    else myworld.establishRelations();
+}
+
+function toggle_pins(){
+
+    const button = document.getElementById(`${myworld.name}pin_toggle`);
+    const state = button.innerText == "Hide pins";
+
+    button.innerText = state ? "Show pins" : "Hide pins";
+
+    document.querySelectorAll(".map-pin").forEach(pin => {
+
+        if(!pin.id.includes(myworld.name + "w-p")) return;
+        
+        if(!state) {
+            pin.style.display = "block";
+            myworld.positionAllMapPins();
+        }
+        else pin.style.display = "none";
+    });
+}
+
+function clearLines(color=null){
+
+    document.querySelectorAll(".controller").forEach(e => e.innerText = "Show all relationships");
+
+    lines = Array.from(document.getElementsByTagName('svg'));
+    for (var l of lines) {
+
+        flag = true;
+        if(color != null){
+
+            const list = l.querySelectorAll("svg>g>use");
+            for (let index = 0; index < list.length; index++) {
+                const g = list.item(index);                
+
+                const stroke_color = g.style.stroke;
+                console.log(stroke_color + " " + color);
+                if(stroke_color == color) {
+                    flag = false;
+                    break;
+                }
+            }
+            
+        }
+
+        if(flag) l.remove();
+    }
+}
+
+// Open new world
+function openWorld(event, world, view=0){
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    clearLines();
+
+    let w = new World(world);
+    myworld = w;
+
+    document.getElementById(world).style.display = "block";
+
+    //After creation
+    w.establishRelations();
+    defineGrabbable();
+    
+    //Lock page height
+    const n_char = Math.floor(myworld.characters.length / 2);
+    const height = n_char * (320 + 290);
+    
+    //document.getElementsByClassName("chara-container").item(0).style.height = height + "px";
+    
+    switchView(view);
+}
+
 class World {
 
     name = "";
@@ -715,27 +991,8 @@ class World {
     }
 } 
 
-function mapZoomOut(){
-
-    $(`[id='${myworld.name}slide']`).cycle('destroy'); 
-
-    // Zoom out of map
-    const map = myworld.getCurrentMap();
-    let mapid = map.parentElement.parentElement.id.split("w-m")[1];
-
-    const myData = myworld.getMapDataFromIndex(mapid);
-
-    // remove slide show images
-    map.parentElement.innerHTML = "<img class=\"map-image\" src=\""+getResource(myData.image)+"\">";
-
-    document.getElementById(myworld.name + "slide").style.removeProperty("height");
-
-    myworld.positionAllMapPins();
-
-    //Clear region data
-    const frame = document.querySelector(`.map-active .region-data`);
-    frame.style.display = "none";
-}
+// Start template world
+let myworld = new World("");
 
 function switchView(view){
 
@@ -803,407 +1060,175 @@ function switchView(view){
     }
 }
 
-function previous_map(){
+function parse() {
 
-    mapZoomOut();
-    document.querySelectorAll(".map-active").forEach(active_map => {
+    document.getElementById("loader").style.display = "none";
 
-        if(active_map.id.includes(myworld.name)){
+    popup = document.getElementById("popup");
+    mapPopup = document.getElementById("map-popup");
 
-            // Found current map
-            const id = active_map.id.split("w-m")[1];
+    // Set up page
+    document.getElementById("title").innerText = file;
+    const tagHolder = document.getElementById("tags");
+    const worldHolder = document.getElementById("worlds");
 
-            let next = id - 1;
-            active_map.className = active_map.className.replace("map-active", "");
+    data.dimensions.forEach(element => {
 
-            var next_map = document.getElementById(myworld.name + "w-m" + next);
-            if(next_map == null) next_map = document.getElementById(myworld.name + "w-m" + (myworld.world.maps.length-1));
+        let world = new World(element.name);
+        myworld = world;
+        
+        let tab = document.createElement("button")
+        tab.className = "tooltip";
+        tab.onclick = () => {openWorld(event, element.name)}
+        tab.innerText = element.name;
+        
+        tagHolder.appendChild(tab);
+        
+        let content = document.createElement("div");
+        content.id = element.name;
+        content.className = "tabcontent";
 
-            next_map.classList.add("map-active");
-            return;
-        }    
-    });
+        content.innerHTML = "<h2 class='tooltip world_name'>"+element.name+"</h2>";
 
-    myworld.positionAllMapPins();
-}
+        const outline = document.createElement("p");
+        outline.className = "world-outline";
+        outline.innerText = element.outline;
+        
+        content.appendChild(outline);
+        content.innerHTML += "<h3>World contributtors</h3>";
 
-function next_map(){
+        let creators = [];
+        for(let i = 0; i < myworld.characters.length; i++)    
+            for(let j = 0; j < myworld.characters[i].creators.length; j++){
 
-    mapZoomOut();
-    document.querySelectorAll(".map-active").forEach(active_map => {
-
-        if(active_map.id.includes(myworld.name)){
-
-            // Found current map
-            const id = active_map.id.split("w-m")[1];
-
-            let next = (parseInt(id) + 1);
-            active_map.className = active_map.className.replace("map-active", "");
-
-            var next_map = document.getElementById(myworld.name + "w-m" + next.toString());
-            if(next_map == null) next_map = document.getElementById(myworld.name + "w-m0");
-
-            next_map.classList.add("map-active");
-            return;
-        }
-    });
-
-    myworld.positionAllMapPins();
-}
-
-// Start template world
-let myworld = new World("");
-
-// Set up page
-document.getElementById("title").innerText = file;
-const tagHolder = document.getElementById("tags");
-const worldHolder = document.getElementById("worlds");
-
-data.dimensions.forEach(element => {
-
-    let world = new World(element.name);
-    myworld = world;
-    
-    let tab = document.createElement("button")
-    tab.className = "tooltip";
-    tab.onclick = () => {openWorld(event, element.name)}
-    tab.innerText = element.name;
-    
-    tagHolder.appendChild(tab);
-    
-    let content = document.createElement("div");
-    content.id = element.name;
-    content.className = "tabcontent";
-
-    content.innerHTML = "<h2 class='tooltip world_name'>"+element.name+"</h2>";
-
-    const outline = document.createElement("p");
-    outline.className = "world-outline";
-    outline.innerText = element.outline;
-    
-    content.appendChild(outline);
-    content.innerHTML += "<h3>World contributtors</h3>";
-
-    let creators = [];
-    for(let i = 0; i < myworld.characters.length; i++)    
-        for(let j = 0; j < myworld.characters[i].creators.length; j++){
-
-            const creator = myworld.characters[i].creators[j];
-            if(!creators.includes(creator)) creators.push(creator);
-        }
-
-    creators = creators.map(c => getCreator(c).name).join(", ");
-
-    const creatornames = document.createElement("p");
-    creatornames.innerText = creators;
-
-    content.appendChild(creatornames);
-
-    // Add view switch panels
-    const view_panel = `
-        <button onclick='switchView(0)' id="${myworld.name}-cv" class='button-6${myworld.characters == undefined ? " blocked" : ""}'>Character view</button>
-        <button onclick='switchView(1)' id="${myworld.name}-wo" class='button-6${myworld.world == undefined ? " blocked" : ""}'>World overview</button>
-        <button onclick='switchView(2)' id="${myworld.name}-et" class='button-6${myworld.events == undefined ? " blocked" : ""}'>Event timeline</button>
-        <button onclick='switchView(3)' id="${myworld.name}-cl" class='button-6${myworld.calendar == undefined ? " blocked" : ""}'>Calendar</button>
-    `;
-
-    content.innerHTML += view_panel;
-    content.appendChild(document.createElement("hr"));
-
-    // ---------CHARACTER VIEW---------
-
-    const cView = document.createElement("div");
-    cView.id = myworld.name + "-" + "chara-container";
-
-    const controller = `
-        <div>
-            <button class='button-30 controller' onclick='relationship_control()'>Hide all relationships</button>
-            <button onclick='reset_positions()' class='button-30'>Reset character positions</button>
-            <button type='button' class='char_sorter'>Open</button> 
-            <div class='sorter_content' id="${myworld.name}chara-sorter">
-            </div> 
-
-            <br /><br /><br />
-            <! -- form for shit and maybe el menu -->
-            <div class="box">
-                <form name="search">
-                    <input maxlength=80 id="${myworld.name}search" type="text" placeholder="Search" oninput="searchUpdate()" class="input" name="txt">
-                </form>
-            </div>
-
-            <div class="subtitles">
-                <div class="subtitle"> <div class="circle"></div> <span>Text</span></div>
-                <div class="subtitle"> <div class="circle"></div> <span>Text</span></div>
-                <div class="subtitle"> <div class="circle"></div> <span>Text</span></div>
-            </div>
-
-            <br><br><br>
-        </div>`;
-    cView.innerHTML += controller;
-    
-    worldHolder.appendChild(content);
-    
-    let dom = document.createElement("div");
-    dom.className = "chara-container";
-    
-    for (let index = 0; index < world.divisions.length; index++) dom.append(world.divisions[index]);
-    cView.append(dom);
-
-    // ---------WORLD OVERVIEW---------
-    const wView = document.createElement("div");
-    wView.id = myworld.name + "-" + "world-container";
-    
-    const map_container = document.createElement("div");
-    map_container.className = "map-container";
-    //map_container.innerHTML += "<h2>" +myworld.name+ "'s cartography</h2>";
-
-    let map_data = myworld.drawMaps();
-    map_container.appendChild(map_data);
-
-    wView.appendChild(map_container);
-    
-    // ---------EVENT TIMELINE---------
-    const eView = document.createElement("div");
-    eView.id = myworld.name + "-" + "event-container";
-    
-    var title = document.createElement("h2");
-    title = document.createElement("h2");
-    title.innerText = myworld.name + "'s chronological events"
-    
-    eView.appendChild(title);
-
-    // --------- CALLENDAR---------
-    const clView = document.createElement("div");
-    clView.id = myworld.name + "-" + "calendar-container";
-    
-    var title = document.createElement("h2");
-    title = document.createElement("h2");
-    title.innerText = myworld.name + "'s holidays n shit"
-    
-    clView.appendChild(title);
-    
-    // Append views
-    content.appendChild(cView);
-    content.appendChild(wView);
-    content.appendChild(eView);
-    content.appendChild(clView);
-
-    myworld.setupTagFilters();
-});
-
-function clearLines(color=null){
-
-    document.querySelectorAll(".controller").forEach(e => e.innerText = "Show all relationships");
-
-    lines = Array.from(document.getElementsByTagName('svg'));
-    for (var l of lines) {
-
-        flag = true;
-        if(color != null){
-
-            const list = l.querySelectorAll("svg>g>use");
-            for (let index = 0; index < list.length; index++) {
-                const g = list.item(index);                
-
-                const stroke_color = g.style.stroke;
-                console.log(stroke_color + " " + color);
-                if(stroke_color == color) {
-                    flag = false;
-                    break;
-                }
+                const creator = myworld.characters[i].creators[j];
+                if(!creators.includes(creator)) creators.push(creator);
             }
-            
+
+        creators = creators.map(c => getCreator(c).name).join(", ");
+
+        const creatornames = document.createElement("p");
+        creatornames.innerText = creators;
+
+        content.appendChild(creatornames);
+
+        // Add view switch panels
+        const view_panel = `
+            <button onclick='switchView(0)' id="${myworld.name}-cv" class='button-6${myworld.characters == undefined ? " blocked" : ""}'>Character view</button>
+            <button onclick='switchView(1)' id="${myworld.name}-wo" class='button-6${myworld.world == undefined ? " blocked" : ""}'>World overview</button>
+            <button onclick='switchView(2)' id="${myworld.name}-et" class='button-6${myworld.events == undefined ? " blocked" : ""}'>Event timeline</button>
+            <button onclick='switchView(3)' id="${myworld.name}-cl" class='button-6${myworld.calendar == undefined ? " blocked" : ""}'>Calendar</button>
+        `;
+
+        content.innerHTML += view_panel;
+        content.appendChild(document.createElement("hr"));
+
+        // ---------CHARACTER VIEW---------
+
+        const cView = document.createElement("div");
+        cView.id = myworld.name + "-" + "chara-container";
+
+        const controller = `
+            <div>
+                <button class='button-30 controller' onclick='relationship_control()'>Hide all relationships</button>
+                <button onclick='reset_positions()' class='button-30'>Reset character positions</button>
+                <button type='button' class='char_sorter'>Open</button> 
+                <div class='sorter_content' id="${myworld.name}chara-sorter">
+                </div> 
+
+                <br /><br /><br />
+                <! -- form for shit and maybe el menu -->
+                <div class="box">
+                    <form name="search">
+                        <input maxlength=80 id="${myworld.name}search" type="text" placeholder="Search" oninput="searchUpdate()" class="input" name="txt">
+                    </form>
+                </div>
+
+                <div class="subtitles">
+                    <div class="subtitle"> <div class="circle"></div> <span>Text</span></div>
+                    <div class="subtitle"> <div class="circle"></div> <span>Text</span></div>
+                    <div class="subtitle"> <div class="circle"></div> <span>Text</span></div>
+                </div>
+
+                <br><br><br>
+            </div>`;
+        cView.innerHTML += controller;
+        
+        worldHolder.appendChild(content);
+        
+        let dom = document.createElement("div");
+        dom.className = "chara-container";
+        
+        for (let index = 0; index < world.divisions.length; index++) dom.append(world.divisions[index]);
+        cView.append(dom);
+
+        // ---------WORLD OVERVIEW---------
+        const wView = document.createElement("div");
+        wView.id = myworld.name + "-" + "world-container";
+        
+        const map_container = document.createElement("div");
+        map_container.className = "map-container";
+        //map_container.innerHTML += "<h2>" +myworld.name+ "'s cartography</h2>";
+
+        let map_data = myworld.drawMaps();
+        map_container.appendChild(map_data);
+
+        wView.appendChild(map_container);
+        
+        // ---------EVENT TIMELINE---------
+        const eView = document.createElement("div");
+        eView.id = myworld.name + "-" + "event-container";
+        
+        var title = document.createElement("h2");
+        title = document.createElement("h2");
+        title.innerText = myworld.name + "'s chronological events"
+        
+        eView.appendChild(title);
+
+        // --------- CALLENDAR---------
+        const clView = document.createElement("div");
+        clView.id = myworld.name + "-" + "calendar-container";
+        
+        var title = document.createElement("h2");
+        title = document.createElement("h2");
+        title.innerText = myworld.name + "'s holidays n shit"
+        
+        clView.appendChild(title);
+        
+        // Append views
+        content.appendChild(cView);
+        content.appendChild(wView);
+        content.appendChild(eView);
+        content.appendChild(clView);
+
+        myworld.setupTagFilters();
+    });
+
+    document.addEventListener("mouseup", () => {
+        if(ismerging) {
+            ismerging = false;
+            unmerge();
         }
-
-        if(flag) l.remove();
-    }
-}
-
-// Open new world
-function openWorld(event, world, view=0){
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-
-    clearLines();
-
-    let w = new World(world);
-    myworld = w;
-
-    document.getElementById(world).style.display = "block";
-
-    //After creation
-    w.establishRelations();
-    defineGrabbable();
-    
-    //Lock page height
-    const n_char = Math.floor(myworld.characters.length / 2);
-    const height = n_char * (320 + 290);
-    
-    //document.getElementsByClassName("chara-container").item(0).style.height = height + "px";
-    
-    switchView(view);
-}
-
-document.addEventListener("mouseup", () => {
-    if(ismerging) {
-        ismerging = false;
-        unmerge();
-    }
-});
-
-let ismerging = false;
-// Merge all the maps
-function merge_maps(){
-
-    //Close region data pop up
-    mapZoomOut();
-
-    myworld.clearPins();
-    ismerging = true;
-
-    const start_height = document.getElementById(myworld.name).getBoundingClientRect().height;
-
-    const otherMaps = [];
-    const offsets = [];
-
-    let map_n = 1;
-
-    var currentMap = null;
-
-    document.querySelectorAll(".map-image").forEach(map => {
-
-        if(currentMap==null) currentMap = map.offsetParent != null ? map : null;
-        if(map.parentElement.parentElement.id.split("w-m")[0] != myworld.name || map.offsetParent != null) return;
-        
-        const img = document.createElement("img");
-        img.className = "map-merging";
-        img.src = map.src;
-        
-        otherMaps.push(img);
-
-        map_n++;
     });
 
-    if(map_n==1 || currentMap == null) return;
+    var coll = document.getElementsByClassName("char_sorter");
+    var i;
 
-    map_n = 1 / map_n;
-    otherMaps.forEach(map => {
+    for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
 
-        const drawnMap = currentMap.parentNode.appendChild(map);
-        const height = drawnMap.getBoundingClientRect().height;
-
-        offsets.push(height);
-        // mais 3.5 porque offsets gostam de me comer o cu
-        const this_height = offsets.reduce((a, b) => a + b + 3.5, 0);
-
-        drawnMap.style.bottom = this_height + "px";
-        drawnMap.style.opacity = map_n;
-    });
-
-    document.getElementById(myworld.name).style.height = start_height + "px";
-}
-
-function unmerge(){
-
-    myworld.positionAllMapPins();
-    document.querySelectorAll(".map-merging").forEach(map => {
-
-        map.remove();
-    });
-
-    document.getElementById(myworld.name).style.removeProperty("height");
-}
-
-function searchUpdate(prompt=null){
-
-    prompt = prompt==null ? document.getElementById(myworld.name + "search").value.toLowerCase() : prompt;
-    reset_positions();
-    
-    myworld.characters.forEach(chara => {
-
-        let name = chara.name.toString().toLowerCase();
-        console.log(prompt);
-        document.getElementById(`${myworld.name}c${chara.id}`).style.display = name.includes(prompt) ? "block" : "none";
-    });
-
-    myworld.establishRelations();
-}
-
-function popupOf(who){
-
-    let chara = myworld.getChara(who);
-    myworld.openPopUp(chara);
-}
-
-function next_popup(){
-
-    const mychar = document.getElementById("name").innerText;
-    let id = myworld.nameToId(mychar) + 1;
-
-    if(id >= myworld.characters.length) id = 0;
-    popupOf(id);
-}
-
-function previous_popup(){
-
-    const mychar = document.getElementById("name").innerText;
-    let id = myworld.nameToId(mychar) - 1;
-
-    if(id < 0) id = myworld.characters.length-1;
-    popupOf(id);
-}
-
-function relationship_control(){
-
-    const text = document.getElementsByClassName("controller").item(0).innerText;
-    const state = text == "Hide all relationships";
-    document.getElementsByClassName("controller").item(0).innerText = state ? "Show all relationships" : "Hide all relationships";
-
-    if(state) clearLines();
-    else myworld.establishRelations();
-}
-
-function toggle_pins(){
-
-    const button = document.getElementById(`${myworld.name}pin_toggle`);
-    const state = button.innerText == "Hide pins";
-
-    button.innerText = state ? "Show pins" : "Hide pins";
-
-    document.querySelectorAll(".map-pin").forEach(pin => {
-
-        if(!pin.id.includes(myworld.name + "w-p")) return;
-        
-        if(!state) {
-            pin.style.display = "block";
-            myworld.positionAllMapPins();
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.display === "block") {
+        content.style.display = "none";
+        } else {
+        content.style.display = "block";
         }
-        else pin.style.display = "none";
     });
-}
+    }
 
-function reset_positions() {
-
-    document.querySelectorAll(".chara").forEach(character => {
-
-        // Dont change if in different world
-        if(character.offsetParent == null) return;
-
-        character.style.left = 0;
-        character.style.top = 0;
-
-        clearLines();
-        myworld.establishRelations();
-    })
+    // Open first world
+    openWorld(event, data.dimensions[0].name, 1);
 }
 
 // Dragging and dropping elements
@@ -1211,7 +1236,7 @@ function defineGrabbable(restore = false, xx=0, yy=0){
 
     var draggableItems = Array.from(
         document.querySelectorAll(".DraggableItem")
-      );
+    );
     console.log(`There are ${draggableItems.length} draggable items.`);
 
     //Loop over each draggable item and add the listeners
@@ -1281,22 +1306,3 @@ function defineGrabbable(restore = false, xx=0, yy=0){
         }
     }
 }
-
-var coll = document.getElementsByClassName("char_sorter");
-var i;
-
-for (i = 0; i < coll.length; i++) {
-  coll[i].addEventListener("click", function() {
-
-    this.classList.toggle("active");
-    var content = this.nextElementSibling;
-    if (content.style.display === "block") {
-      content.style.display = "none";
-    } else {
-      content.style.display = "block";
-    }
-  });
-}
-
-// Open first world
-openWorld(event, data.dimensions[0].name, 1);
