@@ -1,5 +1,4 @@
 const file = document.getElementById("script").src;
-console.log(data);
 
 // Hello hello <3 hai o7
 //lets get back to work!! :flex:
@@ -473,6 +472,7 @@ class World {
         document.querySelectorAll(".controller").forEach(e => e.innerText = "Hide all relationships");
         
         this.characters.forEach(chara => {
+            if(chara.relations == undefined) return;
             chara.relations.forEach(relation => {
 
                 const start = document.getElementById(this.name + 'c' + chara.id);
@@ -495,25 +495,28 @@ class World {
                 //Check if is mutual relation
                 if(data.settings.mix_mutual_relationships){
 
-                    const mutual = this.getChara(relation.to).relations.find(r => r.to == chara.id);
-                    if(mutual != undefined){
-                        
-                        // Double arrow
-                        settings.startPlug = "arrow1";
-                        // Inbetween color
-                        const color1 = this.hexToRgb(color_codes[relationData.color]);
-                        const color2 = this.hexToRgb(color_codes[getRelationshipData(mutual.details).color]);
-    
-                        const new_color = [
-                            (color1[0] + color2[0]) / 2,
-                            (color1[1] + color2[1]) / 2,
-                            (color1[2] + color2[2]) / 2,
-                        ];
-    
-                        settings.color = `rgb(${new_color.join(",")})`;
-    
-                        let index = this.getChara(relation.to).relations.indexOf(mutual);
-                        if(relation.drawn == undefined) this.getChara(relation.to).relations[index].drawn = true;
+                    if(this.getChara(relation.to).relations !== undefined){
+
+                        const mutual = this.getChara(relation.to).relations.find(r => r.to == chara.id);
+                        if(mutual != undefined){
+                            
+                            // Double arrow
+                            settings.startPlug = "arrow1";
+                            // Inbetween color
+                            const color1 = this.hexToRgb(color_codes[relationData.color]);
+                            const color2 = this.hexToRgb(color_codes[getRelationshipData(mutual.details).color]);
+        
+                            const new_color = [
+                                (color1[0] + color2[0]) / 2,
+                                (color1[1] + color2[1]) / 2,
+                                (color1[2] + color2[2]) / 2,
+                            ];
+        
+                            settings.color = `rgb(${new_color.join(",")})`;
+        
+                            let index = this.getChara(relation.to).relations.indexOf(mutual);
+                            if(relation.drawn == undefined) this.getChara(relation.to).relations[index].drawn = true;
+                        }
                     }
                 }
 
@@ -554,11 +557,11 @@ class World {
         if(this.world == undefined) {return container}
 
         container.innerHTML += `
-            <button class='button-30' onclick="toggle_pins()" id="${myworld.name}pin_toggle">Hide pins</button>
-            <button class="button-30" onclick="previous_map()">Previous</button>
-            <button class="button-30" onclick="next_map()">Next</button>
+            <button class='button-6' onclick="toggle_pins()" id="${myworld.name}pin_toggle">Hide pins</button>
+            <button class="button-6" onclick="previous_map()">Previous</button>
+            <button class="button-6" onclick="next_map()">Next</button>
             <br><br>
-            <button class="button-30" onmouseup="unmerge()" onmousedown="merge_maps()">Merge maps (hold)</button>
+            <button class="button-6" onmouseup="unmerge()" onmousedown="merge_maps()">Merge maps (hold)</button>
         `;
         
         for (let index = 0; index < this.world.maps.length; index++) {
@@ -1062,6 +1065,8 @@ function switchView(view){
 
 function parse() {
 
+    console.log(data);
+
     document.getElementById("loader").style.display = "none";
 
     popup = document.getElementById("popup");
@@ -1130,8 +1135,8 @@ function parse() {
 
         const controller = `
             <div>
-                <button class='button-30 controller' onclick='relationship_control()'>Hide all relationships</button>
-                <button onclick='reset_positions()' class='button-30'>Reset character positions</button>
+                <button class='button-6 controller' onclick='relationship_control()'>Hide all relationships</button>
+                <button onclick='reset_positions()' class='button-6'>Reset character positions</button>
                 <button type='button' class='char_sorter'>Open</button> 
                 <div class='sorter_content' id="${myworld.name}chara-sorter">
                 </div> 
@@ -1246,8 +1251,6 @@ function defineGrabbable(restore = false, xx=0, yy=0){
         //console.log(element.getBoundingClientRect());
 
         if(element.offsetParent == null) continue;
-
-        console.log("cum");
 
         element.setAttribute("rel-x", element.getBoundingClientRect().left);
         element.setAttribute("rel-y", element.getBoundingClientRect().top + window.scrollY);
