@@ -563,11 +563,11 @@ class World {
         if(this.world == undefined) {return container}
 
         container.innerHTML += `
-            <button class='button-6' onclick="toggle_pins()" id="${myworld.name}pin_toggle">Hide pins</button>
-            <button class="button-6" onclick="previous_map()">Previous</button>
-            <button class="button-6" onclick="next_map()">Next</button>
+            <button class='button' onclick="toggle_pins()" id="${myworld.name}pin_toggle">Hide pins</button>
+            <button class="button" onclick="previous_map()">Previous</button>
+            <button class="button" onclick="next_map()">Next</button>
             <br><br>
-            <button class="button-6" onmouseup="unmerge()" onmousedown="merge_maps()">Merge maps (hold)</button>
+            <button class="button is-primary" onmouseup="unmerge()" onmousedown="merge_maps()">Merge maps (hold)</button>
         `;
         
         for (let index = 0; index < this.world.maps.length; index++) {

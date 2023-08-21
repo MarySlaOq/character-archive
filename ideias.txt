@@ -3,3 +3,5 @@
  - linguas
  - City related facilities show when pin selected
  - character sorter
+
+ npm install -g firebase-tools
