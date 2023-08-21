@@ -78,9 +78,10 @@
                                       maps: [],
                                     },
                                     characters: [],
-                                    events: [],
-                                    calendar: [],
                                   };
+
+                                  if (element.divisions == undefined)
+                                    dimData.world = undefined;
 
                                   data.dimensions.push(dimData);
                                 }
@@ -191,9 +192,9 @@
               localStorage.removeItem("ca-user-account");
               document.getElementById("username").innerText =
                 "Browsing as guest";
-              document.getElementById("userimg").src = "resources/alexia.jpg";
+              document.getElementById("userimg").src = "resources/default.jpg";
               document.getElementById("login").innerText = "Login with google";
-              document.getElementById("login").className = "button-6";
+              document.getElementById("login").className = "button";
             })
             .catch((error) => {
               popUpNotification("Sign out failed", 1);
@@ -228,10 +229,15 @@
       integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
       crossorigin="anonymous"
     ></script>
+    <script src="modals.js"></script>
 
     <script src="cycle.js"></script>
 
     <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
 
     <script src="lines/leader-line.min.js"></script>
 
@@ -244,34 +250,76 @@
     />
 
     <script>
-      function close_popup() {
-        document.getElementById("blinds").style.opacity = 0;
-        document.getElementById("blinds").style.zIndex = -200;
-
-        document.getElementById("popup").style.opacity = 0;
-        document.getElementById("popup").style.zIndex = -100;
-      }
+      function close_popup() {}
     </script>
   </head>
-  <body>
-    <h1 id="title"></h1>
-    <br />
-
-    <!-- User panel -->
-    <div class="container2">
-      <div class="container3 relation">
-        <img id="userimg" class="profile" src="resources/alexia.jpg" alt="" />
-        <p id="username" class="m10"><b>Browsing as guest</b></p>
+  <body class="container is-fluid">
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navbarBasicExample"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
       </div>
-      <button id="login" class="button-6">Login with google</button>
+
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+          <a href="index.html" class="navbar-item"> Home </a>
+
+          <a href="about.html" class="navbar-item"> Documentation </a>
+
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link"> More </a>
+
+            <div class="navbar-dropdown">
+              <a
+                target="_blank"
+                href="https://github.com/MarySlaOq/character-archive"
+                class="navbar-item"
+              >
+                Source code
+              </a>
+              <a class="navbar-item"> About </a>
+              <a class="navbar-item"> Contact </a>
+              <hr class="navbar-divider" />
+              <a
+                target="_blank"
+                href="https://github.com/MarySlaOq/character-archive/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc"
+                class="navbar-item"
+              >
+                Report an issue
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="navbar-end">
+          <div class="is-flex">
+            <img
+              id="userimg"
+              class="is-rounded profile"
+              src="resources/default.jpg"
+              alt=""
+            />
+            <p id="username" class="m10 card-header-title">
+              <b>Browsing as guest</b>
+            </p>
+          </div>
+          <button id="login" class="button">Login with google</button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="tabs is-centered is-medium is-boxed">
+      <ul id="tags"></ul>
     </div>
-
-    <br />
-    <a href="about.html">About the application</a>
-    <p>Click on the tabs to change dimension</p>
-    <p>Drag characters with right click to move them around</p>
-
-    <div id="tags" class="tab"></div>
 
     <div id="worlds"></div>
 
@@ -289,90 +337,121 @@
       </p>
     </div>
 
-    <div id="blinds"></div>
-    <div class="popup" id="popup">
-      <div class="container2">
-        <div class="container2">
-          <h1 id="name">Testing name</h1>
-          <img
-            class="icon"
-            src="https://upload.wikimedia.org/wikipedia/commons/0/08/Pinterest-logo.png"
-            id="pinterest"
-          />
-          <img
-            class="icon"
-            src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
-            id="spotify"
-          />
-        </div>
-        <div>
-          <button onclick="previous_popup()" class="close"><</button>
-          <button onclick="next_popup()" class="close">></button>
-          <button onclick="close_popup()" class="close">X</button>
-        </div>
-      </div>
-      <p id="fullname">Fullname here!</p>
-      <div class="container">
-        <div>
-          <h2>Background</h2>
-          <p id="outline">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          </p>
-          <h2>Personality</h2>
-          <p id="personality">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa natus
-            possimus minima repudiandae assumenda voluptas dicta facere
-          </p>
-
-          <h2>Traits</h2>
-          <div id="traits">
-            <p><b>Species</b>: <span id="species">test</span></p>
-            <p><b>Age</b>: <span id="age">test</span></p>
-            <p><b>Gender</b>: <span id="gender">test</span></p>
-            <p><b>Occupation</b>: <span id="occupation">test</span></p>
-            <p><b>Height</b>: <span id="height">test</span></p>
-            <p><b>Weight</b>: <span id="weight">test</span></p>
-            <p><b>Blood type</b>: <span id="bloodtype">test</span></p>
-            <p><b>Birth date</b>: <span id="birthdate">test</span></p>
-            <p><b>Birth place</b>: <span id="birthplace">test</span></p>
-          </div>
-
-          <h2>Preferences</h2>
+    <div class="modal" id="popup">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head is-justify-content-space-between">
           <div>
-            <h4>Likes</h4>
-            <ul id="likes">
-              <li>One</li>
-              <li>Two</li>
-              <li>Three</li>
-            </ul>
-            <h4>Hates</h4>
-            <ul id="hates">
-              <li>One</li>
-              <li>Two</li>
-              <li>Three</li>
-            </ul>
+            <h1 class="mb-1 modal-card-title" id="name">Testing name</h1>
+            <p class="mb-3" id="fullname">Fullname here!</p>
+            <img
+              class="smol"
+              src="https://upload.wikimedia.org/wikipedia/commons/0/08/Pinterest-logo.png"
+              id="pinterest"
+            />
+            <img
+              class="smol"
+              src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
+              id="spotify"
+            />
           </div>
-
-          <h2>Relations</h2>
-          <div id="relations">
-            <p class="relation">Related to Character: Friends</p>
-            <p class="relation">Related to Other Character: Siblings</p>
-            <p class="relation">Related to Yet Another Character: Child</p>
-          </div>
-
-          <h2>Creators</h2>
-          <div id="creators">
-            <p><b>MarySlaOq</b> <a href="www.twitter.com">Twitter</a></p>
-          </div>
-        </div>
-        <div>
-          <img id="image" src="../resources/saloman.png" alt="" srcset="" />
-
+          <button class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
           <div>
-            <h2>Notes</h2>
-            <p id="notes"></p>
+            <div class="box">
+              <h2 class="title">Background</h2>
+              <p id="outline">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              </p>
+              <br />
+              <h2 class="title">Personality</h2>
+              <p id="personality">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa
+                natus possimus minima repudiandae assumenda voluptas dicta
+                facere
+              </p>
+            </div>
+
+            <div class="box">
+              <h2 class="title">Traits</h2>
+              <div id="traits" class="columns">
+                <div class="column">
+                  <p><b>Species</b>: <span id="species">test</span></p>
+                  <p><b>Age</b>: <span id="age">test</span></p>
+                  <p><b>Gender</b>: <span id="gender">test</span></p>
+                  <p><b>Occupation</b>: <span id="occupation">test</span></p>
+                  <p><b>Height</b>: <span id="height">test</span></p>
+                </div>
+                <div class="column">
+                  <p><b>Weight</b>: <span id="weight">test</span></p>
+                  <p><b>Blood type</b>: <span id="bloodtype">test</span></p>
+                  <p><b>Birth date</b>: <span id="birthdate">test</span></p>
+                  <p><b>Birth place</b>: <span id="birthplace">test</span></p>
+                </div>
+              </div>
+            </div>
+
+            <div class="box">
+              <h2 class="title">Preferences</h2>
+
+              <div class="columns">
+                <div class="column">
+                  <h4 class="subtitle">Likes</h4>
+                  <ul id="likes">
+                    <li>One</li>
+                    <li>Two</li>
+                    <li>Three</li>
+                  </ul>
+                </div>
+                <div class="column">
+                  <h4 class="subtitle">Hates</h4>
+                  <ul id="hates">
+                    <li>One</li>
+                    <li>Two</li>
+                    <li>Three</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="box">
+              <h2 class="title">Relations</h2>
+              <div id="relations" class="">
+                <p class="relation">Related to Character: Friends</p>
+                <p class="relation">Related to Other Character: Siblings</p>
+                <p class="relation">Related to Yet Another Character: Child</p>
+              </div>
+            </div>
           </div>
-        </div>
+          <br />
+          <div>
+            <img id="image" src="../resources/saloman.png" alt="" srcset="" />
+
+            <article class="message is-small">
+              <div class="message-header">
+                <p>Notes</p>
+              </div>
+              <div class="message-body">
+                <p id="notes"></p>
+              </div>
+            </article>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <div>
+            <button class="button" onclick="previous_popup()">
+              Previous character
+            </button>
+            <button class="button is-primary mb-3" onclick="next_popup()">
+              Next character
+            </button>
+            <br />
+            <div id="creators">
+              <p><b>MarySlaOq</b> <a href="www.twitter.com">Twitter</a></p>
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
   </body>

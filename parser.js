@@ -117,7 +117,9 @@ function reset_positions() {
 
         clearLines();
         myworld.establishRelations();
-    })
+    });
+
+    saveIconsPositions();
 }
 
 let ismerging = false;
@@ -290,7 +292,9 @@ function openWorld(event, world, view=0){
 
     tablinks = document.getElementsByClassName("tablinks");
     for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
+
+        tablinks[i].className = tablinks[i].className.replace(" is-active", "");
+        if(tablinks[i].innerText == world) tablinks[i].classList.add("is-active");
     }
 
     clearLines();
@@ -424,7 +428,9 @@ class World {
             const chara = this.characters[index];
             
             let container = document.createElement("div");
-            container.className = "chara DraggableItem";
+            container.className = "chara DraggableItem js-modal-trigger";
+            container.setAttribute("data-target", "popup");
+
             container.draggable = true;
             container.id = this.name+ "c"+chara.id;
             
@@ -625,7 +631,7 @@ class World {
                         <h2 id="${myworld.name}region_name">Region name</h2>
                         <img src="https://images.jifo.co/141438036_1685123167974.svg" class="flag" id='${myworld.name}flag' />
                     </div>
-                    <button class="close" onclick="mapZoomOut()">Return to full map</button>
+                    <button class="button is-primary" onclick="mapZoomOut()">Return to full map</button>
                 </div>
                 <p id="${myworld.name}desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore veritatis inventore sed ullam enim, dolor at culpa in, quod deserunt blanditiis! Pariatur officiis ipsa, facilis repellat odio sint inventore voluptatibus culpa sunt vero recusandae! Fugiat sapiente voluptas alias exercitationem eos tempora provident, ipsam, optio, modi vel deserunt iste repellat voluptatibus.</p>
                 <div class="traits">
@@ -882,7 +888,11 @@ class World {
 
         uniqueTags.forEach(tag => {
 
-            const ele = document.createElement("p");
+            if(tag==undefined) return;
+
+            const ele = document.createElement("a");
+            ele.href = "#0";
+            ele.className = "dropdown-item"
             ele.innerText = tag;
 
             sorter.appendChild(ele);
@@ -891,26 +901,16 @@ class World {
 
     openPopUp(chara){
 
-        if(block_popup){
-
-            block_popup = false;
-            return;
-        }
-
-
         popup.scrollTop = 0;
-
         popup.style.zIndex = 1000;
-        popup.style.opacity = 1;
-
-        document.getElementById("blinds").style.opacity = 1;
-        document.getElementById("blinds").style.zIndex = 200;
 
         document.getElementById("image").src = getResource(chara.image);
 
         document.getElementById("name").innerText = chara.name;
         document.getElementById("outline").innerHTML = this.replaceNameWithHyperLinks(chara.biography, chara.name);
-        document.getElementById("personality").innerText = chara.personality.join(", ")
+
+        document.getElementById("personality").innerText = "";
+        if(chara.personality != undefined) document.getElementById("personality").innerText = chara.personality.join(", ");
 
         document.getElementById("species").innerText = chara.species;
         document.getElementById("age").innerText = chara.age;
@@ -926,35 +926,37 @@ class World {
         const notes = document.getElementById("notes");
         if(chara.notes == ""){
 
-            notes.parentNode.style.display = "none";
+            notes.parentNode.parentNode.style.display = "none";
         }else{
 
-            notes.parentNode.style.display = "block";
+            notes.parentNode.parentNode.style.display = "block";
             notes.innerText = chara.notes;
         }
 
         document.getElementById("pinterest").onclick = () => {
 
-            if(chara.pinterest == "") alert("No folder specified");
+            if(chara.pinterest == "") popUpNotification("No folder specified", 1);
             else window.open(chara.pinterest, "_blank");
         };
 
         document.getElementById("spotify").onclick = () => {
             
-            if(chara.spotify == "") alert("No playlist specified");
+            if(chara.spotify == "") popUpNotification("No playlist specified",1);
             else window.open(chara.spotify, "_blank");
         };
 
         document.getElementById("likes").innerHTML = "";
         document.getElementById("hates").innerHTML = "";
         
-        if(chara.likes.length > 0) document.getElementById("likes").innerHTML = "<li>" + chara.likes.join("</li><li>") + "</li>";
-        if(chara.hates.length > 0) document.getElementById("hates").innerHTML = "<li>" + chara.hates.join("</li><li>") + "</li>";
+        if(chara.likes != undefined && chara.likes.length > 0) document.getElementById("likes").innerHTML = "<li>" + chara.likes.join("</li><li>") + "</li>";
+        if(chara.hates != undefined && chara.hates.length > 0) document.getElementById("hates").innerHTML = "<li>" + chara.hates.join("</li><li>") + "</li>";
 
         const rel = document.getElementById("relations");
-        rel.innerHTML = chara.relations.map(rel => `<p class="relation"><img src="${getResource(this.getChara(rel.to).image)}" /> Related to <a onclick="popupOf(${rel.to})" href="#0">${this.idToName(rel.to)}</a>: ${getRelationshipData(rel.details).name}</p>`).join("");
+        rel.innerHTML = "";
+        
+        if(chara.relations != undefined) rel.innerHTML = chara.relations.map(rel => `<p class="relation"><img src="${getResource(this.getChara(rel.to).image)}" /> &nbsp; Related to &nbsp;<a onclick="popupOf(${rel.to})" href="#0"> ${this.idToName(rel.to)}</a>: ${getRelationshipData(rel.details).name}</p>`).join("");
 
-        if (chara.relations.length == 0) rel.innerHTML = "No relationships established"
+        if (chara.relations == undefined || chara.relations.length == 0) rel.innerHTML = "No relationships established"
 
         const creator = document.getElementById("creators");
         creator.innerHTML = chara.creators.map(c => `<p><b>${getCreator(c).name}</b>${
@@ -1006,14 +1008,14 @@ function switchView(view){
         document.getElementById(`${myworld.name}-cl`)
     ];
 
-    if(panel[view].className.includes("blocked")) {
+    if(panel[view].className.includes("disabled")) {
 
-        alert(`${myworld.name}'s file does not have a "${panel[view].innerText}" attribute configured yet`);
+        popUpNotification(`${myworld.name}'s file does not have a "${panel[view].innerText}" attribute configured yet`, 2);
         return;
     }
 
-    for (let i = 0; i < panel.length; i++) panel[i].className = panel[i].className.replace("active", "");
-    panel[view].className += " active";
+    for (let i = 0; i < panel.length; i++) panel[i].className = panel[i].className.replace("is-primary", "");
+    panel[view].className += " is-primary";
 
     // Fetch views
     const character_view = document.getElementById(`${myworld.name}-chara-container`);
@@ -1073,7 +1075,6 @@ function parse() {
     mapPopup = document.getElementById("map-popup");
 
     // Set up page
-    document.getElementById("title").innerText = file;
     const tagHolder = document.getElementById("tags");
     const worldHolder = document.getElementById("worlds");
 
@@ -1082,25 +1083,28 @@ function parse() {
         let world = new World(element.name);
         myworld = world;
         
-        let tab = document.createElement("button")
-        tab.className = "tooltip";
+        let tab = document.createElement("a")
         tab.onclick = () => {openWorld(event, element.name)}
         tab.innerText = element.name;
+
+        const li = document.createElement("li");
+        li.className = "tablinks"
+        li.appendChild(tab);
         
-        tagHolder.appendChild(tab);
+        tagHolder.appendChild(li);
         
         let content = document.createElement("div");
         content.id = element.name;
         content.className = "tabcontent";
 
-        content.innerHTML = "<h2 class='tooltip world_name'>"+element.name+"</h2>";
+        content.innerHTML = "<h2 class='title'>"+element.name+"</h2>";
 
         const outline = document.createElement("p");
         outline.className = "world-outline";
         outline.innerText = element.outline;
         
         content.appendChild(outline);
-        content.innerHTML += "<h3>World contributtors</h3>";
+        content.innerHTML += "<hr><h3 class='title is-4'>World contributtors</h3>";
 
         let creators = [];
         for(let i = 0; i < myworld.characters.length; i++)    
@@ -1110,19 +1114,20 @@ function parse() {
                 if(!creators.includes(creator)) creators.push(creator);
             }
 
-        creators = creators.map(c => getCreator(c).name).join(", ");
+        creators = creators.map(c => "<span class='tag is-link is-medium is-light'>" + getCreator(c).name + "</span>").join(" ");
 
-        const creatornames = document.createElement("p");
-        creatornames.innerText = creators;
+        const creatornames = document.createElement("div");
+        creatornames.innerHTML = creators;
 
         content.appendChild(creatornames);
 
         // Add view switch panels
         const view_panel = `
-            <button onclick='switchView(0)' id="${myworld.name}-cv" class='button-6${myworld.characters == undefined ? " blocked" : ""}'>Character view</button>
-            <button onclick='switchView(1)' id="${myworld.name}-wo" class='button-6${myworld.world == undefined ? " blocked" : ""}'>World overview</button>
-            <button onclick='switchView(2)' id="${myworld.name}-et" class='button-6${myworld.events == undefined ? " blocked" : ""}'>Event timeline</button>
-            <button onclick='switchView(3)' id="${myworld.name}-cl" class='button-6${myworld.calendar == undefined ? " blocked" : ""}'>Calendar</button>
+            <hr />
+            <button onclick='switchView(0)' id="${myworld.name}-cv" class='button is-medium' ${myworld.characters == undefined ? " disabled" : ""}>Character view</button>
+            <button onclick='switchView(1)' id="${myworld.name}-wo" class='button is-medium' ${myworld.world == undefined ? " disabled" : ""}>World overview</button>
+            <button onclick='switchView(2)' id="${myworld.name}-et" class='button is-medium' ${myworld.events == undefined ? " disabled" : ""}>Event timeline</button>
+            <button onclick='switchView(3)' id="${myworld.name}-cl" class='button is-medium' ${myworld.calendar == undefined ? " disabled" : ""}>Calendar</button>
         `;
 
         content.innerHTML += view_panel;
@@ -1134,16 +1139,28 @@ function parse() {
         cView.id = myworld.name + "-" + "chara-container";
 
         const controller = `
-            <div>
-                <button class='button-6 controller' onclick='relationship_control()'>Hide all relationships</button>
-                <button onclick='reset_positions()' class='button-6'>Reset character positions</button>
-                <button type='button' class='char_sorter'>Open</button> 
-                <div class='sorter_content' id="${myworld.name}chara-sorter">
-                </div> 
+            <div class="block">
+                <button class='button controller' onclick='relationship_control()'>Hide all relationships</button>
+                <button onclick='reset_positions()' class='button'>Reset character positions</button>
+
+                <div id="sorter${myworld.name}" class="dropdown">
+                    <div class="dropdown-trigger">
+                        <button class="button" aria-haspopup="true" onclick="toggle_sorter()" aria-controls="dropdown-menu">
+                        <span>Sort by tags</span>
+                        <span class="icon is-small">
+                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                        </span>
+                        </button>
+                    </div>
+                    <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                        <div class='dropdown-content' id="${myworld.name}chara-sorter">
+                        </div> 
+                    </div>
+                </div>
 
                 <br /><br /><br />
                 <! -- form for shit and maybe el menu -->
-                <div class="box">
+                <div class="">
                     <form name="search">
                         <input maxlength=80 id="${myworld.name}search" type="text" placeholder="Search" oninput="searchUpdate()" class="input" name="txt">
                     </form>
@@ -1162,7 +1179,7 @@ function parse() {
         worldHolder.appendChild(content);
         
         let dom = document.createElement("div");
-        dom.className = "chara-container";
+        dom.className = "is-flex is-flex-wrap-wrap m30 is-justify-content-center";
         
         for (let index = 0; index < world.divisions.length; index++) dom.append(world.divisions[index]);
         cView.append(dom);
@@ -1207,6 +1224,8 @@ function parse() {
         content.appendChild(clView);
 
         myworld.setupTagFilters();
+
+        setTriggers();
     });
 
     document.addEventListener("mouseup", () => {
@@ -1222,7 +1241,12 @@ function parse() {
     for (i = 0; i < coll.length; i++) {
     coll[i].addEventListener("click", function() {
 
-        this.classList.toggle("active");
+        if(this.nextElementSibling.childElementCount == 0){
+
+            popUpNotification("This characters don't have any tags assigned", 2)
+            return;
+        }
+
         var content = this.nextElementSibling;
         if (content.style.display === "block") {
         content.style.display = "none";
@@ -1233,7 +1257,16 @@ function parse() {
     }
 
     // Open first world
-    openWorld(event, data.dimensions[0].name, 1);
+    openWorld(event, data.dimensions[0].name, 0);
+
+    parserFinishedCallback();
+}
+
+function toggle_sorter() {
+
+    const sorter = document.getElementById("sorter" + myworld.name);
+    if(sorter.classList.contains("is-active")) sorter.classList.remove("is-active");
+    else sorter.classList.add("is-active");
 }
 
 // Dragging and dropping elements
@@ -1297,6 +1330,8 @@ function defineGrabbable(restore = false, xx=0, yy=0){
 
             clearLines();
             myworld.establishRelations();
+
+            saveIconsPositions();
         }
         function elementDrag(e) {
 

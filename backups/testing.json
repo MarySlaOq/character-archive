@@ -1,0 +1,102 @@
+[
+    {
+        "id": 0,
+        "name": "GDA",
+        "full_name" : "Guilherme Duarte Alexandre",
+        "biography": "Gda was a normal middle schooler, until he found out he wanted to be a girl, from that day onwards he decided to keep that a secret while taking estrogen pills, until one day he entered highschool and met a boy to share his secret with, who also shared his passion for german and japanese culture, and together they are the Nazi femboys <3",
+        "personality": ["Intelligent", "Wry", "Pettit", "Nazi"],
+        "species": "Human",
+        "age": "15 ~ 17",
+        "gender": "Trans woman",
+        "occupation": "Student",
+        "height": 174,
+        "weight": 60,
+        "bloodtype": "",
+        "birthdate": "30/8",
+        "birthplace": "Portugal",
+        "creators": [2],
+        "image": "gda.png",
+        "role": 0,
+        "relations": [
+            {
+                "to": 1,
+                "details": 11
+            }
+        ],
+        "likes": ["Germany", "Cute guys", "Hololive", "Anime", "Weeb music"],
+        "hates": ["Woman", "Being misvalued"],
+        "notes": "",
+        "pinterest": "",
+        "spotify": "",
+        "tags": [],
+        "highlight": "blue"
+    },
+    {
+        "id": 1,
+        "name": "Faibo",
+        "full_name" : "Fábio Proskurnyk",
+        "biography": "Faibo is an Ukranian transfer student, and he is what people call a femboy, he is GDA's classmate and he runs a cross-dressing account on Twitter, he is also in love with the GDA and the two of them often engage in sexual activity unintentionally",
+        "personality": ["Funny", "Laid back", "Energetic", "Nazi"],
+        "species": "Human",
+        "age": "15 ~ 17",
+        "gender": "M",
+        "occupation": "Student",
+        "height": 172,
+        "weight": 67,
+        "bloodtype": "",
+        "birthdate": "",
+        "birthplace": "Ukraine",
+        "creators": [2],
+        "image": "faibo.png",
+        "role": 0,
+        "relations": [
+            {
+                "to": 0,
+                "details": 11
+            }
+        ],
+        "likes": ["Ukraine", "Danganronpa", "Anime", "Evangelion"],
+        "hates": ["Woman", "Russians"],
+        "notes": "",
+        "pinterest": "",
+        "spotify": "",
+        "tags": [],
+        "highlight": "pink"
+    },
+    {
+        "id": 2,
+        "name": "Porge Pocha",
+        "full_name" : "Jorge Rocha",
+        "biography": "Porge is the GDA's and Faibo's classmate, he is secretelly a massive fan of femboys and after finding out Faibo's Twitter account becomes obsessed with the boy, he desperately tries to get closer to him but he is to focused on GDA, so he ends up kidnapping Faibo.",
+        "personality": ["Funny", "0.7", "Disconnected", "Obsessive"],
+        "species": "Human",
+        "age": "15 ~ 17",
+        "gender": "M",
+        "occupation": "Student",
+        "height": 170,
+        "weight": 56,
+        "bloodtype": "",
+        "birthdate": "",
+        "birthplace": "Portugal",
+        "creators": [2],
+        "image": "none.png",
+        "role": 1,
+        "relations": [
+            {
+                "to": 0,
+                "details": 12
+            },
+            {
+                "to": 1,
+                "details": 12
+            }
+        ],
+        "likes": ["Faibo", "Crack whores", "League of legends", "GDA"],
+        "hates": ["Woman", "Gays"],
+        "notes": "",
+        "pinterest": "",
+        "spotify": "",
+        "tags": [],
+        "highlight": "black"
+    }
+]
