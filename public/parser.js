@@ -41,7 +41,7 @@ function mapZoomOut(){
 
     // Zoom out of map
     const map = myworld.getCurrentMap();
-    let mapid = map.parentElement.parentElement.id.split("w-m")[1];
+    let mapid = map.parentElement.parentElement.parentElement.id.split("w-m")[1];
 
     const myData = myworld.getMapDataFromIndex(mapid);
 
@@ -144,7 +144,7 @@ function merge_maps(){
     document.querySelectorAll(".map-image").forEach(map => {
 
         if(currentMap==null) currentMap = map.offsetParent != null ? map : null;
-        if(map.parentElement.parentElement.id.split("w-m")[0] != myworld.name || map.offsetParent != null) return;
+        if(map.parentElement.parentElement.parentElement.id.split("w-m")[0] != myworld.name || map.offsetParent != null) return;
         
         const img = document.createElement("img");
         img.className = "map-merging";
@@ -164,8 +164,8 @@ function merge_maps(){
         const height = drawnMap.getBoundingClientRect().height;
 
         offsets.push(height);
-        // mais 3.5 porque offsets gostam de me comer o cu
-        const this_height = offsets.reduce((a, b) => a + b + 3.5, 0);
+        // mais 5.5 porque offsets gostam de me comer o cu
+        const this_height = offsets.reduce((a, b) => a + b + 5.5, 0);
 
         drawnMap.style.bottom = this_height + "px";
         drawnMap.style.opacity = map_n;
@@ -574,10 +574,11 @@ class World {
             const mapData = this.world.maps[index];
             
             const mapElement = document.createElement("div");
-            mapElement.className = "map-element" + (index == 0 ? " map-active" : "");
+            mapElement.className = "map-width map-element" + (index == 0 ? " map-active" : "");
             mapElement.id = this.name + "w-m" + index;
 
             const mapName = document.createElement("h3");
+            mapName.className = "title";
             mapName.innerText = mapData.name;
 
             const slideContainer = document.createElement("div");
@@ -589,6 +590,9 @@ class World {
 
             mapElement.appendChild(mapName);
             mapElement.innerHTML += "<p>"+mapData.description+"</p>";
+
+            const rule = document.createElement("div");
+            rule.className = "map-rule";
 
             if(mapData.pins != undefined) {
 
@@ -613,48 +617,60 @@ class World {
                     pinElement.src = "https://upload.wikimedia.org/wikipedia/commons/e/ed/Map_pin_icon.svg";
 
                     pinElement.appendChild(tooltip);
-                    mapElement.appendChild(pinElement);
+                    rule.appendChild(pinElement);
                 }
             }
             
+            mapElement.appendChild(document.createElement("br"));
             slideContainer.appendChild(mapImage);
-            mapElement.appendChild(slideContainer);
+            rule.appendChild(slideContainer);
+            rule.appendChild(slideContainer);
 
             // Draw region information
             const region = document.createElement("div");
-            region.className = "region-data";
+            region.className = "fake-box region-data";
             region.id = myworld.name + "region-data";
 
             region.innerHTML = `
-                <div class="container2 m10">
-                    <div id="details" class="container3">
-                        <h2 id="${myworld.name}region_name">Region name</h2>
-                        <img src="https://images.jifo.co/141438036_1685123167974.svg" class="flag" id='${myworld.name}flag' />
+                <div class="m10">
+                    <div id="details" class="m-5 is-flex is-justify-content-space-around">
+
+                        <div class="is-flex is-justify-content-center">
+                            <h2 class="title" id="${myworld.name}region_name">Region name</h2>
+                            <img src="https://images.jifo.co/141438036_1685123167974.svg" class="flag" id='${myworld.name}flag' />
+                        </div>
+                        <button class="button is-primary" onclick="mapZoomOut()">Return to full map</button>
                     </div>
-                    <button class="button is-primary" onclick="mapZoomOut()">Return to full map</button>
                 </div>
                 <p id="${myworld.name}desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore veritatis inventore sed ullam enim, dolor at culpa in, quod deserunt blanditiis! Pariatur officiis ipsa, facilis repellat odio sint inventore voluptatibus culpa sunt vero recusandae! Fugiat sapiente voluptas alias exercitationem eos tempora provident, ipsam, optio, modi vel deserunt iste repellat voluptatibus.</p>
-                <div class="traits">
-                    <p><i class="fas fa-arrows"></i> <b>Area</b> <span id='${myworld.name}area'>100</span> m²</p>
-                    <p><i class="fas fa-users"></i> <b>Population</b> <span id='${myworld.name}pop'>100</span> inhabitants</p>
-                    <p><i class="fas fa-tint"></i> <b>Bodies of water</b> <span id='${myworld.name}water'>1, 2, 3</span></p>
-                    <p><i class="fas fa-male"></i> <b>Denonym</b> <span id='${myworld.name}den'></span></p>
-                    <p><i class="fas fa-balance-scale"></i> <b>Politics</b> <span id='${myworld.name}pol'></span></p>
-                    <p><i class="fas fa-coins"></i> <b>Economy</b> <span id='${myworld.name}econ'></span></p>
-                    <p><i class="fas fa-trophy"></i> <b>Reputation</b> <span id='${myworld.name}rep'></span></p>
-                    <p><i class="fas fa-sun"></i> <b>Climate</b> <span id='${myworld.name}cli'></span></p>
-                    <p><i class="fa-solid fa-money-bill"></i> <b>Money</b> <span id='${myworld.name}mon'></span></p>
-                    <p><i class="fa-solid fa-language"></i> <b>Language</b> <span id='${myworld.name}lang'></span></p>
+                <hr />
+                <div class="columns">
+                    <div class="column">
+                        <p><i class="fas fa-arrows"></i> <b>Area</b> <span id='${myworld.name}area'>100</span> m²</p>
+                        <p><i class="fas fa-users"></i> <b>Population</b> <span id='${myworld.name}pop'>100</span> inhabitants</p>
+                        <p><i class="fas fa-tint"></i> <b>Bodies of water</b> <span id='${myworld.name}water'>1, 2, 3</span></p>
+                        <p><i class="fas fa-male"></i> <b>Denonym</b> <span id='${myworld.name}den'></span></p>
+                        <p><i class="fas fa-balance-scale"></i> <b>Politics</b> <span id='${myworld.name}pol'></span></p>
+                    </div>
+                    <div class="column">
+                        <p><i class="fas fa-coins"></i> <b>Economy</b> <span id='${myworld.name}econ'></span></p>
+                        <p><i class="fas fa-trophy"></i> <b>Reputation</b> <span id='${myworld.name}rep'></span></p>
+                        <p><i class="fas fa-sun"></i> <b>Climate</b> <span id='${myworld.name}cli'></span></p>
+                        <p><i class="fa-solid fa-money-bill"></i> <b>Money</b> <span id='${myworld.name}mon'></span></p>
+                        <p><i class="fa-solid fa-language"></i> <b>Language</b> <span id='${myworld.name}lang'></span></p>
+                    </div>
                 </div>
                 <p><i class="fas fa-book"></i> <b>History</b> <br><br>
                     <span id='${myworld.name}hist'>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore veritatis inventore sed ullam enim, dolor at culpa in, quod deserunt blanditiis! Pariatur officiis ipsa, facilis repellat odio sint inventore voluptatibus culpa sunt vero recusandae! Fugiat sapiente voluptas alias exercitationem eos tempora provident, ipsam, optio, modi vel deserunt iste repellat voluptatibus.
                     </span>
                 </p>
+                <hr />
                 <p><i class="fa-solid fa-paw"></i> <b>Animals</b> <br><br>
-                    <div class="animals" id='${myworld.name}ani'>
+                    <div class="is-flex is-flex-wrap-wrap is-justify-content-center" id='${myworld.name}ani'>
                     </div>
                 </p>
+                <hr />
                 <p><i class="fa-solid fa-shirt"></i> <b>Clothing</b> <br><br>
                     <span id='${myworld.name}cloth'>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore veritatis inventore sed ullam enim, dolor at culpa in, quod deserunt blanditiis! Pariatur officiis ipsa, facilis repellat odio sint inventore voluptatibus culpa sunt vero recusandae! Fugiat sapiente voluptas alias exercitationem eos tempora provident, ipsam, optio, modi vel deserunt iste repellat voluptatibus.
@@ -662,6 +678,10 @@ class World {
                 </p>
                 <img id="${myworld.name}landscape" src="https://i.kym-cdn.com/entries/icons/facebook/000/034/683/fumo.jpg">
                 `;
+                
+            mapElement.appendChild(rule);
+
+            mapElement.appendChild(document.createElement("br"));
             mapElement.appendChild(region);
             container.appendChild(mapElement);
         }
@@ -684,8 +704,8 @@ class World {
             const pin_bounds = pin.parentElement.querySelector("img").getBoundingClientRect();
             const map_bounds = pin.parentElement.querySelector(".map-image").getBoundingClientRect();
             
-            var xx = map_bounds.left;
-            var yy = (map_bounds.top + window.scrollY);
+            var xx = 0;
+            var yy = 0;
 
             // Center the pin
             xx = xx - pin_bounds.width / 2;
@@ -767,14 +787,14 @@ class World {
                         container.className = "animal-card";
                         container.innerHTML = `
                             <img src='${getResource(ani.image)}' />
-                            <h3>${ani.name}</h3>
+                            <h3 class="title is-4">${ani.name}</h3>
                             <p>${ani.outline.substring(0, 200) + (ani.outline.length >= 200 ? "..." : "")}</p>
                             <!-- more info -->
-                            <div></div>
+                            <div></div><br>
                         `;
 
                         const readmore = document.createElement("button");
-                        readmore.className = "button-6";
+                        readmore.className = "button";
                         readmore.innerText = "Read more";
 
                         readmore.onclick = () => {
@@ -1166,7 +1186,7 @@ function parse() {
                     </form>
                 </div>
 
-                <div class="subtitles">
+                <div class="subtitles is-flex is-flex-wrap-wrap">
                     <div class="subtitle"> <div class="circle"></div> <span>Text</span></div>
                     <div class="subtitle"> <div class="circle"></div> <span>Text</span></div>
                     <div class="subtitle"> <div class="circle"></div> <span>Text</span></div>
