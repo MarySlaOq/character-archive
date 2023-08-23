@@ -2,11 +2,11 @@ const setTriggers = () => {
 
     // Functions to open and close a modal
     function openModal($el) {
-      console.log($el);
       $el.classList.add('is-active');
     }
   
     function closeModal($el) {
+      exit_editor();
       $el.classList.remove('is-active');
     }
   

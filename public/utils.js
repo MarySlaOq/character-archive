@@ -100,3 +100,96 @@ const parserFinishedCallback = () => {
         loadIconPositions();
     }
 }
+
+// CRUD data conversion lookup map
+const dataConversionLookupMap = {
+
+    name: {
+        "origin": "p",
+        "target": "text"
+    },
+    fullname: {
+        "origin": "p",
+        "target": "text"
+    },
+    outline: {
+        "origin": "p",
+        "target": "textarea"
+    },
+    species: {
+        "origin": "span",
+        "target": "text"
+    },
+    age: {
+        "origin": "span",
+        "target": "text"
+    },
+    gender: {
+        "origin": "span",
+        "target": "text"
+    },
+    occupation: {
+        "origin": "span",
+        "target": "text"
+    },
+    height: {
+        "origin": "span",
+        "target": "number"
+    },
+    weight: {
+        "origin": "span",
+        "target": "number"
+    },
+    bloodtype: {
+        "origin": "span",
+        "target": "text"
+    },
+    birthdate: {
+        "origin": "span",
+        "target": "text"
+    },
+    birthplace: {
+        "origin": "span",
+        "target": "text"
+    },
+    notes: {
+        "origin": "p",
+        "target": "text"
+    },
+    personality: {
+        "origin": "p",
+        "target": "list",
+        "data": {
+            "dataKey": "personality",
+            "elementTarget": "text"
+        }
+    },
+    likes: {
+        "origin": "ul",
+        "target": "list",
+        "data": {
+            "dataKey": "likes",
+            "elementTarget": "text"
+        }
+    },
+    hates: {
+        "origin": "ul",
+        "target": "list",
+        "data": {
+            "dataKey": "hates",
+            "elementTarget": "text"
+        }
+    },
+    relations: {
+        "origin": "rel",
+        "target": "list",
+        "data": {
+            "dataKey": "relations",
+            "elementTarget": "rel"
+        }
+    },
+    image: {
+        "origin": "img",
+        "target": "text"
+    }
+}

@@ -11,6 +11,11 @@ function getResource(name){
     return "resources/" + name;
 }
 
+function getCurrentCharacterPopUpData(){
+
+    return myworld.getChara(popup.getAttribute("character-id"));
+}
+
 var block_popup = false;
 var my_top = -1;
 
@@ -21,6 +26,12 @@ const color_codes = {
     "aliceblue":"#f0f8ff", "antiquewhite":"#faebd7", "aqua":"#00ffff", "aquamarine":"#7fffd4", "azure":"#f0ffff", "beige":"#f5f5dc", "bisque":"#ffe4c4", "black":"#000000", "blanchedalmond":"#ffebcd", "blue":"#0000ff", "blueviolet":"#8a2be2", "brown":"#a52a2a", "burlywood":"#deb887", "cadetblue":"#5f9ea0", "chartreuse":"#7fff00", "chocolate":"#d2691e", "coral":"#ff7f50", "cornflowerblue":"#6495ed", "cornsilk":"#fff8dc", "crimson":"#dc143c", "cyan":"#00ffff", "darkblue":"#00008b", "darkcyan":"#008b8b", "darkgoldenrod":"#b8860b", "darkgray":"#a9a9a9", "darkgreen":"#006400", "darkkhaki":"#bdb76b", "darkmagenta":"#8b008b", "darkolivegreen":"#556b2f", "darkorange":"#ff8c00", "darkorchid":"#9932cc", "darkred":"#8b0000", "darksalmon":"#e9967a", "darkseagreen":"#8fbc8f", "darkslateblue":"#483d8b", "darkslategray":"#2f4f4f", "darkturquoise":"#00ced1", "darkviolet":"#9400d3", "deeppink":"#ff1493", "deepskyblue":"#00bfff", "dimgray":"#696969", "dodgerblue":"#1e90ff", "firebrick":"#b22222", "floralwhite":"#fffaf0", "forestgreen":"#228b22", "fuchsia":"#ff00ff", "gainsboro":"#dcdcdc", "ghostwhite":"#f8f8ff", "gold":"#ffd700", "goldenrod":"#daa520", "gray":"#808080", "green":"#008000", "greenyellow":"#adff2f",
     "honeydew":"#f0fff0", "hotpink":"#ff69b4", "indianred ":"#cd5c5c", "indigo":"#4b0082", "ivory":"#fffff0", "khaki":"#f0e68c", "lavender":"#e6e6fa", "lavenderblush":"#fff0f5", "lawngreen":"#7cfc00", "lemonchiffon":"#fffacd", "lightblue":"#add8e6", "lightcoral":"#f08080", "lightcyan":"#e0ffff", "lightgoldenrodyellow":"#fafad2", "lightgrey":"#d3d3d3", "lightgreen":"#90ee90", "lightpink":"#ffb6c1", "lightsalmon":"#ffa07a", "lightseagreen":"#20b2aa", "lightskyblue":"#87cefa", "lightslategray":"#778899", "lightsteelblue":"#b0c4de", "lightyellow":"#ffffe0", "lime":"#00ff00", "limegreen":"#32cd32", "linen":"#faf0e6", "magenta":"#ff00ff", "maroon":"#800000", "mediumaquamarine":"#66cdaa", "mediumblue":"#0000cd", "mediumorchid":"#ba55d3", "mediumpurple":"#9370d8", "mediumseagreen":"#3cb371", "mediumslateblue":"#7b68ee",  "mediumspringgreen":"#00fa9a", "mediumturquoise":"#48d1cc", "mediumvioletred":"#c71585", "midnightblue":"#191970", "mintcream":"#f5fffa", "mistyrose":"#ffe4e1", "moccasin":"#ffe4b5", "navajowhite":"#ffdead", "navy":"#000080", "oldlace":"#fdf5e6", "olive":"#808000", "olivedrab":"#6b8e23", "orange":"#ffa500", "orangered":"#ff4500", "orchid":"#da70d6", "palegoldenrod":"#eee8aa",
     "palegreen":"#98fb98", "paleturquoise":"#afeeee", "palevioletred":"#d87093", "papayawhip":"#ffefd5", "peachpuff":"#ffdab9", "peru":"#cd853f", "pink":"#ffc0cb", "plum":"#dda0dd", "powderblue":"#b0e0e6", "purple":"#800080", "rebeccapurple":"#663399", "red":"#ff0000", "rosybrown":"#bc8f8f", "royalblue":"#4169e1", "saddlebrown":"#8b4513", "salmon":"#fa8072", "sandybrown":"#f4a460", "seagreen":"#2e8b57", "seashell":"#fff5ee", "sienna":"#a0522d", "silver":"#c0c0c0", "skyblue":"#87ceeb", "slateblue":"#6a5acd", "slategray":"#708090", "snow":"#fffafa", "springgreen":"#00ff7f", "steelblue":"#4682b4", "tan":"#d2b48c", "teal":"#008080", "thistle":"#d8bfd8", "tomato":"#ff6347", "turquoise":"#40e0d0", "violet":"#ee82ee", "wheat":"#f5deb3", "white":"#ffffff", "whitesmoke":"#f5f5f5", "yellow":"#ffff00", "yellowgreen":"#9acd32"
+}
+
+const restartEditor = () => {
+
+    exit_editor();
+    toggle_edit();
 }
 
 // Prevent right click
@@ -208,8 +219,9 @@ function popupOf(who){
 
 function next_popup(){
 
-    const mychar = document.getElementById("name").innerText;
-    let id = myworld.nameToId(mychar) + 1;
+    exit_editor();
+
+    let id = getCurrentCharacterPopUpData().id + 1;
 
     if(id >= myworld.characters.length) id = 0;
     popupOf(id);
@@ -217,8 +229,9 @@ function next_popup(){
 
 function previous_popup(){
 
-    const mychar = document.getElementById("name").innerText;
-    let id = myworld.nameToId(mychar) - 1;
+    exit_editor();
+
+    let id = getCurrentCharacterPopUpData().id - 1;
 
     if(id < 0) id = myworld.characters.length-1;
     popupOf(id);
@@ -924,6 +937,40 @@ class World {
         popup.scrollTop = 0;
         popup.style.zIndex = 1000;
 
+        // Check if user can edit this character
+        const edit = document.getElementById("edit");
+        const del = document.getElementById("delete");
+        const al = document.getElementById("alert");
+
+        edit.removeAttribute("disabled")
+        del.removeAttribute("disabled")
+
+        al.innerText = "This character belongs to you";
+        al.className = "has-text-success";
+
+        if(myuser !== undefined){
+
+            let myemail = myuser.email;
+            if(chara.creators.find(c => getCreator(c).email == myemail) === undefined){
+    
+                //alert(chara.creators.find(c => getCreator(c).email == myemail))
+                edit.setAttribute("disabled", true)
+                del.setAttribute("disabled", true)
+            
+                al.innerText = "This character is not yours";
+                al.className = "has-text-danger";
+            }
+        } else {
+
+            edit.setAttribute("disabled", true)
+            del.setAttribute("disabled", true)
+        
+            al.innerText = "Log in to edit your characters";
+            al.className = "has-text-info";
+        }
+
+        popup.setAttribute("character-id", chara.id);
+
         document.getElementById("image").src = getResource(chara.image);
 
         document.getElementById("name").innerText = chara.name;
@@ -974,7 +1021,7 @@ class World {
         const rel = document.getElementById("relations");
         rel.innerHTML = "";
         
-        if(chara.relations != undefined) rel.innerHTML = chara.relations.map(rel => `<p class="relation"><img src="${getResource(this.getChara(rel.to).image)}" /> &nbsp; Related to &nbsp;<a onclick="popupOf(${rel.to})" href="#0"> ${this.idToName(rel.to)}</a>: ${getRelationshipData(rel.details).name}</p>`).join("");
+        if(chara.relations != undefined) rel.innerHTML = chara.relations.map(rel => `<p class="relation"><img src="${getResource(this.getChara(rel.to).image)}" /> &nbsp; Related to &nbsp;<a onclick="popupof(${rel.to})" href="#0"> ${this.idToName(rel.to)}</a>: ${getRelationshipData(rel.details).name}</p>`).join("");
 
         if (chara.relations == undefined || chara.relations.length == 0) rel.innerHTML = "No relationships established"
 
@@ -1277,7 +1324,7 @@ function parse() {
     }
 
     // Open first world
-    openWorld(event, data.dimensions[0].name, 0);
+    openWorld(event, data.dimensions[2].name, 0);
 
     parserFinishedCallback();
 }
@@ -1363,4 +1410,224 @@ function defineGrabbable(restore = false, xx=0, yy=0){
             ele.style.top = e.clientY - offsetY - ele.getAttribute("rel-y") + window.scrollY + "px";
         }
     }
+}
+
+function delete_chara(){
+
+    const chara = getCurrentCharacterPopUpData();
+    const val = confirm(`Are you sure you want to delete ${chara.name} from ${myworld.name}?\nThis action can't be undone.`);
+    alert("Sike, it's not implemented");
+}
+
+// Exports the character information to json format
+function export_data(){
+
+    const chara = getCurrentCharacterPopUpData();
+    var dataStr = "data:txt/json;charset=utf-8," + encodeURIComponent(
+        JSON.stringify(chara)
+    );
+
+    var dla = document.getElementById("downloadAnchor");
+    dla.setAttribute("href", dataStr);
+    dla.setAttribute("download", chara.name.trim().replace(" ", "-") + ".json");
+    
+    dla.click();
+}
+
+function toggle_edit(){
+
+    const edit_toggle = document.getElementById("edit");
+    edit_toggle.children.item(1).innerText = "Back to normal";
+    edit_toggle.onclick = exit_editor;
+
+    document.getElementById("popupbody").scrollTop = 0;
+  
+    // Turn readonly editable components to read/write components
+    document.querySelectorAll('[editable="true"]').forEach((comp) => {
+        
+        const conversionData = dataConversionLookupMap[comp.id];
+
+        if(conversionData === undefined) return;
+        const targetElement = conversionData.target;
+
+        let writableComponent;
+
+        
+        if(targetElement != "textarea"){
+            
+            if(targetElement == "list"){
+                
+                var createListElementAdequate = () => {};
+
+                writableComponent = document.createElement("div");
+                let list = getCurrentCharacterPopUpData()[conversionData.data.dataKey];
+                for(let i = 0; i < list.length; i++){
+
+                    const element = list[i];
+                    var ele;
+                    
+                    if(conversionData.data.elementTarget == "rel"){
+
+                        createListElementAdequate = () => {
+
+                            const group = document.createElement("div");
+                            group.className = "field has-addons";
+
+                            const control = document.createElement("div");
+                            control.className = "control";
+
+                            const ele = document.createElement("div");
+                            ele.className = "select";
+    
+                            let myname = getCurrentCharacterPopUpData().name;
+                            ele.innerHTML = `
+                            <select>
+                                ${
+                                    myworld.characters.filter(n => n.name != myname).map(c => "<option " + (c.id==element.to ? "selected" : "") + ">" + c.name + "</option>")
+                                }
+                            </select>`;
+    
+                            group.innerHTML += `
+                            <p class="control">
+                                    <span class="select">
+                                    <select>
+                                        ${
+                                            Object.entries(data.relations).map(r => "<option "+ (r[0] == element.details ? "selected": "") +">" + r[1].name + "</option>")
+                                        }
+                                    </select>
+                                    </span>
+                                </p>
+                            `;
+    
+                            ele.defaultValue = getRelationshipData(element.details).name;
+
+                            control.appendChild(ele);
+                            group.appendChild(control);
+                            group.innerHTML += `
+                            <div class="control">
+                                <a onclick="removeThisPersonalityTrait()" class="button is-danger">
+                                Delete
+                                </a>
+                            </div>
+                            `;
+
+                            return group;
+                        }
+
+                    }else{
+
+                        createListElementAdequate = () => {
+
+                            const group = document.createElement("div");
+                            group.className = "field has-addons";
+
+                            const control = document.createElement("div");
+                            control.className = "control";
+                            
+                            const ele = document.createElement("input");
+                            ele.className = "input";
+                            ele.type = conversionData.data.elementTarget;
+
+                            ele.defaultValue = element;
+
+                            control.appendChild(ele);
+                            group.appendChild(control);
+                            group.innerHTML += `
+                            <div class="control">
+                                <a onclick="removeThisPersonalityTrait()" class="button is-danger">
+                                Delete
+                                </a>
+                            </div>
+                            `;
+
+                            return group;
+                        }
+                    } 
+                    
+                    ele = createListElementAdequate();
+                    writableComponent.appendChild(ele);
+                }
+
+                const append = document.createElement("button");
+                append.className = "button is-primary";
+                append.innerText = "Create new item";
+                append.onclick = () => {
+
+                    const group = createListElementAdequate();
+
+                    writableComponent.insertBefore(group, append);
+                }
+
+                writableComponent.appendChild(append);
+
+            }else{
+                
+                writableComponent = document.createElement("input");
+                writableComponent.type = targetElement;
+                writableComponent.className = comp.className;
+    
+                writableComponent.classList.add("input");
+            }
+        }
+        else {
+
+            writableComponent = document.createElement(targetElement);
+            writableComponent.className = comp.className;
+            
+            writableComponent.classList.add("textarea");
+        }
+
+        writableComponent.id = comp.id;
+        writableComponent.setAttribute("editable", "true");
+        if(conversionData.origin == "img")
+            writableComponent.value = comp.src;
+        else
+            writableComponent.value = targetElement == "number" ? parseInt(comp.innerText) : comp.innerText;
+        
+
+        comp.replaceWith(writableComponent);
+    });
+}
+
+function exit_editor() {
+
+    const edit_toggle = document.getElementById("edit");
+    edit_toggle.children.item(1).innerText = "Edit character data";
+    edit_toggle.onclick = toggle_edit;
+  
+    // Turn readonly editable components to read/write components
+    document.querySelectorAll('[editable="true"]').forEach((comp) => {
+        
+        if(dataConversionLookupMap[comp.id] === undefined) return;
+        const targetElement = dataConversionLookupMap[comp.id].origin;
+
+        if(targetElement=="rel"){
+
+            comp.innerhtml = "";
+            const chara = getCurrentCharacterPopUpData();
+            
+            if(chara.relations != undefined) comp.innerHTML = chara.relations.map(rel => `<p class="relation"><img src="${getResource(myworld.getChara(rel.to).image)}" /> &nbsp; Related to &nbsp;<a onclick="popupof(${rel.to})" href="#0"> ${myworld.idToName(rel.to)}</a>: ${getRelationshipData(rel.details).name}</p>`).join("");
+            if (chara.relations == undefined || chara.relations.length == 0) comp.innerHTML = "No relationships established";
+
+            return;
+        }
+
+        let readonlyComponent = document.createElement(targetElement);
+
+        readonlyComponent.id = comp.id;
+        readonlyComponent.className = comp.className.replace("input", "").replace("textarea", "");
+
+        readonlyComponent.attributes = comp.attributes;
+
+        if(targetElement == "img") readonlyComponent.src = comp.value;
+        else readonlyComponent.innerText = comp.value;
+        readonlyComponent.setAttribute("editable", "true");
+
+        comp.replaceWith(readonlyComponent);
+    });
+}
+
+function removeThisPersonalityTrait(trait) {
+
+    window.event.target.parentElement.parentElement.remove();
 }

@@ -337,19 +337,23 @@
       </p>
     </div>
 
-    <div class="modal" id="popup">
+    <div class="modal" id="popup" character-id="-1">
       <div class="modal-background"></div>
       <div class="modal-card">
         <header class="modal-card-head is-justify-content-space-between">
           <div>
-            <h1 class="mb-1 modal-card-title" id="name">Testing name</h1>
-            <p class="mb-3" id="fullname">Fullname here!</p>
+            <p editable="true" class="mb-1 modal-card-title" id="name">
+              Testing name
+            </p>
+            <p editable="true" class="mb-3" id="fullname">Fullname here!</p>
             <img
+              editable="true"
               class="smol"
               src="https://upload.wikimedia.org/wikipedia/commons/0/08/Pinterest-logo.png"
               id="pinterest"
             />
             <img
+              editable="true"
               class="smol"
               src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
               id="spotify"
@@ -357,16 +361,16 @@
           </div>
           <button class="delete" aria-label="close"></button>
         </header>
-        <section class="modal-card-body">
+        <section id="popupbody" class="modal-card-body">
           <div>
             <div class="box">
               <h2 class="title">Background</h2>
-              <p id="outline">
+              <p editable="true" id="outline">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
               </p>
               <br />
               <h2 class="title">Personality</h2>
-              <p id="personality">
+              <p editable="true" id="personality">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa
                 natus possimus minima repudiandae assumenda voluptas dicta
                 facere
@@ -377,17 +381,38 @@
               <h2 class="title">Traits</h2>
               <div id="traits" class="columns">
                 <div class="column">
-                  <p><b>Species</b>: <span id="species">test</span></p>
-                  <p><b>Age</b>: <span id="age">test</span></p>
-                  <p><b>Gender</b>: <span id="gender">test</span></p>
-                  <p><b>Occupation</b>: <span id="occupation">test</span></p>
-                  <p><b>Height</b>: <span id="height">test</span></p>
+                  <p>
+                    <b>Species</b>:
+                    <span editable="true" id="species">test</span>
+                  </p>
+                  <p><b>Age</b>: <span editable="true" id="age">test</span></p>
+                  <p>
+                    <b>Gender</b>: <span editable="true" id="gender">test</span>
+                  </p>
+                  <p>
+                    <b>Occupation</b>:
+                    <span editable="true" id="occupation">test</span>
+                  </p>
+                  <p>
+                    <b>Height</b>: <span editable="true" id="height">test</span>
+                  </p>
                 </div>
                 <div class="column">
-                  <p><b>Weight</b>: <span id="weight">test</span></p>
-                  <p><b>Blood type</b>: <span id="bloodtype">test</span></p>
-                  <p><b>Birth date</b>: <span id="birthdate">test</span></p>
-                  <p><b>Birth place</b>: <span id="birthplace">test</span></p>
+                  <p>
+                    <b>Weight</b>: <span editable="true" id="weight">test</span>
+                  </p>
+                  <p>
+                    <b>Blood type</b>:
+                    <span editable="true" id="bloodtype">test</span>
+                  </p>
+                  <p>
+                    <b>Birth date</b>:
+                    <span editable="true" id="birthdate">test</span>
+                  </p>
+                  <p>
+                    <b>Birth place</b>:
+                    <span editable="true" id="birthplace">test</span>
+                  </p>
                 </div>
               </div>
             </div>
@@ -398,7 +423,7 @@
               <div class="columns">
                 <div class="column">
                   <h4 class="subtitle">Likes</h4>
-                  <ul id="likes">
+                  <ul editable="true" id="likes">
                     <li>One</li>
                     <li>Two</li>
                     <li>Three</li>
@@ -406,7 +431,7 @@
                 </div>
                 <div class="column">
                   <h4 class="subtitle">Hates</h4>
-                  <ul id="hates">
+                  <ul editable="true" id="hates">
                     <li>One</li>
                     <li>Two</li>
                     <li>Three</li>
@@ -417,7 +442,7 @@
 
             <div class="box">
               <h2 class="title">Relations</h2>
-              <div id="relations" class="">
+              <div id="relations" editable="true">
                 <p class="relation">Related to Character: Friends</p>
                 <p class="relation">Related to Other Character: Siblings</p>
                 <p class="relation">Related to Yet Another Character: Child</p>
@@ -426,18 +451,51 @@
           </div>
           <br />
           <div>
-            <img id="image" src="../resources/saloman.png" alt="" srcset="" />
+            <img
+              editable="true"
+              id="image"
+              src="../resources/saloman.png"
+              alt=""
+              srcset=""
+            />
 
             <article class="message is-small">
               <div class="message-header">
                 <p>Notes</p>
               </div>
               <div class="message-body">
-                <p id="notes"></p>
+                <p editable="true" id="notes"></p>
               </div>
             </article>
           </div>
+
+          <hr />
+
+          <!-- El buttones -->
+          <p id="alert">This character is not yours</p>
+          <br />
+          <button id="export" onclick="export_data()" class="button">
+            <span class="icon is-small">
+              <i class="fas fa-file-export"></i>
+            </span>
+            <span>Export character data</span>
+          </button>
+          <a id="downloadAnchor" style="display: none"></a>
+
+          <button id="edit" onclick="toggle_edit()" class="button is-warning">
+            <span class="icon is-small">
+              <i class="fas fa-edit"></i>
+            </span>
+            <span id="tog_text">Edit character data</span>
+          </button>
+          <button id="delete" onclick="delete_chara()" class="button is-danger">
+            <span class="icon is-small">
+              <i class="fas fa-trash"></i>
+            </span>
+            <span>Delete character</span>
+          </button>
         </section>
+
         <footer class="modal-card-foot">
           <div>
             <button class="button" onclick="previous_popup()">
