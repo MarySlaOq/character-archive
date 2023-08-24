@@ -110,11 +110,13 @@ const dataConversionLookupMap = {
     },
     fullname: {
         "origin": "p",
-        "target": "text"
+        "target": "text",
+        "dataKey": "full_name"
     },
     outline: {
         "origin": "p",
-        "target": "textarea"
+        "target": "textarea",
+        "dataKey": "biography"
     },
     species: {
         "origin": "span",

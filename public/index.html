@@ -25,6 +25,7 @@
         ref,
         child,
         get,
+        update,
       } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js";
       import {
         getAuth,
@@ -220,6 +221,14 @@
       }
 
       document.getElementById("login").onclick = authFunction;
+
+      function updateDatabaseValue(newInformation, characterPath) {
+        const updates = {};
+        updates[characterPath] = newInformation;
+        return update(ref(getDatabase()), updates);
+      }
+
+      globalThis.updateDatabaseValue = updateDatabaseValue;
     </script>
 
     <!-- include jquery -->
@@ -459,6 +468,8 @@
               srcset=""
             />
 
+            <hr />
+
             <article class="message is-small">
               <div class="message-header">
                 <p>Notes</p>
@@ -498,10 +509,14 @@
 
         <footer class="modal-card-foot">
           <div>
-            <button class="button" onclick="previous_popup()">
+            <button id="prev_c" class="button" onclick="previous_popup()">
               Previous character
             </button>
-            <button class="button is-primary mb-3" onclick="next_popup()">
+            <button
+              id="next_c"
+              class="button is-primary mb-3"
+              onclick="next_popup()"
+            >
               Next character
             </button>
             <br />
