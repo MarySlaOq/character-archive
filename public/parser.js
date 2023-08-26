@@ -1149,7 +1149,10 @@ function parse() {
 
     // Set up page
     const tagHolder = document.getElementById("tags");
+    tagHolder.innerHTML = "";
+
     const worldHolder = document.getElementById("worlds");
+    worldHolder.innerHTML = "";
 
     data.dimensions.forEach(element => {
 
@@ -1776,6 +1779,8 @@ function saveNewCharacterInformation(){
 
         popupOf(currentTarget.id);
         myworld.establishRelations();
+
+        parse();
     });
 }
 
