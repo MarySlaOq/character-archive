@@ -195,3 +195,31 @@ const dataConversionLookupMap = {
         "target": "text"
     }
 }
+
+const emptyCharacterTemplate = {
+    "id": -1,
+    "name": "",
+    "full_name" : "",
+    "biography": "",
+    "personality": [],
+    "species": "",
+    "age": "",
+    "gender": "",
+    "occupation": "",
+    "height": 0,
+    "weight": 0,
+    "bloodtype": "",
+    "birthdate": "",
+    "birthplace": "",
+    "creators": [],
+    "image": "",
+    "role": 0,
+    "relations": [],
+    "likes": [],
+    "hates": [],
+    "notes": "",
+    "pinterest": "",
+    "spotify": "",
+    "tags": [],
+    "highlight": ""
+}

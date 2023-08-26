@@ -280,6 +280,8 @@ body {font-family: Arial; width: 70% !important; margin: auto !important;}
   align-items: center;
   padding-right: 1em;
   width: fit-content;
+
+  margin-bottom: 15px;
 }
 
 .relation img

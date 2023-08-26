@@ -196,6 +196,8 @@
               document.getElementById("userimg").src = "resources/default.jpg";
               document.getElementById("login").innerText = "Login with google";
               document.getElementById("login").className = "button";
+
+              window.location.reload();
             })
             .catch((error) => {
               popUpNotification("Sign out failed", 1);
@@ -213,6 +215,8 @@
               console.log(user);
 
               popUpNotification("Logged in as " + user.displayName, 0);
+
+              window.location.reload();
             })
             .catch((error) => {
               popUpNotification("Google login failed", 1);
@@ -257,10 +261,6 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-
-    <script>
-      function close_popup() {}
-    </script>
   </head>
   <body class="container is-fluid">
     <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -325,6 +325,8 @@
         </div>
       </div>
     </nav>
+
+    <br />
 
     <div class="tabs is-centered is-medium is-boxed">
       <ul id="tags"></ul>
@@ -458,6 +460,53 @@
               </div>
             </div>
           </div>
+
+          <br />
+          <div class="box" id="edit-only" style="display: none">
+            <p class="title">Metadata</p>
+
+            <div class="columns">
+              <div class="column">
+                <p class="subtitle">Color highlight</p>
+                <div class="select">
+                  <select id="highlight"></select>
+                </div>
+              </div>
+
+              <div class="column">
+                <p class="subtitle">Role</p>
+                <div class="select">
+                  <select id="role">
+                    <option value="0">Main character</option>
+                    <option value="1">Supporting character</option>
+                    <option value="2">Arc character</option>
+                    <option value="3">Background character</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="columns">
+              <div class="column">
+                <p class="subtitle">Spotify</p>
+                <input id="spotify-input" type="text" class="input" />
+              </div>
+              <div class="column">
+                <p class="subtitle">Pinterest</p>
+                <input id="pinterest-input" type="text" class="input" />
+              </div>
+            </div>
+
+            <h4 class="subtitle">Tags</h4>
+
+            <div id="tags-input"></div>
+
+            <br />
+            <button onclick="createTag()" class="button is-primary">
+              Create new item
+            </button>
+          </div>
+
           <br />
           <div>
             <img

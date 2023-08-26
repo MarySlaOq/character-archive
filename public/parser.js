@@ -8,6 +8,8 @@ function getCreator(id){ return data.people.find(p => p.id == id); }
 function getRelationshipData(id){ return data.relations[id]; }
 function getResource(name){
 
+    if(name==undefined) return "";
+
     if(name.includes("public/resources")) name = name.split("/").slice(-1)[0];
     return "resources/" + name;
 }
@@ -349,6 +351,7 @@ class World {
     calendar = [];
     
     animals = [];
+    contributors = [];
 
     constructor(name){
 
@@ -992,7 +995,7 @@ class World {
         document.getElementById("fullname").innerHTML = chara.full_name;
 
         const notes = document.getElementById("notes");
-        if(chara.notes == ""){
+        if(chara.notes == "" || chara.notes == undefined || chara.notes == "undefined"){
 
             notes.parentNode.parentNode.style.display = "none";
         }else{
@@ -1139,6 +1142,8 @@ function parse() {
 
     document.getElementById("loader").style.display = "none";
 
+    document.getElementById("highlight").innerHTML = Object.entries(color_codes).map(c => `<option style="color: ${c[1]}" value="${c[0]}">${c[0]}</option>`).join("3");
+
     popup = document.getElementById("popup");
     mapPopup = document.getElementById("map-popup");
 
@@ -1181,6 +1186,7 @@ function parse() {
                 const creator = myworld.characters[i].creators[j];
                 if(!creators.includes(creator)) creators.push(creator);
             }
+        myworld.contributors = creators.map(c => getCreator(c));
 
         creators = creators.map(c => "<span class='tag is-link is-medium is-light'>" + getCreator(c).name + "</span>").join(" ");
 
@@ -1210,22 +1216,23 @@ function parse() {
             <div class="block">
                 <button class='button controller' onclick='relationship_control()'>Hide all relationships</button>
                 <button onclick='reset_positions()' class='button'>Reset character positions</button>
-
+                
                 <div id="sorter${myworld.name}" class="dropdown">
                     <div class="dropdown-trigger">
                         <button class="button" aria-haspopup="true" onclick="toggle_sorter()" aria-controls="dropdown-menu">
                         <span>Sort by tags</span>
                         <span class="icon is-small">
                             <i class="fas fa-angle-down" aria-hidden="true"></i>
-                        </span>
-                        </button>
-                    </div>
+                            </span>
+                            </button>
+                            </div>
                     <div class="dropdown-menu" id="dropdown-menu" role="menu">
                         <div class='dropdown-content' id="${myworld.name}chara-sorter">
                         </div> 
+                        </div>
                     </div>
-                </div>
-
+                        
+                        ${myuser=== undefined ? "" : ((myworld.contributors.map(c => c.email).includes(myuser.email)) ? "<br /><br /><button data-target='popup' onclick='open_creator()' class='js-modal-trigger button is-rounded is-success'><span class='icon'><i class='fas fa-user'></i></span><span>Create new character</span></button>" : "")}
                 <br /><br /><br />
                 <! -- form for shit and maybe el menu -->
                 <div class="">
@@ -1435,23 +1442,51 @@ function export_data(){
     dla.click();
 }
 
-function toggle_edit(){
+function toggle_edit(values=null){
 
+    if( values == event) values = null;
+    
     const edit_toggle = document.getElementById("edit");
     edit_toggle.children.item(1).innerText = "Back to normal";
     edit_toggle.onclick = exit_editor;
-
+    
     const n = document.getElementById("next_c")
     n.innerText = "Save changes";
     n.onclick = saveNewCharacterInformation;
-
+    
     const p = document.getElementById("prev_c")
     p.innerText = "Close editor";
     p.onclick = exit_editor;
     
+    const c = document.getElementById("creators");
+    document.getElementById("edit-only").style.display = 'block';
+
+    edit_toggle.style.display = values == null ? 'inline-flex' : 'none';
+    document.getElementById("export").style.display = values == null ? 'inline-flex' : 'none';
+    document.getElementById("delete").style.display = values == null ? 'inline-flex' : 'none';
+    document.getElementById("alert").style.display = values == null ? 'block' : 'none';
+    c.style.display = values == null ? 'block' : 'none';
+    
     document.getElementById("notes").parentNode.parentNode.style.display = "block";
 
     document.getElementById("popupbody").scrollTop = 0;
+
+    // Fill metadata 
+    const chara = values == null ? getCurrentCharacterPopUpData() : values;
+
+    document.getElementById("highlight").value = chara.highlight;
+    document.getElementById("spotify-input").value = chara.spotify;
+    document.getElementById("pinterest-input").value = chara.pinterest;
+    document.getElementById("role").value = chara.role;
+
+    if(chara.tags != undefined) document.getElementById("tags-input").innerHTML = chara.tags.map(t => `
+        <div class="field has-addons"><div class="control"><input class="input" type="text" value="${t}"></div>
+            <div class="control">
+                <a onclick="removeThisPersonalityTrait()" class="button is-danger">
+                    Delete
+                </a>
+            </div>`
+    ).join();
   
     // Turn readonly editable components to read/write components
     document.querySelectorAll('[editable="true"]').forEach((comp) => {
@@ -1471,7 +1506,7 @@ function toggle_edit(){
                 var createListElementAdequate = () => {};
 
                 writableComponent = document.createElement("div");
-                let list = getCurrentCharacterPopUpData()[conversionData.data.dataKey];
+                let list = values == null ? getCurrentCharacterPopUpData()[conversionData.data.dataKey] : values[conversionData.data.dataKey];
 
                 if(conversionData.data.elementTarget == "rel"){
 
@@ -1486,7 +1521,7 @@ function toggle_edit(){
                         const ele = document.createElement("div");
                         ele.className = "select";
 
-                        let myname = getCurrentCharacterPopUpData().name;
+                        let myname = values == null ? getCurrentCharacterPopUpData().name : values.name;
                         ele.innerHTML = `
                         <select>
                             ${
@@ -1565,7 +1600,6 @@ function toggle_edit(){
                 append.onclick = () => {
 
                     const group = createListElementAdequate();
-
                     writableComponent.insertBefore(group, append);
                 }
 
@@ -1591,10 +1625,11 @@ function toggle_edit(){
         writableComponent.id = comp.id;
         writableComponent.setAttribute("editable", "true");
         if(conversionData.origin == "img")
-            writableComponent.value = comp.src;
+            writableComponent.value = values == null ? comp.src : values.image;
         else
-            writableComponent.value = targetElement == "number" ? parseInt(comp.innerText) : comp.innerText;
+            writableComponent.value = values == null ? (targetElement == "number" ? parseInt(comp.innerText) : comp.innerText) : (values[dataConversionLookupMap[comp.id].dataKey] == undefined ? values[comp.id] : values[dataConversionLookupMap[comp.id].dataKey]);
         
+        writableComponent.placeholder = comp.id;
 
         comp.replaceWith(writableComponent);
     });
@@ -1602,6 +1637,7 @@ function toggle_edit(){
 
 function exit_editor() {
 
+    document.getElementById("edit-only").style.display = 'none';
     const edit_toggle = document.getElementById("edit");
     edit_toggle.children.item(1).innerText = "Edit character data";
     edit_toggle.onclick = toggle_edit;
@@ -1613,8 +1649,17 @@ function exit_editor() {
     const p = document.getElementById("prev_c")
     p.innerText = "Previous character";
     p.onclick = previous_popup;
+    
+    const c = document.getElementById("creators");
+    edit_toggle.style.display = 'inline-flex';
+    document.getElementById("export").style.display = 'inline-flex';
+    document.getElementById("delete").style.display = 'inline-flex';
+    document.getElementById("alert").style.display = 'block';
+    c.style.display = 'block';
 
-    if(getCurrentCharacterPopUpData().notes == "")
+    const chara = getCurrentCharacterPopUpData();
+
+    if(chara != null && chara.notes == "")
     document.getElementById("notes").parentNode.parentNode.style.display = "none";
   
     // Turn readonly editable components to read/write components
@@ -1626,10 +1671,9 @@ function exit_editor() {
         if(targetElement=="rel"){
 
             comp.innerhtml = "";
-            const chara = getCurrentCharacterPopUpData();
             
-            if(chara.relations != undefined) comp.innerHTML = chara.relations.map(rel => `<p class="relation"><img src="${getResource(myworld.getChara(rel.to).image)}" /> &nbsp; Related to &nbsp;<a onclick="popupOf(${rel.to})" href="#0"> ${myworld.idToName(rel.to)}</a>: ${getRelationshipData(rel.details).name}</p>`).join("");
-            if (chara.relations == undefined || chara.relations.length == 0) comp.innerHTML = "No relationships established";
+            if (chara != null && chara.relations != undefined) comp.innerHTML = chara.relations.map(rel => `<p class="relation"><img src="${getResource(myworld.getChara(rel.to).image)}" /> &nbsp; Related to &nbsp;<a onclick="popupOf(${rel.to})" href="#0"> ${myworld.idToName(rel.to)}</a>: ${getRelationshipData(rel.details).name}</p>`).join("");
+            if (chara != null && (chara.relations == undefined || chara.relations.length == 0)) comp.innerHTML = "No relationships established";
 
             return;
         }
@@ -1641,7 +1685,7 @@ function exit_editor() {
 
         readonlyComponent.attributes = comp.attributes;
 
-        if(targetElement == "img") readonlyComponent.src = comp.value;
+        if(targetElement == "img") readonlyComponent.src = getResource(comp.value);
         else readonlyComponent.innerText = comp.value;
         readonlyComponent.setAttribute("editable", "true");
 
@@ -1669,7 +1713,7 @@ function saveNewCharacterInformation(){
             case "textarea":
             case "input":
 
-                if(element.value==undefined) continue;
+                if(element.value == undefined || element.value == "undefined") continue;
                 
                 field = dataConversionLookupMap[field].dataKey || field;
                 currentTarget[field] = element.value;
@@ -1710,6 +1754,16 @@ function saveNewCharacterInformation(){
         }
     }
 
+    // Save the metadata
+    currentTarget.highlight = document.getElementById("highlight").value;
+    currentTarget.role = document.getElementById("role").value;
+    currentTarget.spotify = document.getElementById("spotify-input").value;
+    currentTarget.pinterest = document.getElementById("pinterest-input").value;
+
+    let thisList = [];
+    document.querySelectorAll("#tags-input input").forEach((item) => {thisList.push(item.value)});
+    currentTarget.tags = thisList;
+
     // Update database information
     //console.log(currentTarget);
 
@@ -1723,4 +1777,39 @@ function saveNewCharacterInformation(){
         popupOf(currentTarget.id);
         myworld.establishRelations();
     });
+}
+
+function open_creator(){
+
+    popup.setAttribute("character-id", -1);
+    toggle_edit(emptyCharacterTemplate);
+    
+    document.getElementById("next_c").innerText = "Create new character";
+}
+
+function createTag(){
+
+    const group = document.createElement("div");
+    group.className = "field has-addons";
+
+    const control = document.createElement("div");
+    control.className = "control";
+
+    const ele = document.createElement("input");
+    ele.className = "input";
+    ele.type = "text";
+
+    ele.defaultValue = "";
+
+    control.appendChild(ele);
+    group.appendChild(control);
+    group.innerHTML += `
+    <div class="control">
+        <a onclick="removeThisPersonalityTrait()" class="button is-danger">
+        Delete
+        </a>
+    </div>
+    `;
+
+    document.getElementById("tags-input").appendChild(group);
 }
