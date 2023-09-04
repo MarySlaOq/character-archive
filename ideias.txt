@@ -1,8 +1,25 @@
- - Calendar with specific colors n holidays
- - Zoom in in map and show
+IDEIAS
+ - calendar with specific colors n holidays
+ - zoom in in map and show
+ - event timeline with the history of the world
  - linguas
- - City related facilities show when pin selected
- - character sorter
+ - city related facilities show when pin selected
+ - character tag sorter
  - world languages tab
+ - character language list
+ - magic system tab
+ - cute and funny spellbook interface
+ - event timeline sortable by characters involved / place where the event happened
+ - multiple character images
+ - region clothing
 
- npm install -g firebase-tools
+BUGS
+ - map popup is not showing tehehe
+ - dragging elements is kinda sus, and super jank
+
+NOTES
+
+ https://fantasy-calendar.com/ [HTML calendar template]
+ https://github.com/GramThanos/jsCalendar [Cool looking JS calendar library]
+ npm install -g firebase-tools [install firebase cli (cock licking incorporated) thing]
+ firebase login [firebase login magic command thing]

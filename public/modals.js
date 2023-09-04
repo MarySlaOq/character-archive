@@ -5,17 +5,6 @@ const setTriggers = () => {
       $el.classList.add('is-active');
     }
   
-    function closeModal($el) {
-      exit_editor();
-      $el.classList.remove('is-active');
-    }
-  
-    function closeAllModals() {
-      (document.querySelectorAll('.modal') || []).forEach(($modal) => {
-        closeModal($modal);
-      });
-    }
-  
     // Add a click event on buttons to open a specific modal
     (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
       const modal = $trigger.dataset.target;
@@ -61,3 +50,14 @@ const setTriggers = () => {
       });
     });
   };
+    
+function closeAllModals() {
+  (document.querySelectorAll('.modal') || []).forEach(($modal) => {
+    closeModal($modal);
+  });
+}
+
+function closeModal($el) {
+exit_editor();
+$el.classList.remove('is-active');
+}

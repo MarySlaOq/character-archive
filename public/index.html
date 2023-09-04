@@ -25,6 +25,7 @@
         ref,
         child,
         get,
+        set,
         update,
       } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js";
       import {
@@ -124,7 +125,32 @@
                                             0
                                           );
 
-                                          parse();
+                                          get(child(dbRef, `magic`)).then(
+                                            (snapshot) => {
+                                              if (snapshot.exists()) {
+                                                for (const property in snapshot.val()) {
+                                                  const element =
+                                                    snapshot.val()[property];
+
+                                                  data.dimensions.find(
+                                                    (d) => d.name == property
+                                                  ).magic = element;
+                                                }
+
+                                                popUpNotification(
+                                                  "Magic information loaded",
+                                                  0
+                                                );
+
+                                                parse();
+                                              } else {
+                                                popUpNotification(
+                                                  "Could not load characters",
+                                                  1
+                                                );
+                                              }
+                                            }
+                                          );
                                         } else {
                                           popUpNotification(
                                             "Could not load characters",
@@ -232,6 +258,11 @@
         return update(ref(getDatabase()), updates);
       }
 
+      function createDatabaseValue(newInformation, createCollection) {
+        set(ref(getDatabase(), createCollection), newInformation);
+      }
+
+      globalThis.createDatabaseValue = createDatabaseValue;
       globalThis.updateDatabaseValue = updateDatabaseValue;
     </script>
 
@@ -528,8 +559,6 @@
               </div>
             </article>
           </div>
-
-          <hr />
 
           <!-- El buttones -->
           <p id="alert">This character is not yours</p>

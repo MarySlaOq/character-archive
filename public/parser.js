@@ -4,7 +4,12 @@ const file = document.getElementById("script").src;
 //lets get back to work!! :flex:
 
 const roles = ["Main character", "Supporting character", "Arc character", "Background character"];
-function getCreator(id){ return data.people.find(p => p.id == id); }
+
+function getCreator(id){ 
+    if (data.people == []) return {};
+    return data.people.find(p => p.id == id); 
+}
+function getCreatorByEmail(email) { return data.people.find(p => p.email == email) }
 function getRelationshipData(id){ return data.relations[id]; }
 function getResource(name){
 
@@ -299,6 +304,9 @@ function clearLines(color=null){
 
 // Open new world
 function openWorld(event, world, view=0){
+    
+    localStorage.setItem("ca-visit", world);
+
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
 
@@ -331,6 +339,7 @@ function openWorld(event, world, view=0){
     //document.getElementsByClassName("chara-container").item(0).style.height = height + "px";
     
     switchView(view);
+
 }
 
 class World {
@@ -338,6 +347,7 @@ class World {
     name = "";
     outline = "";
     characters = [];
+    magic = [];
 
     output = "";
     divisions = [];
@@ -368,6 +378,7 @@ class World {
         this.calendar = dim.calendar;
 
         this.animals = animals[name];
+        this.magic = dim.magic;
 
         this.divisions = this.setupCharacters();
     }
@@ -877,6 +888,15 @@ class World {
         });
     }
 
+    drawSpellBook() {
+
+        if(this.magic == undefined) return document.createElement("span");
+
+        const outline = document.createElement("p");
+        outline.innerText = this.magic.outline;
+        return outline;
+    }
+
     getCurrentMap(){
 
         return [...document.querySelectorAll(".map-image")].find(m => m.offsetParent != null);
@@ -1076,7 +1096,8 @@ function switchView(view){
         document.getElementById(`${myworld.name}-cv`),
         document.getElementById(`${myworld.name}-wo`),
         document.getElementById(`${myworld.name}-et`),
-        document.getElementById(`${myworld.name}-cl`)
+        document.getElementById(`${myworld.name}-cl`),
+        document.getElementById(`${myworld.name}-mg`)
     ];
 
     if(panel[view].className.includes("disabled")) {
@@ -1093,10 +1114,13 @@ function switchView(view){
     const world_view = document.getElementById(`${myworld.name}-world-container`);
     const event_view = document.getElementById(`${myworld.name}-event-container`);
     const calendar_view = document.getElementById(`${myworld.name}-calendar-container`);
+    const magic_view = document.getElementById(`${myworld.name}-magic-container`);
 
     switch (view) {
         // Character display
         case 0:
+
+            magic_view.style.display = "none";
             character_view.style.display = "block";
             world_view.style.display = "none";
             event_view.style.display = "none";
@@ -1106,6 +1130,8 @@ function switchView(view){
             break;
         // World overview
         case 1:
+
+            magic_view.style.display = "none";
             world_view.style.display = "block";
             character_view.style.display = "none";
             event_view.style.display = "none";
@@ -1117,6 +1143,8 @@ function switchView(view){
             break;
         // Event timeline
         case 2:
+
+            magic_view.style.display = "none";
             event_view.style.display = "block";
             character_view.style.display = "none";
             world_view.style.display = "none";
@@ -1124,14 +1152,26 @@ function switchView(view){
             clearLines();
 
             break;
-        // Callendar
+        // Calendar
         case 3:
+
+            magic_view.style.display = "none";
             calendar_view.style.display = "block";
             character_view.style.display = "none";
             world_view.style.display = "none";
             event_view.style.display = "none";
             clearLines();
 
+            break;
+        // Magic
+        case 4:
+
+            magic_view.style.display = "block";
+            calendar_view.style.display = "none";
+            character_view.style.display = "none";
+            world_view.style.display = "none";
+            event_view.style.display = "none";
+            clearLines();
             break;
     }
 }
@@ -1142,7 +1182,7 @@ function parse() {
 
     document.getElementById("loader").style.display = "none";
 
-    document.getElementById("highlight").innerHTML = Object.entries(color_codes).map(c => `<option style="color: ${c[1]}" value="${c[0]}">${c[0]}</option>`).join("3");
+    document.getElementById("highlight").innerHTML = Object.entries(color_codes).map(c => `<option class="outline" style="color: ${c[1]}" value="${c[0]}">${c[0]}</option>`).join("3");
 
     popup = document.getElementById("popup");
     mapPopup = document.getElementById("map-popup");
@@ -1201,10 +1241,11 @@ function parse() {
         // Add view switch panels
         const view_panel = `
             <hr />
-            <button onclick='switchView(0)' id="${myworld.name}-cv" class='button is-medium' ${myworld.characters == undefined ? " disabled" : ""}>Character view</button>
-            <button onclick='switchView(1)' id="${myworld.name}-wo" class='button is-medium' ${myworld.world == undefined ? " disabled" : ""}>World overview</button>
-            <button onclick='switchView(2)' id="${myworld.name}-et" class='button is-medium' ${myworld.events == undefined ? " disabled" : ""}>Event timeline</button>
-            <button onclick='switchView(3)' id="${myworld.name}-cl" class='button is-medium' ${myworld.calendar == undefined ? " disabled" : ""}>Calendar</button>
+            <button onclick='switchView(0)' id="${myworld.name}-cv" class='button is-medium' ${myworld.characters == undefined ? " disabled" : ""}><span class="icon"><i class="fa-solid fa-person"></i> </span><span>Character view</span></button>
+            <button onclick='switchView(1)' id="${myworld.name}-wo" class='button is-medium' ${myworld.world == undefined ? " disabled" : ""}><span class="icon"><i class="fa-solid fa-earth"></i> </span><span>World overview</span></button>
+            <button onclick='switchView(2)' id="${myworld.name}-et" class='button is-medium' ${myworld.events == undefined ? " disabled" : ""}><span class="icon"><i class="fa-solid fa-timeline"></i> </span><span>Event timeline</span></button>
+            <button onclick='switchView(3)' id="${myworld.name}-cl" class='button is-medium' ${myworld.calendar == undefined ? " disabled" : ""}><span class="icon"><i class="fa-solid fa-calendar"></i> </span><span>Calendar</span></button>
+            <button onclick='switchView(4)' id="${myworld.name}-mg" class='button is-medium' ${myworld.magic == undefined ? " disabled" : ""}><span class="icon"><i class="fa-solid fa-wand-magic-sparkles"></i> </span><span>Magic</span></button>
         `;
 
         content.innerHTML += view_panel;
@@ -1235,7 +1276,28 @@ function parse() {
                         </div>
                     </div>
                         
-                        ${myuser=== undefined ? "" : ((myworld.contributors.map(c => c.email).includes(myuser.email)) ? "<br /><br /><button data-target='popup' onclick='open_creator()' class='js-modal-trigger button is-rounded is-success'><span class='icon'><i class='fas fa-user'></i></span><span>Create new character</span></button>" : "")}
+                        ${myuser=== undefined ? "" : 
+                            (
+                                (myworld.contributors.map(c => c.email).includes(myuser.email)) ? 
+                                `
+                                    <br />
+                                    <br />
+                                    <button data-target='popup' onclick='open_creator()' class='js-modal-trigger button is-rounded is-success'>
+                                        <span class='icon'>
+                                            <i class='fas fa-user'></i>
+                                        </span>
+                                        <span>Create new character</span>
+                                    </button>
+                                    
+                                    <button class='button is-rounded is-info ml-3'>
+                                        <span class='icon'>
+                                            <i class='fas fa-pen'></i>
+                                        </span>
+                                        <span>Add world collaborator</span>
+                                    </button>
+                                    ` 
+                                    : ""
+                                )}
                 <br /><br /><br />
                 <! -- form for shit and maybe el menu -->
                 <div class="">
@@ -1285,7 +1347,7 @@ function parse() {
         
         eView.appendChild(title);
 
-        // --------- CALLENDAR---------
+        // --------- CALENDAR ---------
         const clView = document.createElement("div");
         clView.id = myworld.name + "-" + "calendar-container";
         
@@ -1294,12 +1356,24 @@ function parse() {
         title.innerText = myworld.name + "'s holidays n shit"
         
         clView.appendChild(title);
+
+        // ---------- Magic ---------
+        const mgView = document.createElement("div");
+        mgView.id = myworld.name + "-magic-container";
+        const mTitle = document.createElement("p");
+        mTitle.innerText = myworld.name + "'s magic system";
+        mTitle.className = "title";
+
+        mgView.appendChild(mTitle);
+        let magic_data = myworld.drawSpellBook();
+        mgView.appendChild(magic_data);
         
         // Append views
         content.appendChild(cView);
         content.appendChild(wView);
         content.appendChild(eView);
         content.appendChild(clView);
+        content.appendChild(mgView);
 
         myworld.setupTagFilters();
 
@@ -1335,7 +1409,8 @@ function parse() {
     }
 
     // Open first world
-    openWorld(event, data.dimensions[2].name, 0);
+
+    openWorld(event, localStorage.getItem("ca-visit") == undefined ? data.dimensions[0].name : localStorage.getItem("ca-visit"), 0);
 
     parserFinishedCallback();
 }
@@ -1455,7 +1530,10 @@ function toggle_edit(values=null){
     
     const n = document.getElementById("next_c")
     n.innerText = "Save changes";
-    n.onclick = saveNewCharacterInformation;
+    n.onclick = () => {
+     
+        saveNewCharacterInformation(DatabaseOperations.UPDATE);
+    }
     
     const p = document.getElementById("prev_c")
     p.innerText = "Close editor";
@@ -1701,9 +1779,10 @@ function removeThisPersonalityTrait(trait) {
     window.event.target.parentElement.parentElement.remove();
 }
 
-function saveNewCharacterInformation(){
+function saveNewCharacterInformation(operation=DatabaseOperations.UPDATE){
 
-    var currentTarget = getCurrentCharacterPopUpData();
+    var currentTarget;
+    currentTarget = popup.getAttribute("character-id") == -1 ? emptyCharacterTemplate : getCurrentCharacterPopUpData();
 
     for (let field in dataConversionLookupMap) {
         
@@ -1732,7 +1811,6 @@ function saveNewCharacterInformation(){
                     // 0 = relation type; 1 = relation partner
                     
                     const relationDetailsId = Object.entries(data.relations).filter(r => r[1].name==selectionBoxes[0].value)[0][0];
-                    console.log(myworld.nameToId(selectionBoxes[1].value));
                     const relationPartnerId = myworld.nameToId(selectionBoxes[1].value);
 
                     const relationReference = {
@@ -1770,18 +1848,46 @@ function saveNewCharacterInformation(){
     // Update database information
     //console.log(currentTarget);
 
-    globalThis.updateDatabaseValue(currentTarget, `/characters/${myworld.name}/${currentTarget.id}`).then((result) => {
+    switch (operation) {
+        case DatabaseOperations.UPDATE:
+            
+            globalThis.updateDatabaseValue(currentTarget, `/characters/${myworld.name}/${currentTarget.id}`).then((result) => {
+        
+                data.dimensions.find(d => d.name == myworld.name)[currentTarget.id] = currentTarget;
+        
+                exit_editor();
+        
+                popupOf(currentTarget.id);
+                myworld.establishRelations();
+                parse();
 
-        data.dimensions.find(d => d.name == myworld.name)[currentTarget.id] = currentTarget;
+                popUpNotification(`${currentTarget.name} was just edited`, 0);
+            });
+            break;
+    
+        case DatabaseOperations.CREATE:
 
-        popUpNotification(`${currentTarget.name} was just edited`, 0);
-        exit_editor();
+            // Define a new id
+            let lastID = -1;
+            myworld.characters.forEach(chara => {
+                if (chara.id > lastID) lastID = chara.id;
+            });
 
-        popupOf(currentTarget.id);
-        myworld.establishRelations();
+            lastID++;
+            
+            currentTarget.id = lastID;
+            currentTarget.creators = [getCreatorByEmail(myuser.email).id];
 
-        parse();
-    });
+            globalThis.createDatabaseValue(
+                currentTarget,
+                `characters/${myworld.name}/${currentTarget.id}`
+            );
+
+            popUpNotification(`${currentTarget.name} was created into ${myworld.name} successfully`, 0);
+            closeAllModals();
+
+            break;
+    }
 }
 
 function open_creator(){
@@ -1789,7 +1895,12 @@ function open_creator(){
     popup.setAttribute("character-id", -1);
     toggle_edit(emptyCharacterTemplate);
     
-    document.getElementById("next_c").innerText = "Create new character";
+    const create = document.getElementById("next_c");
+    create.innerText = "Create new character";
+
+    create.onclick = () => {saveNewCharacterInformation(DatabaseOperations.CREATE);}
+
+    document.getElementById("prev_c").onclick = closeAllModals;
 }
 
 function createTag(){

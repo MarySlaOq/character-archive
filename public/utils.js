@@ -101,6 +101,12 @@ const parserFinishedCallback = () => {
     }
 }
 
+const DatabaseOperations = Object.freeze({
+    CREATE: 0,
+    UPDATE: 1,
+    DELETE: 2
+});
+
 // CRUD data conversion lookup map
 const dataConversionLookupMap = {
 
@@ -196,6 +202,7 @@ const dataConversionLookupMap = {
     }
 }
 
+// An empty character -UPDATE WHEN NEW INFO IS ADDED!!-
 const emptyCharacterTemplate = {
     "id": -1,
     "name": "",

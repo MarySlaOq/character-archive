@@ -320,3 +320,9 @@ body {font-family: Arial; width: 70% !important; margin: auto !important;}
 @media only screen and (max-width: 930px){ .m30 { gap: 30px; }}
 
 @media only screen and (max-width: 750px){ .m30 { gap: 0px } }
+
+.outline {
+  -webkit-text-fill-color: black;
+  -webkit-text-fill-color: #000000;
+  -webkit-text-fill-color: black;
+}
