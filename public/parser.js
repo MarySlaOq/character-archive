@@ -30,6 +30,8 @@ var my_top = -1;
 var popup = document.getElementById("popup");
 var mapPopup = document.getElementById("map-popup");
 
+var currentMagicalPage = 0;
+
 const color_codes = {
     "aliceblue":"#f0f8ff", "antiquewhite":"#faebd7", "aqua":"#00ffff", "aquamarine":"#7fffd4", "azure":"#f0ffff", "beige":"#f5f5dc", "bisque":"#ffe4c4", "black":"#000000", "blanchedalmond":"#ffebcd", "blue":"#0000ff", "blueviolet":"#8a2be2", "brown":"#a52a2a", "burlywood":"#deb887", "cadetblue":"#5f9ea0", "chartreuse":"#7fff00", "chocolate":"#d2691e", "coral":"#ff7f50", "cornflowerblue":"#6495ed", "cornsilk":"#fff8dc", "crimson":"#dc143c", "cyan":"#00ffff", "darkblue":"#00008b", "darkcyan":"#008b8b", "darkgoldenrod":"#b8860b", "darkgray":"#a9a9a9", "darkgreen":"#006400", "darkkhaki":"#bdb76b", "darkmagenta":"#8b008b", "darkolivegreen":"#556b2f", "darkorange":"#ff8c00", "darkorchid":"#9932cc", "darkred":"#8b0000", "darksalmon":"#e9967a", "darkseagreen":"#8fbc8f", "darkslateblue":"#483d8b", "darkslategray":"#2f4f4f", "darkturquoise":"#00ced1", "darkviolet":"#9400d3", "deeppink":"#ff1493", "deepskyblue":"#00bfff", "dimgray":"#696969", "dodgerblue":"#1e90ff", "firebrick":"#b22222", "floralwhite":"#fffaf0", "forestgreen":"#228b22", "fuchsia":"#ff00ff", "gainsboro":"#dcdcdc", "ghostwhite":"#f8f8ff", "gold":"#ffd700", "goldenrod":"#daa520", "gray":"#808080", "green":"#008000", "greenyellow":"#adff2f",
     "honeydew":"#f0fff0", "hotpink":"#ff69b4", "indianred ":"#cd5c5c", "indigo":"#4b0082", "ivory":"#fffff0", "khaki":"#f0e68c", "lavender":"#e6e6fa", "lavenderblush":"#fff0f5", "lawngreen":"#7cfc00", "lemonchiffon":"#fffacd", "lightblue":"#add8e6", "lightcoral":"#f08080", "lightcyan":"#e0ffff", "lightgoldenrodyellow":"#fafad2", "lightgrey":"#d3d3d3", "lightgreen":"#90ee90", "lightpink":"#ffb6c1", "lightsalmon":"#ffa07a", "lightseagreen":"#20b2aa", "lightskyblue":"#87cefa", "lightslategray":"#778899", "lightsteelblue":"#b0c4de", "lightyellow":"#ffffe0", "lime":"#00ff00", "limegreen":"#32cd32", "linen":"#faf0e6", "magenta":"#ff00ff", "maroon":"#800000", "mediumaquamarine":"#66cdaa", "mediumblue":"#0000cd", "mediumorchid":"#ba55d3", "mediumpurple":"#9370d8", "mediumseagreen":"#3cb371", "mediumslateblue":"#7b68ee",  "mediumspringgreen":"#00fa9a", "mediumturquoise":"#48d1cc", "mediumvioletred":"#c71585", "midnightblue":"#191970", "mintcream":"#f5fffa", "mistyrose":"#ffe4e1", "moccasin":"#ffe4b5", "navajowhite":"#ffdead", "navy":"#000080", "oldlace":"#fdf5e6", "olive":"#808000", "olivedrab":"#6b8e23", "orange":"#ffa500", "orangered":"#ff4500", "orchid":"#da70d6", "palegoldenrod":"#eee8aa",
@@ -49,10 +51,15 @@ document.addEventListener('contextmenu', event => event.preventDefault());
 window.addEventListener("resize", (event) => {
 
     // Deal with absolute position shit
+    adjustMagicPage();
     reset_positions();
     defineGrabbable();
     mapZoomOut();
 });
+
+function adjustMagicPage() {
+    
+}
 
 function mapZoomOut(){
 
@@ -378,6 +385,7 @@ class World {
         this.calendar = dim.calendar;
 
         this.animals = animals[name];
+        if (dim.magic != undefined && dim.magic.pages.length % 2 != 0) dim.magic.pages.push("");
         this.magic = dim.magic;
 
         this.divisions = this.setupCharacters();
@@ -892,9 +900,35 @@ class World {
 
         if(this.magic == undefined) return document.createElement("span");
 
+        const magicContainer = document.createElement("div");
         const outline = document.createElement("p");
         outline.innerText = this.magic.outline;
-        return outline;
+
+        outline.innerHTML += `
+            <br>
+            <hr>
+            <div class="is-flex">
+                <button id="prevP" onclick="previousMagicPage(-1)" class="button">Previous page</button>
+                <button id="nextP" onclick="nextMagicPage(1)" class="button is-primary ml-2">Next page</button>
+            </div>
+        `;
+
+        const pages = document.createElement("div");
+        pages.className = "pages";
+        pages.innerHTML = `
+            <div id="left" class="pages-left">
+                <div class="page-content">${this.magic.pages[currentMagicalPage]}</div>
+            </div>
+
+            <div id="right" class="pages-right"> 
+                <div class="page-content">${this.magic.pages[currentMagicalPage+1]}</div>
+            </div>
+            </div>
+        `;
+
+        magicContainer.appendChild(outline);
+        magicContainer.appendChild(pages);
+        return magicContainer;
     }
 
     getCurrentMap(){
@@ -1378,6 +1412,7 @@ function parse() {
         myworld.setupTagFilters();
 
         setTriggers();
+        adjustMagicPage();
     });
 
     document.addEventListener("mouseup", () => {
@@ -1935,4 +1970,71 @@ function createTag(){
     `;
 
     document.getElementById("tags-input").appendChild(group);
+}
+
+function nextMagicPage(amount) {
+
+    if(amount == 0) return;
+
+    if (document.querySelectorAll(".turning, .unturning").length > 0) return;
+        
+    if (myworld.magic.pages[currentMagicalPage + amount * 2 + 1] == undefined){
+        
+        popUpNotification("This is the last page", 2);
+        return;
+    }
+    
+    currentMagicalPage += amount * 2;
+    const l = document.getElementById("left");
+    const r = document.getElementById("right");
+
+    r.classList.add("turning");
+
+    r.onanimationend = () => {
+
+        r.classList.remove("turning");
+        l.classList.add("unturning");
+        
+        r.innerHTML = myworld.magic.pages[currentMagicalPage + 1];
+        l.innerHTML = myworld.magic.pages[currentMagicalPage ]
+    };
+
+    l.onanimationend = () => {
+
+        l.classList.remove("unturning");
+    };
+}
+
+function previousMagicPage(amount) {
+
+    if(amount == 0) return;
+
+    if (document.querySelectorAll(".turning, .unturning").length > 0) return;
+    
+    
+    if (myworld.magic.pages[currentMagicalPage + amount * 2] == undefined){
+        
+        popUpNotification("This is the first page", 2);
+        return;
+    }
+    currentMagicalPage += amount * 2;
+
+    const l = document.getElementById("left");
+    const r = document.getElementById("right");
+
+    l.classList.add("turning");
+
+    l.onanimationend = () => {
+
+        l.classList.remove("turning");
+        r.classList.add("unturning");
+        
+        r.innerHTML = myworld.magic.pages[currentMagicalPage + 1];
+        l.innerHTML = myworld.magic.pages[currentMagicalPage]
+    };
+
+    r.onanimationend = () => {
+
+        r.classList.remove("unturning");
+    };
 }

@@ -326,3 +326,94 @@ body {font-family: Arial; width: 70% !important; margin: auto !important;}
   -webkit-text-fill-color: #000000;
   -webkit-text-fill-color: black;
 }
+
+.pages div{
+
+  background-color: bisque;
+  padding: 15px;
+
+  overflow: hidden;
+  width: 100%;
+
+  word-wrap: break-word;
+
+}
+
+.page-content {
+
+  transform-origin: top left;
+  width: 100%;
+}
+
+.pages-left {
+  
+  border-left: 5px solid black;
+  border-right: 15px solid black;
+  border-image: 
+    linear-gradient(
+      to left, 
+      rgba(0, 0, 0, 0.308), 
+      rgba(0, 0, 0, 0)
+    ) 1 100%;
+
+  transform-origin: center right;
+}
+
+.pages-right {
+  
+  border-right: 5px solid black;
+  border-left: 15px solid black;
+  border-image: 
+    linear-gradient(
+      to right, 
+      rgba(0, 0, 0, 0.308), 
+      rgba(0, 0, 0, 0)
+    ) 1 100%;
+
+  transform-origin: center left;
+}
+  
+.turning {
+    
+    animation: turn 1s linear 1;
+}
+
+.unturning {
+    
+    animation: unturn 1s linear 1;
+}
+.pages {
+
+  display: flex;
+  justify-content: center;
+  
+  background-color: bisque;
+
+  aspect-ratio: 1 / 0.6;
+  width: 100%;
+  margin: 15px;
+}
+
+@keyframes turn{
+
+  0%{
+    transform: rotate3d(0,1,0, 0deg);
+  }
+
+  100% {
+
+    transform: rotate3d(0, 1, 0, 90deg);
+  }
+}
+
+@keyframes unturn{
+  0%{
+
+    transform: rotateY(90deg);
+  }
+
+  100% {
+
+    transform: rotateY(0);
+  }
+}
