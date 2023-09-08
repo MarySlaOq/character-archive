@@ -1502,7 +1502,14 @@ function delete_chara(){
 
     const chara = getCurrentCharacterPopUpData();
     const val = confirm(`Are you sure you want to delete ${chara.name} from ${myworld.name}?\nThis action can't be undone.`);
-    alert("Sike, it's not implemented");
+
+    if (val) {
+
+        globalThis.updateDatabaseValue({}, `characters/${myworld.name}/${chara.id}`).then((result) => {
+        
+                window.location.reload();
+            });;
+    }
 }
 
 // Exports the character information to json format
