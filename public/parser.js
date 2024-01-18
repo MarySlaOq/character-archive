@@ -4,6 +4,7 @@ const file = document.getElementById("script").src;
 //lets get back to work!! :flex:
 
 const roles = ["Main character", "Supporting character", "Arc character", "Background character"];
+const sexuality = ["Agender","Aromantic","Asexual","Bisexual","Demiromantic","Demisexual","Gay","Genderfluid","GenderQueer","Lesbian","Non-Binary","Pansexual","Polyamorous","Polysexual", "Straight", "Trans"];
 
 function getCreator(id){ 
     if (data.people == []) return {};
@@ -19,6 +20,7 @@ function getResource(name){
     if(name.includes("http")) return name;
     return "resources/" + name;
 }
+function getFlagOf(name){ return `resources/flags/${name}-Pride.jpg`; }
 
 function getCurrentCharacterPopUpData(){
 
@@ -346,8 +348,8 @@ function openWorld(event, world, view=0){
     
     //document.getElementsByClassName("chara-container").item(0).style.height = height + "px";
     
+    loadCharacterSelect();
     switchView(view);
-
 }
 
 class World {
@@ -1048,6 +1050,7 @@ class World {
         document.getElementById("birthdate").innerText = chara.birthdate;
         document.getElementById("birthplace").innerText = chara.birthplace;
         document.getElementById("fullname").innerHTML = chara.full_name;
+        document.getElementById("sexuality").innerHTML = chara.sexuality == -1 ? "" : `<img class='sex-flag' src='${getFlagOf(sexuality[chara.sexuality])}' />`;
 
         const notes = document.getElementById("notes");
         if(chara.notes == "" || chara.notes == undefined || chara.notes == "undefined"){
@@ -1086,7 +1089,7 @@ class World {
 
         const creator = document.getElementById("creators");
         creator.innerHTML = chara.creators.map(c => `<p><b>${getCreator(c).name}</b>${
-            getCreator(c).socials.map(s => ` <a href="${s.link}">${s.name}</a>`).join(", ")
+            getCreator(c).socials == "" ? " no social media to display" : (getCreator(c).socials.map(s => ` <a href="${s.link}">${s.name}</a>`).join(", "))
         }</p>`).join("");
     }
 
@@ -1293,6 +1296,7 @@ function parse() {
 
         const controller = `
             <div class="block">
+
                 <button class='button controller' onclick='relationship_control()'>Hide all relationships</button>
                 <button onclick='reset_positions()' class='button'>Reset character positions</button>
                 
@@ -1324,7 +1328,7 @@ function parse() {
                                         <span>Create new character</span>
                                     </button>
                                     
-                                    <button class='button is-rounded is-info ml-3'>
+                                    <button class='button is-rounded is-info ml-3 js-modal-trigger' data-target="collaborator">
                                         <span class='icon'>
                                             <i class='fas fa-pen'></i>
                                         </span>
@@ -1411,7 +1415,7 @@ function parse() {
         content.appendChild(mgView);
 
         myworld.setupTagFilters();
-
+        
         setTriggers();
         adjustMagicPage();
     });
@@ -1680,7 +1684,7 @@ function toggle_edit(values=null){
                         return group;
                     }
 
-                }else{
+                }else if (!conversionData.data.constant){
 
                     createListElementAdequate = (element) => {
 
@@ -1710,24 +1714,39 @@ function toggle_edit(values=null){
                     }
                 } 
 
-                if(list !== undefined) for(let i = 0; i < list.length; i++){
+                if(conversionData.data.constant){
 
-                    var ele;                    
+                    const container = document.createElement("div");
+                    container.className = "select";
                     
-                    ele = createListElementAdequate(list[i]);
-                    writableComponent.appendChild(ele);
+                    const select = document.createElement("select");
+                    select.id = conversionData.data.newID;
+                    select.innerHTML = "<option value='-1'>None</option>" + conversionData.data.source.map((item, index) => `<option value=${index}>${item} </option> `).join("");
+
+                    container.appendChild(select);
+                    writableComponent.appendChild(container);
+
+                }else{
+    
+                    if(list !== undefined) for(let i = 0; i < list.length; i++){
+    
+                        var ele;                    
+                        
+                        ele = createListElementAdequate(list[i]);
+                        writableComponent.appendChild(ele);
+                    }
+    
+                    const append = document.createElement("button");
+                    append.className = "button is-primary";
+                    append.innerText = "Create new item";
+                    append.onclick = () => {
+    
+                        const group = createListElementAdequate();
+                        writableComponent.insertBefore(group, append);
+                    }
+    
+                    writableComponent.appendChild(append);
                 }
-
-                const append = document.createElement("button");
-                append.className = "button is-primary";
-                append.innerText = "Create new item";
-                append.onclick = () => {
-
-                    const group = createListElementAdequate();
-                    writableComponent.insertBefore(group, append);
-                }
-
-                writableComponent.appendChild(append);
 
             }else{
                 
@@ -1757,6 +1776,8 @@ function toggle_edit(values=null){
 
         comp.replaceWith(writableComponent);
     });
+
+    document.getElementById("sexuality-selector").value = chara.sexuality;
 }
 
 function exit_editor() {
@@ -1877,6 +1898,7 @@ function saveNewCharacterInformation(operation=DatabaseOperations.UPDATE){
             default:break;
         }
     }
+    currentTarget.sexuality = document.getElementById("sexuality-selector").value;
 
     // Save the metadata
     currentTarget.highlight = document.getElementById("highlight").value;
@@ -1931,6 +1953,41 @@ function saveNewCharacterInformation(operation=DatabaseOperations.UPDATE){
 
             break;
     }
+}
+
+function loadCharacterSelect(){
+
+    const characterOptions = myworld.characters.map(c => `<option value=${c.id}>${c.name}</option>`).join("");
+    console.log(characterOptions);
+    document.getElementById("character-list").innerHTML = characterOptions;
+}
+
+function addCollaborator(){
+
+    const selectedCharacter = document.getElementById("character-list").value;
+    const creator = document.getElementById("creator-mail").value;
+
+    const person = getCreatorByEmail(creator);
+    if(person == undefined){
+
+        popUpNotification("Can't find " + creator + " as a registered creator", 1);
+        return;
+    }
+
+    // Get this character's current creators
+    const charaObj = myworld.getChara(selectedCharacter);
+    if(charaObj.creators.includes(person.id)){
+
+        popUpNotification(creator + " is already a contributor for this character", 2);
+        return;
+    }
+
+    charaObj.creators.push(person.id);
+    globalThis.updateDatabaseValue(charaObj, `/characters/${myworld.name}/${charaObj.id}`).then((result) => {
+        
+        console.log(result);
+        popUpNotification(`${person.name} is now a collaborator of ${charaObj.name}`, 0);
+    });
 }
 
 function open_creator(){

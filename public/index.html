@@ -8,9 +8,9 @@
     <!-- User data in files-->
     <script id="script" src="data.json"></script>
 
-    <script src="utils.js"></script>
     <script src="secrets.js"></script>
     <script src="parser.js"></script>
+    <script src="utils.js"></script>
 
     <!-- include firebase -->
     <script type="module"></script>
@@ -342,6 +342,8 @@
           </div>
         </div>
 
+        <!--<button onclick="addCharacterAttribute()">test</button>-->
+
         <div class="navbar-end">
           <div class="is-flex">
             <img
@@ -379,6 +381,32 @@
       <p id="description">
         Lorem ipsum, dolor sit amet consectetur adipisicing elit.
       </p>
+    </div>
+
+    <div id="collaborator" class="modal">
+      <div class="modal-background"></div>
+  
+      <div class="modal-content">
+      <div class="box">
+          <span class="title">
+            Add a collaborator
+          </span><br><hr>
+          
+          <label>Character</label><br>
+          <div class="select">
+            <select id="character-list"></select>
+          </div><br>
+          
+          <label>Creator</label><br>
+          <input class="input" type="text" id="creator-mail" placeholder="Creator e-mail">
+
+          <br><hr>
+
+          <input onclick="addCollaborator()" type="button" class="button is-info" value="Add collaborator"></input>
+      </div>
+      </div>
+  
+      <button class="modal-close is-large" aria-label="close"></button>
     </div>
 
     <div class="modal" id="popup" character-id="-1">
@@ -456,6 +484,10 @@
                   <p>
                     <b>Birth place</b>:
                     <span editable="true" id="birthplace">test</span>
+                  </p>
+                  <p>
+                    <b>Sexual orientation</b>:
+                    <span editable="true" id="sexuality">test</span>
                   </p>
                 </div>
               </div>

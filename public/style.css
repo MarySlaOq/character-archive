@@ -231,6 +231,15 @@ body {font-family: Arial; width: 70% !important; margin: auto !important;}
   bottom: 8px;
 }
 
+.sex-flag{
+  margin: auto 0;
+  width: 30px !important;
+  position: relative;
+  top: 5px;
+  margin-left: 5px;
+  border-radius: 5px;
+}
+
 .map-merging {
 
   position: relative;

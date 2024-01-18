@@ -160,6 +160,17 @@ const dataConversionLookupMap = {
         "origin": "span",
         "target": "text"
     },
+    sexuality: {
+        "origin": "span",
+        "target": "list",
+        "data": {
+            "constant": true,
+            "source": sexuality,
+            "datakey": "sexuality",
+            "elementTarget": "text",
+            "newID": "sexuality-selector"
+        }
+    },
     notes: {
         "origin": "p",
         "target": "text"
@@ -168,6 +179,7 @@ const dataConversionLookupMap = {
         "origin": "p",
         "target": "list",
         "data": {
+            "constant": false,
             "dataKey": "personality",
             "elementTarget": "text"
         }
@@ -176,6 +188,7 @@ const dataConversionLookupMap = {
         "origin": "ul",
         "target": "list",
         "data": {
+            "constant": false,
             "dataKey": "likes",
             "elementTarget": "text"
         }
@@ -184,6 +197,7 @@ const dataConversionLookupMap = {
         "origin": "ul",
         "target": "list",
         "data": {
+            "constant": false,
             "dataKey": "hates",
             "elementTarget": "text"
         }
@@ -192,6 +206,7 @@ const dataConversionLookupMap = {
         "origin": "rel",
         "target": "list",
         "data": {
+            "constant": false,
             "dataKey": "relations",
             "elementTarget": "rel"
         }
@@ -218,6 +233,7 @@ const emptyCharacterTemplate = {
     "bloodtype": "",
     "birthdate": "",
     "birthplace": "",
+    "sexuality": -1,
     "creators": [],
     "image": "",
     "role": 0,
