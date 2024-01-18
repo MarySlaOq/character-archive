@@ -44,6 +44,7 @@
         sleep(0).then(() => {
           // Get people
           const dbRef = ref(database);
+          console.log(child(dbRef, `people`));
           get(child(dbRef, `people`))
             .then((snapshot) => {
               if (snapshot.exists()) {
@@ -264,6 +265,7 @@
 
       globalThis.createDatabaseValue = createDatabaseValue;
       globalThis.updateDatabaseValue = updateDatabaseValue;
+
     </script>
 
     <!-- include jquery -->

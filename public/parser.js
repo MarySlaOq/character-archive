@@ -16,6 +16,7 @@ function getResource(name){
     if(name==undefined) return "";
 
     if(name.includes("public/resources")) name = name.split("/").slice(-1)[0];
+    if(name.includes("http")) return name;
     return "resources/" + name;
 }
 
