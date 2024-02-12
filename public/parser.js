@@ -1088,9 +1088,11 @@ class World {
         if (chara.relations == undefined || chara.relations.length == 0) rel.innerHTML = "No relationships established"
 
         const creator = document.getElementById("creators");
-        creator.innerHTML = chara.creators.map(c => `<p><b>${getCreator(c).name}</b>${
-            getCreator(c).socials == "" ? " no social media to display" : (getCreator(c).socials.map(s => ` <a href="${s.link}">${s.name}</a>`).join(", "))
-        }</p>`).join("");
+        creator.innerHTML = chara.creators.map(c => `<span class="tag"><p><b>${getCreator(c).name}</b>${
+            getCreator(c).socials == "" ? " no social media to display" : (getCreator(c).socials.map(s => `
+                <a target="_blank" href="${s.link}">${s.name}</a>
+          `).join(", "))
+        }</p><a onclick="removeCharacterCreator(${c})" class="tag is-delete"></a></span>`).join("");
     }
 
     idToName(id){
@@ -1960,6 +1962,7 @@ function loadCharacterSelect(){
     const characterOptions = myworld.characters.map(c => `<option value=${c.id}>${c.name}</option>`).join("");
     console.log(characterOptions);
     document.getElementById("character-list").innerHTML = characterOptions;
+    collaborationLinkSwap();
 }
 
 function addCollaborator(){
@@ -1974,20 +1977,76 @@ function addCollaborator(){
         return;
     }
 
-    // Get this character's current creators
-    const charaObj = myworld.getChara(selectedCharacter);
-    if(charaObj.creators.includes(person.id)){
+    if (document.getElementById("character-list").hasAttribute("disabled")){
 
-        popUpNotification(creator + " is already a contributor for this character", 2);
+        let editedCounter = 0;
+        myworld.characters.forEach(chara => {
+
+            // Skip characters who already have this creator assigned
+            if(!chara.creators.includes(person.id)) {
+
+                chara.creators.push(person.id);
+                globalThis.updateDatabaseValue(chara, `/characters/${myworld.name}/${chara.id}`).then((result) => {
+            
+                    popUpNotification(`${person.name} is now a collaborator of ${chara.name}`, 0);
+                });
+
+                editedCounter++;   
+            }
+        });
+
+        popUpNotification(`Edited ${editedCounter} total characters`, 0);
+
+    }else{
+    
+        // Get this character's current creators
+        const charaObj = myworld.getChara(selectedCharacter);
+        if(charaObj.creators.includes(person.id)){
+    
+            popUpNotification(creator + " is already a contributor for this character", 2);
+            return;
+        }
+    
+        charaObj.creators.push(person.id);
+        globalThis.updateDatabaseValue(charaObj, `/characters/${myworld.name}/${charaObj.id}`).then((result) => {
+            
+            popUpNotification(`${person.name} is now a collaborator of ${charaObj.name}`, 0);
+        });
+    }
+}
+
+function removeCharacterCreator(creator) {
+
+    const chara = getCurrentCharacterPopUpData();
+    const person = getCreator(creator);
+    if (person.email == myuser.email){
+        popUpNotification("You can't remove yourself from the creator list", 1)
         return;
     }
 
-    charaObj.creators.push(person.id);
-    globalThis.updateDatabaseValue(charaObj, `/characters/${myworld.name}/${charaObj.id}`).then((result) => {
+    // Check if your part of creator list
+    if(!chara.creators.includes(getCreatorByEmail(myuser.email).id)){
+        popUpNotification("You can't remove creators from a character you don't own", 1)
+        return;
+    }
+
+    const removeIndex = chara.creators.indexOf(creator);
+    chara.creators.splice(removeIndex, 1);
+    
+    globalThis.updateDatabaseValue(chara, `/characters/${myworld.name}/${chara.id}`).then((result) => {
         
         console.log(result);
-        popUpNotification(`${person.name} is now a collaborator of ${charaObj.name}`, 0);
+        popUpNotification(`${person.name} is no longer a collaborator of ${chara.name}`, 0);
+
+        popupOf(chara.id);
     });
+}
+
+function collaborationLinkSwap(){
+
+    const value = document.getElementById("one-chara").checked;
+    if(!value) document.getElementById("character-list").setAttribute("disabled", true);
+    else document.getElementById("character-list").removeAttribute("disabled");
 }
 
 function open_creator(){

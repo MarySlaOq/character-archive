@@ -346,6 +346,7 @@
 
         <div class="navbar-end">
           <div class="is-flex">
+
             <img
               id="userimg"
               class="is-rounded profile"
@@ -391,11 +392,33 @@
           <span class="title">
             Add a collaborator
           </span><br><hr>
+
+          <div class="control">
+            <label class="radio">
+              <input id="one-chara" onchange="collaborationLinkSwap()" type="radio" name="answer" value="" checked>
+              Link one character
+            </label>
+            <label class="radio">
+              <input id="multi-chara" onchange="collaborationLinkSwap()" type="radio" value="" name="answer">
+              Link all characters
+            </label>
+          </div>
+
+          <br>
+
+          <article class="message is-danger" id="share-warning">
+            <div class="message-body">
+              Adding a collaborator means that someone other than you will be able to <strong>edit, delete and manage the creators</strong> of your characters
+            </div>
+          </article>
+
           
           <label>Character</label><br>
           <div class="select">
             <select id="character-list"></select>
-          </div><br>
+          </div>
+
+          <br><br>
           
           <label>Creator</label><br>
           <input class="input" type="text" id="creator-mail" placeholder="Creator e-mail">

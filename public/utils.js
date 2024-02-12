@@ -99,6 +99,12 @@ const parserFinishedCallback = () => {
     if(localStorage.getItem("ca-icon-positions") !== undefined){
         loadIconPositions();
     }
+
+    // Check if is creator
+    const creator = getCreatorByEmail(myuser.email);
+    if(creator != undefined){
+        const displayName = document.getElementById("username").innerHTML += "<span id='creator'>creator!</span>";
+    }
 }
 
 const DatabaseOperations = Object.freeze({
