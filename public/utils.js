@@ -4,7 +4,21 @@ const types = [
     ["is-warning is-light", "<i class=\"fa-solid fa-triangle-exclamation\"></i>"]
 ];
 
+const accessRightss = ["Visitor", "Creator", "Moderator", "Helper", "Administrator"];
+const accessColors = ["message is-dark is-light is-small", "message is-info is-light is-small", "message is-primary is-light is-small", "message is-danger is-light is-small", "message is-primary is-warning is-small"];
+
+const roles = ["Main character", "Supporting character", "Arc character", "Background character"];
+const sexuality = ["Agender","Aromantic","Asexual","Bisexual","Demiromantic","Demisexual","Gay","Genderfluid","GenderQueer","Lesbian","Non-Binary","Pansexual","Polyamorous","Polysexual", "Straight", "Trans"];
+
 var myuser = undefined;
+
+function getCreator(id){ 
+    if (data.people == {}) return {};
+    return data.people[id];
+}
+
+function getCreatorByEmail(email) { return Object.values(data.people).find(p => p.email == email) }
+function getCreatorByName(name) { return Object.values(data.people).find(p => p.name == name) }
 
 const popUpNotification = (text, type) => {
 
@@ -48,6 +62,20 @@ function saveUserData(user){
     localStorage.setItem("ca-user-account", JSON.stringify(myuser));
 }
 
+function downloadFile(filename, text) {
+
+    var element = document.createElement('a');
+    element.setAttribute('href', "data:txt/json;charset=utf-8," + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+  
+    element.style.display = 'none';
+    document.body.appendChild(element);
+  
+    element.click();
+  
+    document.body.removeChild(element);
+}
+
 function saveIconsPositions(){
 
     const positions = {};
@@ -76,10 +104,11 @@ function loadIconPositions(){
 }
 
 window.addEventListener("load", ()=> {
-   
+
     if(localStorage.getItem("ca-user-account") != undefined) {
 
         myuser = JSON.parse(localStorage.getItem("ca-user-account"));
+
         document.getElementById("username").innerText = myuser.displayName;
         document.getElementById("userimg").src = myuser.photoURL;
 
@@ -96,14 +125,39 @@ window.addEventListener("load", ()=> {
 
 const parserFinishedCallback = () => {
 
-    if(localStorage.getItem("ca-icon-positions") !== undefined){
+    if(document.getElementById("worlds") != undefined && localStorage.getItem("ca-icon-positions") !== undefined){
         loadIconPositions();
     }
 
+    loadAccessRights();
+}
+
+function loadAccessRights(){
+
+    if(window["block"] != undefined){
+
+        block();
+    }
+
+
     // Check if is creator
+    if(myuser == undefined) return;
+
     const creator = getCreatorByEmail(myuser.email);
-    if(creator != undefined){
-        const displayName = document.getElementById("username").innerHTML += "<span id='creator'>creator!</span>";
+
+    const access = creator == undefined ? 0 : (creator.access == undefined ? 1 : creator.access);
+    document.getElementById("access").className = accessColors[access];
+    document.getElementById("access-cont").innerText = accessRightss[access];
+
+    if(access > 1){
+        const pane = document.getElementById("adminpane");
+
+        const btn = document.createElement("a");
+        btn.className = "button is-link";
+        btn.innerText = "Admin panel";
+        btn.href = "admin.html";
+
+        pane.appendChild(btn);
     }
 }
 

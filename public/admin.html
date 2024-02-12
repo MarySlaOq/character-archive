@@ -9,13 +9,10 @@
     <script id="script" src="data.json"></script>
 
     <script src="secrets.js"></script>
-    <script src="parser.js"></script>
     <script src="utils.js"></script>
+    <script src="admin.js"></script>
 
     <!-- include firebase -->
-    <script type="module"></script>
-
-    <script src="database.js"></script>
 
     <script type="module" async>
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
@@ -42,8 +39,17 @@
       async function fetchAllDataBaseInfo(database, app) {
         popUpNotification("Connected to database successfully", 0);
         sleep(0).then(() => {
+
           // Get people
           const dbRef = ref(database);
+
+          //get all
+          get(child(dbRef, `/`)).then((snapshot) => {
+            globalThis.dataAll = snapshot.val();
+
+            console.log('Database loaded successfully.');
+          }, (error) => {});
+
           get(child(dbRef, `people`))
             .then((snapshot) => {
               if (snapshot.exists()) {
@@ -55,8 +61,6 @@
                     data.applications = snapshot.val();
                   }
                 });
-
-                if (data.applications == undefined) data.applications = [];
 
                 get(child(dbRef, `relations`)).then((snapshot) => {
                   if (snapshot.exists()) {
@@ -150,7 +154,7 @@
                                                   0
                                                 );
 
-                                                parse();
+                                                parserFinishedCallback();
                                               } else {
                                                 popUpNotification(
                                                   "Could not load characters",
@@ -283,15 +287,11 @@
     ></script>
     <script src="modals.js"></script>
 
-    <script src="cycle.js"></script>
-
     <link rel="stylesheet" href="style.css" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
     />
-
-    <script src="lines/leader-line.min.js"></script>
 
     <link
       rel="stylesheet"
@@ -380,415 +380,108 @@
       </div>
     </nav>
 
-    <div id="adminpane"></div>
-
     <br />
 
-    <div class="tabs is-centered is-medium is-boxed">
-      <ul id="tags"></ul>
-    </div>
+    <div id="controls">
 
-    <div id="worlds"></div>
+      <h1 class="title">Admininstration panel</h1>
 
-    <div class="loader" id="loader"></div>
+      <div id="creator applications">
+        <div class="seperate">
+          <h4 class="title is-4">Manage creator applications</h4>
+          <article class="message is-primary is-small">
+            <div class="message-body">
+              Access level: Moderator+
+            </div>
+          </article>
+        </div>
 
-    <!-- POP UPs -->
-
-    <div class="map-popup" id="map-popup">
-      <div id="header">
-        <h2 id="location">Location</h2>
-        <span id="division-type">type</span>
+        <br>
+        <div class="apps" id="application-list"></div>
       </div>
-      <p id="description">
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-      </p>
-    </div>
 
-    <div id="collaborator" class="modal">
-      <div class="modal-background"></div>
-  
-      <div class="modal-content">
-      <div class="box">
-          <span class="title">
-            Add a collaborator
-          </span><br><hr>
+      <hr>
 
-          <div class="control">
-            <label class="radio">
-              <input id="one-chara" onchange="collaborationLinkSwap()" type="radio" name="answer" value="" checked>
-              Link one character
-            </label>
-            <label class="radio">
-              <input id="multi-chara" onchange="collaborationLinkSwap()" type="radio" value="" name="answer">
-              Link all characters
-            </label>
+      <div class="columns">
+
+        <div class="column">
+          
+          <div>
+            <div class="seperate">
+              <h4 class="title is-4">Manage creator accounts</h4>
+              <article class="message is-warning is-small">
+                <div class="message-body">
+                  Access level: Admininstrator
+                </div>
+              </article>
+            </div>
+    
+            <br>
+            <div id="user-list"></div>
           </div>
 
-          <br>
+        </div>
 
-          <article class="message is-danger" id="share-warning">
-            <div class="message-body">
-              Adding a collaborator means that someone other than you will be able to <strong>edit, delete and manage the creators</strong> of your characters
+        <div class="column">
+          
+          <div>
+            <div class="seperate">
+              <h4 class="title is-4">Database backups</h4>
+              <article class="message is-warning is-small">
+                <div class="message-body">
+                  Access level: Administrator
+                </div>
+              </article>
+              
+            </div>
+
+            <div id="backups">
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <div id="modify" class="modal">
+      <div class="modal-background"></div>
+    
+      <div class="modal-content">
+        <div class="box">
+          <p id="edit-title" class="title">Change permissions</p>
+
+          <article class="message is-warning">
+            <div class="message-header">
+              <p>Warning</p>
+            </div>
+            <div id="access-message" class="message-body">
+              
             </div>
           </article>
 
-          
-          <label>Character</label><br>
           <div class="select">
-            <select id="character-list"></select>
+            <select id="edit-access" onchange="messageChange()">
+              <option value="0">Visitor</option>
+              <option value="1">Creator</option>
+              <option value="2">Moderator</option>
+              <option value="3">Helper</option>
+              <option value="4">Administrator</option>
+            </select>
           </div>
-
-          <br><br>
-          
-          <label>Creator</label><br>
-          <input class="input" type="text" id="creator-mail" placeholder="Creator e-mail">
-
-          <br><hr>
-
-          <input onclick="addCollaborator()" type="button" class="button is-info" value="Add collaborator"></input>
-      </div>
-      </div>
-  
-      <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-
-    <!-- Creator application -->
-    <div id="modal-create" class="modal">
-      <div class="modal-background"></div>
-      <div class="modal-content">
-        <div class="box">
-            <p class="title">Creator application</p>
-
-            <article class="message is-info">
-              <div class="message-body">
-                Being a creator means to be possible to get invited to edit and create characters in a world! It does not mean you can create your own worlds. You can only edit worlds and characters when another creator invites you
-              </div>
-            </article>
-
-            <div class="field">
-              <label class="label">Username</label>
-              <div class="control has-icons-left has-icons-right">
-                <input class="input" type="text" placeholder="Username" id="creator-name" required>
-                <span class="icon is-small is-left">
-                  <i class="fas fa-user"></i>
-                </span>
-              </div>
-            </div>
-            
-          <div class="field">
-            <label class="label">Email</label>
-            <div class="control has-icons-left has-icons-right">
-              <input readonly class="input" type="email" placeholder="Email" id="creator-email" required>
-              <span class="icon is-small is-left">
-                <i class="fas fa-envelope"></i>
-              </span>
-            </div>
-            <p class="help is-danger">Not editable</p>
-          </div>
-
-          <div class="field">
-            <label class="label">Message</label>
-            <div class="control">
-              <textarea class="textarea" id="creator-message" placeholder="Why should you be a creator?"></textarea>
-            </div>
-          </div>
-
-          <div class="field">
-            <label class="label">Social links</label>
-
-            <div class="is-flex">
-              <div class="control">
-                <div class="control has-icons-left has-icons-right">
-                  <input class="input" type="text" id="creator-Twitter">
-                  <span class="icon is-small is-left">
-                    <i class="fa-brands fa-twitter"></i>
-                  </span>
-                </div>
-              </div>
-  
-              <div class="control">
-                <div class="control has-icons-left has-icons-right">
-                  <input class="input" type="text" id="creator-Instagram">
-                  <span class="icon is-small is-left">
-                    <i class="fa-brands fa-instagram"></i>
-                  </span>
-                </div>
-              </div>
-  
-              <div class="control">
-                <div class="control has-icons-left has-icons-right">
-                  <input class="input" type="text" id="creator-Reddit">
-                  <span class="icon is-small is-left">
-                    <i class="fa-brands fa-reddit"></i>
-                  </span>
-                </div>
-              </div>
-  
-              <div class="control">
-                <div class="control has-icons-left has-icons-right">
-                  <input class="input" type="text" id="creator-Github">
-                  <span class="icon is-small is-left">
-                    <i class="fa-brands fa-github"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-            
-            <p class="help is-info">Not mandatory, fill as many as you'd like</p>
-          </div>
-          
-          <div class="field">
-            <div class="control">
-              <label class="checkbox">
-                <input type="checkbox" required id="creator-agree">
-                I agree to the <a href="#">terms and conditions</a>
-              </label>
-            </div>
-          </div>
-
-          <div class="field is-grouped">
-            <div class="control">
-              <button onclick="createApplication()" class="button is-link">Submit</button>
-            </div>
-            <div class="control">
-              <button class="button is-link is-light">Cancel</button>
-            </div>
-          </div>
-
+          <br>
+          <br>
+          <div class="buttons">
+            <button onclick="changeAccess()" class="button is-primary">Save</button>
           </div>
         </div>
+      </div>
+    
+
       <button class="modal-close is-large" aria-label="close"></button>
     </div>
 
-    <div class="modal" id="popup" character-id="-1">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head is-justify-content-space-between">
-          <div>
-            <p editable="true" class="mb-1 modal-card-title" id="name">
-              Testing name
-            </p>
-            <p editable="true" class="mb-3" id="fullname">Fullname here!</p>
-            <img
-              editable="true"
-              class="smol"
-              src="https://upload.wikimedia.org/wikipedia/commons/0/08/Pinterest-logo.png"
-              id="pinterest"
-            />
-            <img
-              editable="true"
-              class="smol"
-              src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
-              id="spotify"
-            />
-          </div>
-          <button class="delete" aria-label="close"></button>
-        </header>
-        <section id="popupbody" class="modal-card-body">
-          <div>
-            <div class="box">
-              <h2 class="title">Background</h2>
-              <p editable="true" id="outline">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              </p>
-              <br />
-              <h2 class="title">Personality</h2>
-              <p editable="true" id="personality">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa
-                natus possimus minima repudiandae assumenda voluptas dicta
-                facere
-              </p>
-            </div>
-
-            <div class="box">
-              <h2 class="title">Traits</h2>
-              <div id="traits" class="columns">
-                <div class="column">
-                  <p>
-                    <b>Species</b>:
-                    <span editable="true" id="species">test</span>
-                  </p>
-                  <p><b>Age</b>: <span editable="true" id="age">test</span></p>
-                  <p>
-                    <b>Gender</b>: <span editable="true" id="gender">test</span>
-                  </p>
-                  <p>
-                    <b>Occupation</b>:
-                    <span editable="true" id="occupation">test</span>
-                  </p>
-                  <p>
-                    <b>Height</b>: <span editable="true" id="height">test</span>
-                  </p>
-                </div>
-                <div class="column">
-                  <p>
-                    <b>Weight</b>: <span editable="true" id="weight">test</span>
-                  </p>
-                  <p>
-                    <b>Blood type</b>:
-                    <span editable="true" id="bloodtype">test</span>
-                  </p>
-                  <p>
-                    <b>Birth date</b>:
-                    <span editable="true" id="birthdate">test</span>
-                  </p>
-                  <p>
-                    <b>Birth place</b>:
-                    <span editable="true" id="birthplace">test</span>
-                  </p>
-                  <p>
-                    <b>Sexual orientation</b>:
-                    <span editable="true" id="sexuality">test</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="box">
-              <h2 class="title">Preferences</h2>
-
-              <div class="columns">
-                <div class="column">
-                  <h4 class="subtitle">Likes</h4>
-                  <ul editable="true" id="likes">
-                    <li>One</li>
-                    <li>Two</li>
-                    <li>Three</li>
-                  </ul>
-                </div>
-                <div class="column">
-                  <h4 class="subtitle">Hates</h4>
-                  <ul editable="true" id="hates">
-                    <li>One</li>
-                    <li>Two</li>
-                    <li>Three</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div class="box">
-              <h2 class="title">Relations</h2>
-              <div id="relations" editable="true">
-                <p class="relation">Related to Character: Friends</p>
-                <p class="relation">Related to Other Character: Siblings</p>
-                <p class="relation">Related to Yet Another Character: Child</p>
-              </div>
-            </div>
-          </div>
-
-          <br />
-          <div class="box" id="edit-only" style="display: none">
-            <p class="title">Metadata</p>
-
-            <div class="columns">
-              <div class="column">
-                <p class="subtitle">Color highlight</p>
-                <div class="select">
-                  <select id="highlight"></select>
-                </div>
-              </div>
-
-              <div class="column">
-                <p class="subtitle">Role</p>
-                <div class="select">
-                  <select id="role">
-                    <option value="0">Main character</option>
-                    <option value="1">Supporting character</option>
-                    <option value="2">Arc character</option>
-                    <option value="3">Background character</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div class="columns">
-              <div class="column">
-                <p class="subtitle">Spotify</p>
-                <input id="spotify-input" type="text" class="input" />
-              </div>
-              <div class="column">
-                <p class="subtitle">Pinterest</p>
-                <input id="pinterest-input" type="text" class="input" />
-              </div>
-            </div>
-
-            <h4 class="subtitle">Tags</h4>
-
-            <div id="tags-input"></div>
-
-            <br />
-            <button onclick="createTag()" class="button is-primary">
-              Create new item
-            </button>
-          </div>
-
-          <br />
-          <div>
-            <img
-              editable="true"
-              id="image"
-              src="../resources/saloman.png"
-              alt=""
-              srcset=""
-            />
-
-            <hr />
-
-            <article class="message is-small">
-              <div class="message-header">
-                <p>Notes</p>
-              </div>
-              <div class="message-body">
-                <p editable="true" id="notes"></p>
-              </div>
-            </article>
-          </div>
-
-          <!-- El buttones -->
-          <p id="alert">This character is not yours</p>
-          <br />
-          <button id="export" onclick="export_data()" class="button">
-            <span class="icon is-small">
-              <i class="fas fa-file-export"></i>
-            </span>
-            <span>Export character data</span>
-          </button>
-          <a id="downloadAnchor" style="display: none"></a>
-
-          <button id="edit" onclick="toggle_edit()" class="button is-warning">
-            <span class="icon is-small">
-              <i class="fas fa-edit"></i>
-            </span>
-            <span id="tog_text">Edit character data</span>
-          </button>
-          <button id="delete" onclick="delete_chara()" class="button is-danger">
-            <span class="icon is-small">
-              <i class="fas fa-trash"></i>
-            </span>
-            <span>Delete character</span>
-          </button>
-        </section>
-
-        <footer class="modal-card-foot">
-          <div>
-            <button id="prev_c" class="button" onclick="previous_popup()">
-              Previous character
-            </button>
-            <button
-              id="next_c"
-              class="button is-primary mb-3"
-              onclick="next_popup()"
-            >
-              Next character
-            </button>
-            <br />
-            <div id="creators">
-              <p><b>MarySlaOq</b> <a href="www.twitter.com">Twitter</a></p>
-            </div>
-          </div>
-        </footer>
-      </div>
-    </div>
   </body>
+
+  <script src="blocker.js"></script>
 </html>

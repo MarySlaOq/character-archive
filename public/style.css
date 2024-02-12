@@ -326,6 +326,8 @@ body {font-family: Arial; width: 70% !important; margin: auto !important;}
 
 .m30 { gap: 150px; }
 
+.gap { gap: 30px; }
+
 @media only screen and (max-width: 930px){ .m30 { gap: 30px; }}
 
 @media only screen and (max-width: 750px){ .m30 { gap: 0px } }
@@ -346,6 +348,12 @@ body {font-family: Arial; width: 70% !important; margin: auto !important;}
 
   word-wrap: break-word;
 
+}
+
+.apps > div{
+
+  margin: 20px;
+  width: max-content;
 }
 
 .page-content {
@@ -403,6 +411,12 @@ body {font-family: Arial; width: 70% !important; margin: auto !important;}
   margin: 15px;
 }
 
+.seperate {
+
+  display: flex;
+  justify-content: space-between;
+}
+
 @keyframes turn{
 
   0%{
@@ -433,4 +447,8 @@ body {font-family: Arial; width: 70% !important; margin: auto !important;}
   padding-left: 20px;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   color: #858484;
+}
+
+.mr {
+  margin-right: 10px;
 }

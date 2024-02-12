@@ -3,14 +3,6 @@ const file = document.getElementById("script").src;
 // Hello hello <3 hai o7
 //lets get back to work!! :flex:
 
-const roles = ["Main character", "Supporting character", "Arc character", "Background character"];
-const sexuality = ["Agender","Aromantic","Asexual","Bisexual","Demiromantic","Demisexual","Gay","Genderfluid","GenderQueer","Lesbian","Non-Binary","Pansexual","Polyamorous","Polysexual", "Straight", "Trans"];
-
-function getCreator(id){ 
-    if (data.people == []) return {};
-    return data.people.find(p => p.id == id); 
-}
-function getCreatorByEmail(email) { return data.people.find(p => p.email == email) }
 function getRelationshipData(id){ return data.relations[id]; }
 function getResource(name){
 
@@ -222,7 +214,6 @@ function searchUpdate(prompt=null){
     myworld.characters.forEach(chara => {
 
         let name = chara.name.toString().toLowerCase();
-        console.log(prompt);
         document.getElementById(`${myworld.name}c${chara.id}`).style.display = name.includes(prompt) ? "block" : "none";
     });
 
@@ -1550,7 +1541,7 @@ function delete_chara(){
         globalThis.updateDatabaseValue({}, `characters/${myworld.name}/${chara.id}`).then((result) => {
         
                 window.location.reload();
-            });;
+        });;
     }
 }
 
@@ -1960,7 +1951,6 @@ function saveNewCharacterInformation(operation=DatabaseOperations.UPDATE){
 function loadCharacterSelect(){
 
     const characterOptions = myworld.characters.map(c => `<option value=${c.id}>${c.name}</option>`).join("");
-    console.log(characterOptions);
     document.getElementById("character-list").innerHTML = characterOptions;
     collaborationLinkSwap();
 }
@@ -2017,6 +2007,11 @@ function addCollaborator(){
 
 function removeCharacterCreator(creator) {
 
+    if(myuser == undefined){
+        popUpNotification("You can't remove this creator", 1)
+        return;
+    }
+
     const chara = getCurrentCharacterPopUpData();
     const person = getCreator(creator);
     if (person.email == myuser.email){
@@ -2035,7 +2030,6 @@ function removeCharacterCreator(creator) {
     
     globalThis.updateDatabaseValue(chara, `/characters/${myworld.name}/${chara.id}`).then((result) => {
         
-        console.log(result);
         popUpNotification(`${person.name} is no longer a collaborator of ${chara.name}`, 0);
 
         popupOf(chara.id);
@@ -2154,4 +2148,77 @@ function previousMagicPage(amount) {
 
         r.classList.remove("unturning");
     };
+}
+
+function checkCreatorValidity(){
+
+    if(myuser == undefined) {
+        popUpNotification("You need to log in to request a creator account", 2);
+        closeAllModals();
+        return;
+    }else{
+
+        // Check if already a creator / already requested
+        if(getCreatorByEmail(myuser.email) != undefined){
+            popUpNotification("You already are a creator", 1);
+            closeAllModals();
+            return;
+        }
+
+        if(data.applications.find(a => a.email == myuser.email)){
+            popUpNotification("You already requested an application", 1);
+            closeAllModals();
+            return;
+        }
+
+        document.getElementById("creator-email").value = myuser.email;
+        document.getElementById("creator-name").value = myuser.displayName;
+    }
+}
+
+const socialList = ["Twitter", "Instagram", "Reddit", "Github"];
+function createApplication(){
+
+    const name = document.getElementById("creator-name").value;
+    const email = document.getElementById("creator-email").value;
+    const message = document.getElementById("creator-message").value;
+    const agree = document.getElementById("creator-agree").checked;
+
+    const socials = [];
+    socialList.forEach(s => socials.push({link: document.getElementById(`creator-${s}`).value, name: s }));
+
+    if(!agree){
+        popUpNotification("You must agree with the terms and conditions", 2);
+        return;
+    }
+
+    if(getCreatorByName(name) != undefined){
+        popUpNotification("A creator with the name " + name + " already exists", 2); 
+        return;
+    }
+
+    if(message.trim() == "" || name.trim() == "" || name.lenght > 16){
+        popUpNotification("Message and/or name can't be empty / too long", 2);
+        return;
+    }
+
+    // Sucess!
+    // Get send date & app id
+    const date = new Date().toLocaleDateString();
+    let id = 0;
+    data.applications.forEach(a => id = a.id >= id ? a.id : id);
+
+    const request = {
+        id: (id + 1),
+        date: date,
+        email: email,
+        name: name,
+        message: message,
+        socials: socials
+    }
+
+    globalThis.createDatabaseValue(request, `applications/${id}`);
+    popUpNotification("Application submited", 0);
+    closeAllModals();
+    window.location.reload();
 }
