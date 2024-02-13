@@ -115,11 +115,11 @@ window.addEventListener("load", ()=> {
         document.getElementById("login").innerText = "Sign out";
         document.getElementById("login").className = "button";
 
-        sleep(3000).then(()=>{popUpNotification("Logged in as " + myuser.displayName, 0);});
+        sleep(1000).then(()=>{popUpNotification("Logged in as " + myuser.displayName, 0);});
         
     }else {
 
-        sleep(3000).then(()=>{popUpNotification("No account was found", 2);});
+        sleep(1000).then(()=>{popUpNotification("No account was found", 2);});
     }
 });
 
