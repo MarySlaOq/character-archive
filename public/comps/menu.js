@@ -21,8 +21,7 @@ const menu = `<nav class="navbar" role="navigation" aria-label="main navigation"
         <a class="navbar-link"> Community </a>
 
         <div class="navbar-dropdown">
-            <a href="creators.html" class="navbar-item"> Creators </a>
-            <hr class="navbar-divider" />
+            <!--<hr class="navbar-divider" />-->
             <a event="checkCreatorValidity" data-target="modal-create" class="navbar-item js-modal-trigger"> <i class="fa-solid fa-pencil mr"></i> Apply to be a creator </a>
         </div>
         </div>

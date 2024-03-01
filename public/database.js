@@ -158,9 +158,8 @@ const loadDB = (database, app) => {
                     }
                 });
 
-                loaded = true;
                 } else {
-                popUpNotification("Could not load people", 1);
+                    popUpNotification("Could not load people", 1);
                 }
             })
             .catch((error) => {
@@ -226,7 +225,10 @@ const loadDB = (database, app) => {
         }
     }
 
-    document.getElementById("login").onclick = authFunction;
+    try {
+        
+        document.getElementById("login").onclick = authFunction;
+    } catch (error) {}
 
     function updateDatabaseValue(newInformation, characterPath) {
         const updates = {};

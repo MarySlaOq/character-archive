@@ -54,7 +54,7 @@ function loadStuff(access){
         document.getElementById("user-list").innerHTML = "You cannot access this feature";
     }
 
-    if(access >= 3) {
+    if(access >= 4) {
 
         const backup = `
             <div class="buttons">
@@ -68,6 +68,50 @@ function loadStuff(access){
     }else{
 
         document.getElementById("backups").innerHTML = "You cannot access this feature";
+    }
+
+    if(access >= 3) {
+
+        const backup = `
+        <div class="columns">
+            <div class="column" style="margin: 20px">
+                <p class="title is-4">Relationship creation</p>
+                <label> Relation descriptor </label>
+                <input type="text" class="input" id="rel-name" />
+                <br /><br />
+                <label> Relationship color </label>
+                <br />
+                <div class="select">
+                    <select id="rel-color">
+                    ${Object.entries(color_codes).map(c => `<option class="outline" style="color: ${c[1]}" value="${c[0]}">${c[0]}</option>`).join("3")}
+                    </select>
+                </div>
+                <hr />
+                <button onclick="createRelationship()" class="button is-primary"> Create relationship </button>
+            </div>
+            <div class="column" style="margin: 20px">
+                <p class="title is-4">Delete relationship</p>
+                <label> Relation to delete </label><br />
+                <div class="select">
+                    <select>
+                    ${Object.entries(data.relations).map(c => `<option value="${c[0]}">${c[1].name}</option>`).join("3")}
+                    </select>
+                </div>
+                <hr>
+                <article class="message is-danger">
+                <div class="message-body">
+                    By deleting a relation, all the characters which have this type of relationship <b>will have it removed from their relation list</b>
+                </div>
+                </article>
+                <button class="button is-danger"> Delete relationship </button>
+            </div>
+        </div>
+        `;
+
+        document.getElementById("chara-relations").innerHTML = backup;
+    }else{
+
+        document.getElementById("chara-relations").innerHTML = "You cannot access this feature";
     }
 
     setTriggers();
@@ -84,6 +128,43 @@ function setInformation(){
     document.getElementById("edit-access").value = c.access == undefined ? 1 : c.access;
 
     messageChange();
+}
+
+function createRelationship(){
+
+    const name = document.getElementById("rel-name");
+    const color = document.getElementById("rel-color");
+
+    const data = {
+        name: name.value,
+        color: color.value
+    };
+
+    if(data.name.trim() == "") {
+
+        popUpNotification("Relationship name can't be empty", 2);
+        return;
+    }
+
+    // Add to database
+    globalThis.createDatabaseValue(data, `relations/${(parseInt(getLastRelationId()) + 1)}`);
+
+    popUpNotification(`${data.name} was created as a new relation type`, 0);
+    name.value = "";
+    color.value = color_codes[0];
+}
+
+function getLastRelationId(){
+
+    let largest = -1;
+    const ids = Object.entries(data.relations);
+
+    for (let index = 0; index < ids.length; index++) {
+        const element = ids[index];
+        if(parseInt(element[0]) > largest) largest = element[0];
+    }
+
+    return largest + 1;
 }
 
 const AccessWarnings = [
