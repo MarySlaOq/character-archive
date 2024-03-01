@@ -1203,8 +1203,6 @@ function switchView(view){
 
 function parse() {
 
-    console.log(data);
-
     document.getElementById("loader").style.display = "none";
 
     document.getElementById("highlight").innerHTML = Object.entries(color_codes).map(c => `<option class="outline" style="color: ${c[1]}" value="${c[0]}">${c[0]}</option>`).join("3");
@@ -1455,7 +1453,6 @@ function defineGrabbable(restore = false, xx=0, yy=0){
     var draggableItems = Array.from(
         document.querySelectorAll(".DraggableItem")
     );
-    console.log(`There are ${draggableItems.length} draggable items.`);
 
     //Loop over each draggable item and add the listeners
     for (var i = 0; i < draggableItems.length; i++) {
@@ -1944,9 +1941,13 @@ function saveNewCharacterInformation(operation=DatabaseOperations.UPDATE){
 
 function loadCharacterSelect(){
 
-    const characterOptions = myworld.characters.filter(c => c.creators.includes(getCreatorByEmail(myuser.email).id)).map(c => `<option value=${c.id}>${c.name}</option>`).join("");
-    document.getElementById("character-list").innerHTML = characterOptions;
-    collaborationLinkSwap();
+    try {
+        const characterOptions = myworld.characters.filter(c => c.creators.includes(getCreatorByEmail(myuser.email).id)).map(c => `<option value=${c.id}>${c.name}</option>`).join("");
+        document.getElementById("character-list").innerHTML = characterOptions;
+        collaborationLinkSwap();
+    } catch (error) {
+        
+    }
 }
 
 function addCollaborator(){

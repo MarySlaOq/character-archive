@@ -16,6 +16,7 @@ const menu = `<nav class="navbar" role="navigation" aria-label="main navigation"
     <div id="navbarBasicExample" class="navbar-menu">
     <div class="navbar-start">
         <a href="index.html" class="navbar-item"> Home </a>
+        <a href="about.html" class="navbar-item"> Documentation </a>
 
         <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link"> Community </a>
@@ -25,8 +26,6 @@ const menu = `<nav class="navbar" role="navigation" aria-label="main navigation"
             <a event="checkCreatorValidity" data-target="modal-create" class="navbar-item js-modal-trigger"> <i class="fa-solid fa-pencil mr"></i> Apply to be a creator </a>
         </div>
         </div>
-
-        <a href="about.html" class="navbar-item"> Documentation </a>
 
         <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link"> More </a>

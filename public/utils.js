@@ -27,6 +27,14 @@ function getThisId(){ return getCreatorByEmail(myuser.email).id; }
 function getCreatorByEmail(email) { return Object.values(data.people).find(p => p.email == email) }
 function getCreatorByName(name) { return Object.values(data.people).find(p => p.name == name) }
 
+function getApplicationById(id){ return Object.entries(data.applications).find(a => a[1].id == id)[1]; }
+function getApplicationIndexById(id){ return Object.entries(data.applications).find(a => a[1].id == id)[0];}
+
+function getRelationshipById(id){ return Object.entries(data.relations).find(a => a[1].id == id)[1]; }
+function getRelationshipIndexById(id){ return Object.entries(data.relations).find(a => a[1].id == id)[0];}
+
+function getCharacteterWorld(character){ return data.dimensions.find(w => w.characters.includes(character)).name; }
+
 const popUpNotification = (text, type) => {
 
     let add = 100;
@@ -169,7 +177,10 @@ function loadAccessRights(){
         btn.href = "admin.html";
         btn.id = "admin-pane-access";
 
-        pane.appendChild(btn);
+        try {
+            pane.appendChild(btn);
+        } catch (error) {}
+
     }
 }
 
@@ -180,10 +191,42 @@ function uploadFile(){
     console.log(formdata.get("resume"));
 }
 
+function saveLog(type, details = null){
+
+    if(myuser == undefined) return;
+
+    const date = new Date().toLocaleDateString();
+    const time = new Date().toLocaleTimeString();
+    
+    const trigger = getCreatorByEmail(myuser.email).id;
+
+    const logData = {
+        date: date,
+        time: time,
+        operation: type.id,
+        message: type.message,
+        concern: type.concern,
+        details: details,
+        trigger: trigger
+    };
+
+    let uniq = 'id' + (new Date()).getTime();
+    globalThis.createDatabaseValue(logData, `logs/${uniq}`);
+}
+
 const DatabaseOperations = Object.freeze({
     CREATE: 0,
     UPDATE: 1,
     DELETE: 2
+});
+
+const LogTypes = Object.freeze({
+    NEW_CREATOR: {id: 0, message: "A new creator was verified", concern: -1},
+    CREATOR_REJECTED: {id: 5, message: "A new creator was rejected", concern: -1},
+    ROLE_UPDATE: {id: 1, message: "A new status modification was processed", concern: -1},
+    ACCOUNT_DELETE: {id: 2, message: "A creator was banned", concern: -1},
+    NEW_RELATION: {id: 3, message: "A new relationship type was added to the database", concern: -1},
+    DELETE_RELATION: {id: 4, message: "A relationship type was removed from database, your characters may have been afected!", concern: -1},
 });
 
 // CRUD data conversion lookup map

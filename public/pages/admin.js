@@ -93,7 +93,7 @@ function loadStuff(access){
                 <p class="title is-4">Delete relationship</p>
                 <label> Relation to delete </label><br />
                 <div class="select">
-                    <select>
+                    <select id="rel-delete">
                     ${Object.entries(data.relations).map(c => `<option value="${c[0]}">${c[1].name}</option>`).join("3")}
                     </select>
                 </div>
@@ -103,7 +103,7 @@ function loadStuff(access){
                     By deleting a relation, all the characters which have this type of relationship <b>will have it removed from their relation list</b>
                 </div>
                 </article>
-                <button class="button is-danger"> Delete relationship </button>
+                <button onclick="deleteRelationship()" class="button is-danger"> Delete relationship </button>
             </div>
         </div>
         `;
@@ -130,6 +130,43 @@ function setInformation(){
     messageChange();
 }
 
+function deleteRelationship(){
+
+    const id = document.getElementById("rel-delete").value;
+    const name = data.relations[id].name;
+
+    const val = confirm(`Are you sure you want to delete ${name}?\nThis action can't be undone.`);
+
+    if (val) {
+
+        // Check for characters with this relationship
+        const characters = data.dimensions.map(d => d.characters).flat();
+
+        let updatedCount = 0;
+        characters.forEach(c => {
+
+            if(c.relations != undefined){
+
+                // Check for this relationship
+                const relIds = c.relations.map(r => parseInt(r.details));
+
+                if(relIds.includes(parseInt(id))){
+                    
+                    // Remove from list
+                    c.relations = c.relations.filter(r => parseInt(r.details) != parseInt(id));
+                    globalThis.updateDatabaseValue(c, `characters/${getCharacteterWorld(c)}/${c.id}`);
+                    updatedCount++;
+                }
+            }
+        });
+
+        globalThis.updateDatabaseValue({}, `relations/${id}`);
+        saveLog(LogTypes.DELETE_RELATION, `${name}, updated characters: ${updatedCount}`);
+
+        window.location.reload();
+    }
+}
+
 function createRelationship(){
 
     const name = document.getElementById("rel-name");
@@ -150,6 +187,8 @@ function createRelationship(){
     globalThis.createDatabaseValue(data, `relations/${(parseInt(getLastRelationId()) + 1)}`);
 
     popUpNotification(`${data.name} was created as a new relation type`, 0);
+    saveLog(LogTypes.NEW_RELATION, data.name);
+
     name.value = "";
     color.value = color_codes[0];
 }
@@ -164,7 +203,7 @@ function getLastRelationId(){
         if(parseInt(element[0]) > largest) largest = element[0];
     }
 
-    return largest + 1;
+    return largest;
 }
 
 const AccessWarnings = [
@@ -189,21 +228,22 @@ function changeAccess(){
     c.access = parseInt(accesslevel);
     globalThis.updateDatabaseValue(c, `people/${c.id}`).then((result) => {
         
+        saveLog(LogTypes.ROLE_UPDATE, `${c.name} => ${accessRightss[accesslevel]}`);
         window.location.reload();
-});;
+    });;
 }
 
 function acceptCreator(id){
 
     let newId = 0;
-    data.people.forEach(a => newId = a.id >= newId ? a.id : newId);
+    Object.entries(data.people).forEach(a => newId = a[1].id >= newId ? a[1].id : newId);
 
     const creatorInformation = {
         access: 1,
-        email: data.applications[id].email,
+        email: getApplicationById(id).email,
         id: (newId + 1),
-        name: data.applications[id].name,
-        socials: data.applications[id].socials
+        name: getApplicationById(id).name,
+        socials: getApplicationById(id).socials
     }
 
     // Create person
@@ -212,13 +252,18 @@ function acceptCreator(id){
         `people/${creatorInformation.id}`
     );
 
-    rejectCreator(id);
+    // Send log
+    saveLog(LogTypes.NEW_CREATOR, creatorInformation.name);
+
+    rejectCreator(id, false);
 }
 
-function rejectCreator(id){
+function rejectCreator(id, log=true){
+
+    if(log) saveLog(LogTypes.CREATOR_REJECTED, getApplicationById(id).name);
 
     // Delete request
-    globalThis.updateDatabaseValue({}, `applications/${id}`).then((result) => {
+    globalThis.updateDatabaseValue({}, `applications/${getApplicationIndexById(id)}`).then((result) => {
         
         window.location.reload();
     });
@@ -241,6 +286,7 @@ function deleteUser(){
 
         globalThis.updateDatabaseValue({}, `people/${id}`).then((result) => {
         
+                saveLog(LogTypes.ACCOUNT_DELETE, user.name);
                 window.location.reload();
         });;
     }
