@@ -226,8 +226,17 @@ const LogTypes = Object.freeze({
     ROLE_UPDATE: {id: 1, message: "A new status modification was processed", concern: -1},
     ACCOUNT_DELETE: {id: 2, message: "A creator was banned", concern: -1},
     NEW_RELATION: {id: 3, message: "A new relationship type was added to the database", concern: -1},
-    DELETE_RELATION: {id: 4, message: "A relationship type was removed from database, your characters may have been afected!", concern: -1},
+    DELETE_RELATION: {id: 4, message: "A relationship type was removed from database", concern: -1},
 });
+
+const logIcons = [
+    ["<i class=\"fa-solid fa-check\"></i>", "has-text-success"],
+    ["<i class=\"fa-solid fa-triangle-exclamation\"></i>", "has-text-warning"],
+    ["<i class=\"fa-solid fa-ban\"></i>", "has-text-danger"],
+    ["<i class=\"fa-solid fa-heart\"></i>", "has-text-info"],
+    ["<i class=\"fa-solid fa-xmark\"></i>", "has-text-danger"],
+    ["<i class=\"fa-solid fa-hand\"></i>", "has-text-warning"],
+];
 
 // CRUD data conversion lookup map
 const dataConversionLookupMap = {

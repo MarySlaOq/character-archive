@@ -417,6 +417,20 @@ body {font-family: Arial; width: 70% !important; margin: auto !important;}
   justify-content: space-between;
 }
 
+.flex-simple {
+
+  display: flex !important;
+  justify-content: left !important;
+
+  gap: 10px;
+}
+
+
+.fit {
+  
+    width: fit-content;
+}
+
 @keyframes turn{
 
   0%{

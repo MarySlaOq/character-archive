@@ -24,6 +24,7 @@ const menu = `<nav class="navbar" role="navigation" aria-label="main navigation"
         <div class="navbar-dropdown">
             <!--<hr class="navbar-divider" />-->
             <a event="checkCreatorValidity" data-target="modal-create" class="navbar-item js-modal-trigger"> <i class="fa-solid fa-pencil mr"></i> Apply to be a creator </a>
+            <a href="logs.html" class="navbar-item"> <i class="fa-solid fa-scroll mr"></i> Audit logs </a>
         </div>
         </div>
 

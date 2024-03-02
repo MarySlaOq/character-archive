@@ -1,6 +1,9 @@
 
 function loadStuff(access){
 
+    // Hide login button
+    document.getElementById("login").style.display = "none";
+
     if(access >= 2){
         // Application management
         const applications = data.applications.map(app => `
@@ -57,6 +60,7 @@ function loadStuff(access){
     if(access >= 4) {
 
         const backup = `
+            <br>
             <div class="buttons">
                 <button onclick="backupDb()" class="button is-primary">Make a backup</button>
                 <button onclick="" class="button is-secondary">Load a backup</button>
@@ -74,7 +78,7 @@ function loadStuff(access){
 
         const backup = `
         <div class="columns">
-            <div class="column" style="margin: 20px">
+            <div class="column">
                 <p class="title is-4">Relationship creation</p>
                 <label> Relation descriptor </label>
                 <input type="text" class="input" id="rel-name" />
@@ -89,7 +93,7 @@ function loadStuff(access){
                 <hr />
                 <button onclick="createRelationship()" class="button is-primary"> Create relationship </button>
             </div>
-            <div class="column" style="margin: 20px">
+            <div class="column">
                 <p class="title is-4">Delete relationship</p>
                 <label> Relation to delete </label><br />
                 <div class="select">
@@ -98,11 +102,9 @@ function loadStuff(access){
                     </select>
                 </div>
                 <hr>
-                <article class="message is-danger">
-                <div class="message-body">
+                <span>
                     By deleting a relation, all the characters which have this type of relationship <b>will have it removed from their relation list</b>
-                </div>
-                </article>
+                </span><br><br>
                 <button onclick="deleteRelationship()" class="button is-danger"> Delete relationship </button>
             </div>
         </div>

@@ -120,12 +120,19 @@ const loadDB = (database, app) => {
                                                         ).magic = element;
                                                     }
 
-                                                    globalThis.dataInfo = data;
+                                                    get(child(dbRef, `logs`)).then(
+                                                    (snapshot) => {
+                                                        if (snapshot.exists()) {
+                                                            data.logs = snapshot.val();
 
-                                                    if(window["parse"] != undefined) parse();
-                                                    else{
-                                                        parserFinishedCallback();
-                                                    }
+                                                            globalThis.dataInfo = data;
+
+                                                            if(window["parse"] != undefined) parse();
+                                                            else{
+                                                                parserFinishedCallback();
+                                                            }
+                                                        }
+                                                    });
 
                                                 } else {
                                                     popUpNotification("Could not load characters",1);
