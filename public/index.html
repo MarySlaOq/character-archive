@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Relationship builder</title>
-
-    <!-- User data in files-->
-    <script id="script" src="data.json"></script>
+    <title>The character archive</title>
 
     <script src="secrets.js"></script>
     <script src="parser.js"></script>
@@ -14,6 +13,8 @@
 
     <!-- include firebase -->
     <script type="module" src="database.js" async></script>
+  
+    <script type="module" src="renderer.js"></script>
 
     <!-- include jquery -->
 
@@ -24,7 +25,7 @@
     ></script>
     <script src="modals.js"></script>
 
-    <script src="cycle.js"></script>
+    <script src="libs/cycle.js"></script>
 
     <link rel="stylesheet" href="style.css" />
     <link
@@ -45,7 +46,8 @@
   <body class="container is-fluid">
     
     <div id="menu"></div>
-    <script src="comps/menu.js"></script>
+    
+    <div id="universe"></div>
 
     <div id="adminpane"></div>
 
@@ -58,6 +60,8 @@
     <div id="worlds"></div>
 
     <div class="loader" id="loader"></div>
+
+    <div id="level"></div>
 
     <!-- POP UPs -->
 
@@ -415,7 +419,6 @@
             <img
               editable="true"
               id="image"
-              src="../resources/saloman.png"
               alt=""
               srcset=""
             />

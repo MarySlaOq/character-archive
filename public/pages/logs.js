@@ -4,8 +4,6 @@ function loadContent(){
     const list = document.getElementById('log-list');
     const logList = Object.entries(data.logs).reverse();
 
-    console.log(logList);
-
     logList.forEach(log => {
 
         const logObj = log[1];

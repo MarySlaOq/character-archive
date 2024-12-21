@@ -11,6 +11,7 @@ const setTriggers = () => {
       const $target = document.getElementById(modal);
   
       $trigger.addEventListener('click', () => {
+
         openModal($target);
         if($trigger.hasAttribute("event")){
           const eventFunction = $trigger.getAttribute("event");

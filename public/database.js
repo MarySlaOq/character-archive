@@ -1,3 +1,4 @@
+import { startApp } from "./renderer.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
 import {
@@ -77,6 +78,8 @@ const loadDB = (database, app) => {
                                         maps: [],
                                     },
                                     characters: [],
+                                    public: element.public,
+                                    create_date: element.creation_date,
                                     };
 
                                     if (element.divisions == undefined)
@@ -126,9 +129,13 @@ const loadDB = (database, app) => {
                                                             data.logs = snapshot.val();
 
                                                             globalThis.dataInfo = data;
-
-                                                            if(window["parse"] != undefined) parse();
+                                                            startApp();
+                                                            
+                                                            if(window["parse"] != undefined){
+                                                                parse();
+                                                            } 
                                                             else{
+                                                                
                                                                 parserFinishedCallback();
                                                             }
                                                         }
@@ -195,6 +202,9 @@ const loadDB = (database, app) => {
     }
 
     function authFunction() {
+
+        console.log("authFunction");
+
         if (document.getElementById("login").innerText == "Sign out") {
             signOut(auth)
             .then(() => {
@@ -215,8 +225,7 @@ const loadDB = (database, app) => {
             signInWithPopup(auth, provider)
             .then((result) => {
                 // This gives you a Google Access Token. You can use it to access the Google API.
-                const credential =
-                GoogleAuthProvider.credentialFromResult(result);
+                const credential = GoogleAuthProvider.credentialFromResult(result);
                 const token = credential.accessToken;
 
                 const user = result.user;
@@ -235,6 +244,7 @@ const loadDB = (database, app) => {
     try {
         
         document.getElementById("login").onclick = authFunction;
+        
     } catch (error) {}
 
     function updateDatabaseValue(newInformation, characterPath) {

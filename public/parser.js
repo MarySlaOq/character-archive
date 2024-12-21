@@ -1,8 +1,3 @@
-const file = document.getElementById("script").src;
-
-// Hello hello <3 hai o7
-//lets get back to work!! :flex:
-
 function getRelationshipData(id){ return data.relations[id]; }
 function getResource(name){
 
@@ -10,6 +5,8 @@ function getResource(name){
 
     if(name.includes("public/resources")) name = name.split("/").slice(-1)[0];
     if(name.includes("http")) return name;
+
+    if(name.includes("resources")) return name;
     return "resources/" + name;
 }
 function getFlagOf(name){ return `resources/flags/${name}-Pride.jpg`; }
@@ -40,14 +37,14 @@ document.addEventListener('contextmenu', event => event.preventDefault());
 window.addEventListener("resize", (event) => {
 
     // Deal with absolute position shit
-    adjustMagicPage();
     reset_positions();
     defineGrabbable();
     mapZoomOut();
 });
 
-function adjustMagicPage() {
+function swapTab(tab) {
     
+    setStateOfComponentIfExists("universe", {tab: tab});
 }
 
 function mapZoomOut(){
@@ -366,7 +363,7 @@ class World {
 
         this.name = dim.name;
         this.outline = dim.outline;
-        this.characters = dim.characters;
+        this.characters = dim.characters.filter(c => c != undefined);
 
         this.world = dim.world;
         this.events = dim.events;
@@ -1201,14 +1198,13 @@ function switchView(view){
     }
 }
 
-function parse() {
+function openDimension(dimension) {
 
-    document.getElementById("loader").style.display = "none";
+    // Open url
+    window.open("/public/index.html?dimension=" + dimension, "_self");
+}
 
-    document.getElementById("highlight").innerHTML = Object.entries(color_codes).map(c => `<option class="outline" style="color: ${c[1]}" value="${c[0]}">${c[0]}</option>`).join("3");
-
-    popup = document.getElementById("popup");
-    mapPopup = document.getElementById("map-popup");
+function loadDimension(element) {
 
     // Set up page
     const tagHolder = document.getElementById("tags");
@@ -1217,193 +1213,199 @@ function parse() {
     const worldHolder = document.getElementById("worlds");
     worldHolder.innerHTML = "";
 
-    data.dimensions.forEach(element => {
+    let world = new World(element.name);
+    myworld = world;
+    
+    let content = document.createElement("div");
+    content.id = element.name;
+    content.className = "tabcontent";
 
-        let world = new World(element.name);
-        myworld = world;
-        
-        let tab = document.createElement("a")
-        tab.onclick = () => {openWorld(event, element.name)}
-        tab.innerText = element.name;
+    let creators = [];
+    for(let i = 0; i < myworld.characters.length; i++)    
+        for(let j = 0; j < myworld.characters[i].creators.length; j++){
 
-        const li = document.createElement("li");
-        li.className = "tablinks"
-        li.appendChild(tab);
-        
-        tagHolder.appendChild(li);
-        
-        let content = document.createElement("div");
-        content.id = element.name;
-        content.className = "tabcontent";
+            const creator = myworld.characters[i].creators[j];
+            if(!creators.includes(creator)) creators.push(creator);
+        }
 
-        content.innerHTML = "<h2 class='title'>"+element.name+"</h2>";
+    let id = -1;
+    if (myuser != undefined) id = getThisId();
+    
+    if (!element.public && !creators.includes(id)) {
 
-        const outline = document.createElement("p");
-        outline.className = "world-outline";
-        outline.innerText = element.outline;
-        
-        content.appendChild(outline);
-        content.innerHTML += "<hr><h3 class='title is-4'>World contributtors</h3>";
-
-        let creators = [];
-        for(let i = 0; i < myworld.characters.length; i++)    
-            for(let j = 0; j < myworld.characters[i].creators.length; j++){
-
-                const creator = myworld.characters[i].creators[j];
-                if(!creators.includes(creator)) creators.push(creator);
-            }
-        myworld.contributors = creators.map(c => getCreator(c));
-
-        creators = creators.map(c => "<span class='tag is-link is-medium is-light'>" + getCreator(c).name + "</span>").join(" ");
-
-        const creatornames = document.createElement("div");
-        creatornames.innerHTML = creators;
-
-        content.appendChild(creatornames);
-
-        // Add view switch panels
-        const view_panel = `
-            <hr />
-            <button onclick='switchView(0)' id="${myworld.name}-cv" class='button is-medium' ${myworld.characters == undefined ? " disabled" : ""}><span class="icon"><i class="fa-solid fa-person"></i> </span><span>Character view</span></button>
-            <button onclick='switchView(1)' id="${myworld.name}-wo" class='button is-medium' ${myworld.world == undefined ? " disabled" : ""}><span class="icon"><i class="fa-solid fa-earth"></i> </span><span>World overview</span></button>
-            <button onclick='switchView(2)' id="${myworld.name}-et" class='button is-medium' ${myworld.events == undefined ? " disabled" : ""}><span class="icon"><i class="fa-solid fa-timeline"></i> </span><span>Event timeline</span></button>
-            <button onclick='switchView(3)' id="${myworld.name}-cl" class='button is-medium' ${myworld.calendar == undefined ? " disabled" : ""}><span class="icon"><i class="fa-solid fa-calendar"></i> </span><span>Calendar</span></button>
-            <button onclick='switchView(4)' id="${myworld.name}-mg" class='button is-medium' ${myworld.magic == undefined ? " disabled" : ""}><span class="icon"><i class="fa-solid fa-wand-magic-sparkles"></i> </span><span>Magic</span></button>
-        `;
-
-        content.innerHTML += view_panel;
-        content.appendChild(document.createElement("hr"));
-
-        // ---------CHARACTER VIEW---------
-
-        const cView = document.createElement("div");
-        cView.id = myworld.name + "-" + "chara-container";
-
-        const controller = `
-            <div class="block">
-
-                <button class='button controller' onclick='relationship_control()'>Hide all relationships</button>
-                <button onclick='reset_positions()' class='button'>Reset character positions</button>
-                
-                <div id="sorter${myworld.name}" class="dropdown">
-                    <div class="dropdown-trigger">
-                        <button class="button" aria-haspopup="true" onclick="toggle_sorter()" aria-controls="dropdown-menu">
-                        <span>Sort by tags</span>
-                        <span class="icon is-small">
-                            <i class="fas fa-angle-down" aria-hidden="true"></i>
-                            </span>
-                            </button>
-                            </div>
-                    <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                        <div class='dropdown-content' id="${myworld.name}chara-sorter">
-                        </div> 
-                        </div>
-                    </div>
-                        
-                        ${myuser=== undefined ? "" : 
-                            (
-                                (myworld.contributors.map(c => c.email).includes(myuser.email)) ? 
-                                `
-                                    <br />
-                                    <br />
-                                    <button data-target='popup' onclick='open_creator()' class='js-modal-trigger button is-rounded is-success'>
-                                        <span class='icon'>
-                                            <i class='fas fa-user'></i>
-                                        </span>
-                                        <span>Create new character</span>
-                                    </button>
-                                    
-                                    <button class='button is-rounded is-info ml-3 js-modal-trigger' data-target="collaborator">
-                                        <span class='icon'>
-                                            <i class='fas fa-pen'></i>
-                                        </span>
-                                        <span>Add world collaborator</span>
-                                    </button>
-                                    ` 
-                                    : ""
-                                )}
-                <br /><br /><br />
-                <! -- form for shit and maybe el menu -->
-                <div class="">
-                    <form name="search">
-                        <input maxlength=80 id="${myworld.name}search" type="text" placeholder="Search" oninput="searchUpdate()" class="input" name="txt">
-                    </form>
-                </div>
-
-                <div class="subtitles is-flex is-flex-wrap-wrap">
-                    <div class="subtitle"> <div class="circle"></div> <span>Text</span></div>
-                    <div class="subtitle"> <div class="circle"></div> <span>Text</span></div>
-                    <div class="subtitle"> <div class="circle"></div> <span>Text</span></div>
-                </div>
-
-                <br><br><br>
-            </div>`;
-        cView.innerHTML += controller;
-        
+        content.innerHTML = "<h2 class='title'>This world is private</h2>";
         worldHolder.appendChild(content);
-        
-        let dom = document.createElement("div");
-        dom.className = "is-flex is-flex-wrap-wrap m30 is-justify-content-center";
-        
-        for (let index = 0; index < world.divisions.length; index++) dom.append(world.divisions[index]);
-        cView.append(dom);
+        return
+    }
 
-        // ---------WORLD OVERVIEW---------
-        const wView = document.createElement("div");
-        wView.id = myworld.name + "-" + "world-container";
-        
-        const map_container = document.createElement("div");
-        map_container.className = "map-container";
-        //map_container.innerHTML += "<h2>" +myworld.name+ "'s cartography</h2>";
+    content.innerHTML = "<h2 class='title'>"+element.name+"</h2>";
 
-        let map_data = myworld.drawMaps();
-        map_container.appendChild(map_data);
+    const outline = document.createElement("p");
+    outline.className = "world-outline";
+    outline.innerText = element.outline;
+    
+    content.appendChild(outline);
+    content.innerHTML += "<hr><h3 class='title is-4'>World contributtors</h3>";
 
-        wView.appendChild(map_container);
-        
-        // ---------EVENT TIMELINE---------
-        const eView = document.createElement("div");
-        eView.id = myworld.name + "-" + "event-container";
-        
-        var title = document.createElement("h2");
-        title = document.createElement("h2");
-        title.innerText = myworld.name + "'s chronological events"
-        
-        eView.appendChild(title);
+    myworld.contributors = creators.map(c => getCreator(c));
+    creators = myworld.contributors.map(c => makeTag(c)).join(" ");
 
-        // --------- CALENDAR ---------
-        const clView = document.createElement("div");
-        clView.id = myworld.name + "-" + "calendar-container";
-        
-        var title = document.createElement("h2");
-        title = document.createElement("h2");
-        title.innerText = myworld.name + "'s holidays n shit"
-        
-        clView.appendChild(title);
+    const creatornames = document.createElement("div");
+    creatornames.innerHTML = creators;
 
-        // ---------- Magic ---------
-        const mgView = document.createElement("div");
-        mgView.id = myworld.name + "-magic-container";
-        const mTitle = document.createElement("p");
-        mTitle.innerText = myworld.name + "'s magic system";
-        mTitle.className = "title";
+    content.appendChild(creatornames);
 
-        mgView.appendChild(mTitle);
-        let magic_data = myworld.drawSpellBook();
-        mgView.appendChild(magic_data);
-        
-        // Append views
-        content.appendChild(cView);
-        content.appendChild(wView);
-        content.appendChild(eView);
-        content.appendChild(clView);
-        content.appendChild(mgView);
+    // Add view switch panels
+    const view_panel = `
+        <hr />
+        <button onclick='switchView(0)' id="${myworld.name}-cv" class='button is-medium' ${myworld.characters == undefined ? " disabled" : ""}><span class="icon"><i class="fa-solid fa-person"></i> </span><span>Character view</span></button>
+        <button onclick='switchView(1)' id="${myworld.name}-wo" class='button is-medium' ${myworld.world == undefined ? " disabled" : ""}><span class="icon"><i class="fa-solid fa-earth"></i> </span><span>World overview</span></button>
+        <button onclick='switchView(2)' id="${myworld.name}-et" class='button is-medium' ${myworld.events == undefined ? " disabled" : ""}><span class="icon"><i class="fa-solid fa-timeline"></i> </span><span>Event timeline</span></button>
+        <button onclick='switchView(3)' id="${myworld.name}-cl" class='button is-medium' ${myworld.calendar == undefined ? " disabled" : ""}><span class="icon"><i class="fa-solid fa-calendar"></i> </span><span>Calendar</span></button>
+        <button onclick='switchView(4)' id="${myworld.name}-mg" class='button is-medium' ${myworld.magic == undefined ? " disabled" : ""}><span class="icon"><i class="fa-solid fa-wand-magic-sparkles"></i> </span><span>Magic</span></button>
+    `;
 
-        myworld.setupTagFilters();
-        
-        setTriggers();
-        adjustMagicPage();
-    });
+    content.innerHTML += view_panel;
+    content.appendChild(document.createElement("hr"));
+
+    // ---------CHARACTER VIEW---------
+
+    const cView = document.createElement("div");
+    cView.id = myworld.name + "-" + "chara-container";
+
+    const controller = `
+        <div class="block">
+
+            <button class='button controller' onclick='relationship_control()'>Hide all relationships</button>
+            <button onclick='reset_positions()' class='button'>Reset character positions</button>
+            
+            <div id="sorter${myworld.name}" class="dropdown">
+                <div class="dropdown-trigger">
+                    <button class="button" aria-haspopup="true" onclick="toggle_sorter()" aria-controls="dropdown-menu">
+                    <span>Sort by tags</span>
+                    <span class="icon is-small">
+                        <i class="fas fa-angle-down" aria-hidden="true"></i>
+                        </span>
+                        </button>
+                        </div>
+                <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                    <div class='dropdown-content' id="${myworld.name}chara-sorter">
+                    </div> 
+                    </div>
+                </div>
+                    
+                    ${myuser=== undefined ? "" : 
+                        (
+                            (myworld.contributors.map(c => c.email).includes(myuser.email)) ? 
+                            `
+                                <br />
+                                <br />
+                                <button data-target='popup' onclick='open_creator()' class='js-modal-trigger button is-rounded is-success'>
+                                    <span class='icon'>
+                                        <i class='fas fa-user'></i>
+                                    </span>
+                                    <span>Create new character</span>
+                                </button>
+                                
+                                <button class='button is-rounded is-info ml-3 js-modal-trigger' data-target="collaborator">
+                                    <span class='icon'>
+                                        <i class='fas fa-pen'></i>
+                                    </span>
+                                    <span>Add world collaborator</span>
+                                </button>
+                                ` 
+                                : ""
+                            )}
+            <br /><br /><br />
+            <! -- form for shit and maybe el menu -->
+            <div class="">
+                <form name="search">
+                    <input maxlength=80 id="${myworld.name}search" type="text" placeholder="Search" oninput="searchUpdate()" class="input" name="txt">
+                </form>
+            </div>
+
+            <div class="subtitles is-flex is-flex-wrap-wrap">
+                <div class="subtitle"> <div class="circle"></div> <span>Text</span></div>
+                <div class="subtitle"> <div class="circle"></div> <span>Text</span></div>
+                <div class="subtitle"> <div class="circle"></div> <span>Text</span></div>
+            </div>
+
+            <br><br><br>
+        </div>`;
+    cView.innerHTML += controller;
+    
+    worldHolder.appendChild(content);
+    
+    let dom = document.createElement("div");
+    dom.className = "is-flex is-flex-wrap-wrap m30 is-justify-content-center";
+    
+    for (let index = 0; index < world.divisions.length; index++) dom.append(world.divisions[index]);
+    cView.append(dom);
+
+    // ---------WORLD OVERVIEW---------
+    const wView = document.createElement("div");
+    wView.id = myworld.name + "-" + "world-container";
+    
+    const map_container = document.createElement("div");
+    map_container.className = "map-container";
+    //map_container.innerHTML += "<h2>" +myworld.name+ "'s cartography</h2>";
+
+    let map_data = myworld.drawMaps();
+    map_container.appendChild(map_data);
+
+    wView.appendChild(map_container);
+    
+    // ---------EVENT TIMELINE---------
+    const eView = document.createElement("div");
+    eView.id = myworld.name + "-" + "event-container";
+    
+    var title = document.createElement("h2");
+    title = document.createElement("h2");
+    title.innerText = myworld.name + "'s chronological events"
+    
+    eView.appendChild(title);
+
+    // --------- CALENDAR ---------
+    const clView = document.createElement("div");
+    clView.id = myworld.name + "-" + "calendar-container";
+    
+    var title = document.createElement("h2");
+    title = document.createElement("h2");
+    title.innerText = myworld.name + "'s holidays n shit"
+    
+    clView.appendChild(title);
+
+    // ---------- Magic ---------
+    const mgView = document.createElement("div");
+    mgView.id = myworld.name + "-magic-container";
+    const mTitle = document.createElement("p");
+    mTitle.innerText = myworld.name + "'s magic system";
+    mTitle.className = "title";
+
+    mgView.appendChild(mTitle);
+    let magic_data = myworld.drawSpellBook();
+    mgView.appendChild(magic_data);
+    
+    // Append views
+    content.appendChild(cView);
+    content.appendChild(wView);
+    content.appendChild(eView);
+    content.appendChild(clView);
+    content.appendChild(mgView);
+
+    myworld.setupTagFilters();
+    
+    setTriggers();
+}
+
+function parse() {
+
+    document.getElementById("loader").style.display = "none";
+
+    document.getElementById("highlight").innerHTML = Object.entries(color_codes).map(c => `<option class="outline" style="color: ${c[1]}" value="${c[0]}">${c[0]}</option>`).join("3");
+
+    popup = document.getElementById("popup");
+    mapPopup = document.getElementById("map-popup");
 
     document.addEventListener("mouseup", () => {
         if(ismerging) {
@@ -1433,10 +1435,28 @@ function parse() {
     });
     }
 
-    // Open first world
+    // Check which dimension to load
+    const urlParams = new URLSearchParams(window.location.search);
+    const dimension = urlParams.get('dimension');
 
-    openWorld(event, localStorage.getItem("ca-visit") == undefined ? data.dimensions[0].name : localStorage.getItem("ca-visit"), 0);
+    if (dimension != null) {
 
+        const element = data.dimensions.find(d => d.name == dimension);
+
+        if (element == undefined) {
+
+            document.getElementById("worlds").innerHTML = "<h2 class='title'>This dimension doesn't exist</h2>";
+            popUpNotification("This dimension doesn't exist", 1);
+            return;
+        }
+
+        loadDimension(element);
+    }
+
+    // Open characters view
+    switchView(0);
+
+    // Set up shit after
     parserFinishedCallback();
 }
 
@@ -2147,6 +2167,8 @@ function previousMagicPage(amount) {
 }
 
 function checkCreatorValidity(){
+
+    console.log("Checking creator validity");
 
     if(myuser == undefined) {
         popUpNotification("You need to log in to request a creator account", 2);

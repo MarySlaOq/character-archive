@@ -466,3 +466,27 @@ body {font-family: Arial; width: 70% !important; margin: auto !important;}
 .mr {
   margin-right: 10px;
 }
+
+.dim-icon {
+
+  /* Always mainstain aspect ratio */
+  object-fit: cover !important;
+
+  width:100% !important;
+  height:auto !important;
+
+  aspect-ratio: 1 / 1 !important;
+}
+
+.dimension {
+
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.089);
+  border-radius: 10px;
+  
+  transition-duration: 0.3s;
+}
+
+.dimension:hover {
+
+  transform:translateY(-5px);
+}
