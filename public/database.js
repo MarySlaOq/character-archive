@@ -135,7 +135,6 @@ const loadDB = (database, app) => {
                                                                 parse();
                                                             } 
                                                             else{
-                                                                
                                                                 parserFinishedCallback();
                                                             }
                                                         }

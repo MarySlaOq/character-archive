@@ -86,6 +86,26 @@ function setStateOfComponentIfExists(component, state){
     }
 }
 
+function loadUserData(){
+    
+    if(localStorage.getItem("ca-user-account") != undefined) {
+
+        myuser = JSON.parse(localStorage.getItem("ca-user-account"));
+
+        document.getElementById("username").innerText = myuser.displayName;
+        document.getElementById("userimg").src = myuser.photoURL;
+
+        document.getElementById("login").innerText = "Sign out";
+        document.getElementById("login").className = "button";
+
+        sleep(1000).then(()=>{popUpNotification("Logged in as " + myuser.displayName, 0);});
+        
+    }else {
+
+        sleep(1000).then(()=>{popUpNotification("No account was found", 2);});
+    }
+}
+
 function saveUserData(user){
 
     document.getElementById("username").innerText = user.displayName;

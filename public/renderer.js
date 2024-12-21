@@ -11,6 +11,8 @@ export function startApp() {
     
     menu.mount(document.getElementById("menu"));
     data.components.menu = menu;
+
+    loadUserData();
     
     // Check url
     const urlParams = new URLSearchParams(window.location.search);
