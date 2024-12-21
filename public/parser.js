@@ -1201,7 +1201,7 @@ function switchView(view){
 function openDimension(dimension) {
 
     // Open url
-    window.open("/public/index.html?dimension=" + dimension, "_self");
+    window.open("/index.html?dimension=" + dimension, "_self");
 }
 
 function loadDimension(element) {

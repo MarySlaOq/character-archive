@@ -29,8 +29,8 @@ export class Menu extends Component {
                 </div>
                 <div id="navbarBasicExample" class="navbar-menu ${this.state.isMenuOpen ? 'is-active' : ''}">
                     <div class="navbar-start">
-                        <a href="/public/index.html" class="navbar-item"> Home </a>
-                        <a href="/public/pages/about.html" class="navbar-item"> Documentation </a>
+                        <a href="/index.html" class="navbar-item"> Home </a>
+                        <a href="/pages/about.html" class="navbar-item"> Documentation </a>
                         <div class="navbar-item has-dropdown is-hoverable">
                             <a class="navbar-link"> Community </a>
                             <div class="navbar-dropdown">
