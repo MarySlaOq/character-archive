@@ -7,7 +7,7 @@ export class Menu extends Component {
             isMenuOpen: false,
             isLoggedIn: false,
             username: 'Browsing as guest',
-            userImage: '/public/resources/default.jpg'
+            userImage: '/resources/default.jpg'
         };
     }
 

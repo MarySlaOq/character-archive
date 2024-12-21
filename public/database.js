@@ -202,9 +202,8 @@ const loadDB = (database, app) => {
 
     function authFunction() {
 
-        console.log("authFunction");
-
         if (document.getElementById("login").innerText == "Sign out") {
+            
             signOut(auth)
             .then(() => {
                 myuser = undefined;
@@ -220,7 +219,9 @@ const loadDB = (database, app) => {
             .catch((error) => {
                 popUpNotification("Sign out failed", 1);
             });
+            
         } else {
+
             signInWithPopup(auth, provider)
             .then((result) => {
                 // This gives you a Google Access Token. You can use it to access the Google API.
@@ -240,12 +241,6 @@ const loadDB = (database, app) => {
         }
     }
 
-    try {
-        
-        document.getElementById("login").onclick = authFunction;
-        
-    } catch (error) {}
-
     function updateDatabaseValue(newInformation, characterPath) {
         const updates = {};
         updates[characterPath] = newInformation;
@@ -258,6 +253,7 @@ const loadDB = (database, app) => {
 
     globalThis.createDatabaseValue = createDatabaseValue;
     globalThis.updateDatabaseValue = updateDatabaseValue;
+    globalThis.login = authFunction;
 };
 
 loadDB();

@@ -1,4 +1,3 @@
-import { InfoLevel } from './comps/info.js';
 import { Menu } from './comps/menu.js';
 import { Universe } from './comps/universe.js';
 
@@ -26,9 +25,5 @@ export function startApp() {
         const universe = new Universe();
         data.components.universe = universe;
         universe.mount(document.getElementById("universe"));
-
-        const level = new InfoLevel();
-        data.components.level = level;
-        level.mount(document.getElementById("level"));
     }
 }

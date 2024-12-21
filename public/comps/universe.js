@@ -1,5 +1,6 @@
 import { Component } from "../components.js";
 import { Dimension } from "./dimension.js";
+import { InfoLevel } from "./info.js";
 
 export class Universe extends Component {
 
@@ -83,6 +84,9 @@ export class Universe extends Component {
             dimCode = "<div class='column'>Nothing to see here D:</div>";
         }
 
+        const level = new InfoLevel();
+        data.components.level = level;
+
         let universe_block = this.state.tab == 0 ? `
             <section>                
                 <section class="section">
@@ -95,6 +99,8 @@ export class Universe extends Component {
                     ${dimCode}
                 </div>
             </section>
+
+            ${level.code()}
         ` : `
             <section class="section">
 

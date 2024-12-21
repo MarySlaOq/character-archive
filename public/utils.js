@@ -33,7 +33,10 @@ function getCreator(id){
     return data.people[id];
 }
 
-function getThisId(){ return getCreatorByEmail(myuser.email).id; }
+function getThisId(){ 
+    let creator = getCreatorByEmail(myuser.email);
+    return creator == undefined ? -1 : creator.id; 
+}
 function getCreatorByEmail(email) { return Object.values(data.people).find(p => p.email == email) }
 function getCreatorByName(name) { return Object.values(data.people).find(p => p.name == name) }
 
@@ -104,6 +107,17 @@ function loadUserData(){
 
         sleep(1000).then(()=>{popUpNotification("No account was found", 2);});
     }
+
+    // Set functionality of the login button
+    try {
+        
+        document.getElementById("login").onclick = globalThis.login;
+        
+    } catch (error) {
+
+        console.error(error);
+    }
+
 }
 
 function saveUserData(user){
