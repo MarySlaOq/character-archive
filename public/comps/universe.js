@@ -9,10 +9,11 @@ export class Universe extends Component {
         this.state = {
             tab: 0,
         };
+
+        this.setup();
     }
 
-    onMount() {
-
+    setup() {
 
         let id = -1;
         if (myuser != undefined) id = getThisId();
@@ -33,6 +34,10 @@ export class Universe extends Component {
                 }
                 
                 creators.push(...character.creators);
+            }
+
+            if (this.props.user != undefined && !creators.includes(this.props.user.id)) {
+                return;
             }
 
             // Select random character
@@ -67,15 +72,16 @@ export class Universe extends Component {
         let dimCode = "";
         let temp = this.dimensions;
 
+        
         if (this.state.tab == 1 && myuser == undefined) {
 
             popUpNotification("You need to be logged in to see your worlds!", 2);
-            this.setState({ tab: 0 });
+                this.setState({ tab: 0 });
         }
 
         if (this.state.tab == 1)
             temp = this.dimensions.filter(dim => dim.is_mine);
-
+            
         temp.forEach(dim => {
             dimCode += `<div class="column">${dim.code}</div>`;
         });
@@ -84,50 +90,65 @@ export class Universe extends Component {
             dimCode = "<div class='column'>Nothing to see here D:</div>";
         }
 
-        const level = new InfoLevel();
-        data.components.level = level;
+        let level = "";
+        
+        if (this.props.user == undefined) {
+            level = new InfoLevel();
+            data.components.level = level;
+
+            level = level.code();
+        }
 
         let universe_block = this.state.tab == 0 ? `
-            <section>                
-                <section class="section">
+            <div class="columns">
+            ${dimCode}
+            </div>
+            </section>
+
+            ${level}
+        ` : `
+            <section class="section">
+
+            <h1 class="title">My worlds!</h1>
+            <div class="columns">
+            ${dimCode}
+            </div>
+            </section>
+        `;
+            
+        if (this.props.user == undefined) {
+            return `
+            <br>
+            <div class="tabs is-centered is-boxed is-medium" >
+            <ul>
+                    <li class="${this.state.tab == 0 ? "is-active" : ""}" onclick=swapTab(0)>
+                    <a>
+                        <span>Public worlds!</span>
+                    </a>
+                    </li>
+                    <li class="${this.state.tab == 1 ? "is-active" : ""}" onclick=swapTab(1)>
+                    <a>
+                        <span>My stuff</span>
+                    </a>
+                    </li>
+                </ul>
+                </div>
+
+                <section>                
+                    <section class="section">
                     <h1 class="title">The character archive universe!</h1>
                     <h2 class="subtitle">
                         Explore the wonderful worlds created by the community!
                     </h2>
                 </section>
-                <div class="columns">
-                    ${dimCode}
-                </div>
-            </section>
+                ${universe_block}
+            `;
+        } else {
 
-            ${level.code()}
-        ` : `
-            <section class="section">
-
-                <h1 class="title">My worlds!</h1>
-                <div class="columns">
-                    ${dimCode}
-                </div>
-            </section>
-        `;
-
-        return `
-            <br>
-            <div class="tabs is-centered is-boxed is-medium" >
-            <ul>
-                <li class="${this.state.tab == 0 ? "is-active" : ""}" onclick=swapTab(0)>
-                <a>
-                    <span>Public worlds!</span>
-                </a>
-                </li>
-                <li class="${this.state.tab == 1 ? "is-active" : ""}" onclick=swapTab(1)>
-                <a>
-                    <span>My stuff</span>
-                </a>
-                </li>
-            </ul>
-            </div>
-            ${universe_block}
-        `;
-    }
+            return `
+                ${universe_block}
+            `;
+                
+        }
+    } 
 }

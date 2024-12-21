@@ -53,6 +53,7 @@ function mapZoomOut(){
 
     // Zoom out of map
     const map = myworld.getCurrentMap();
+    if (map == undefined) return;
     let mapid = map.parentElement.parentElement.parentElement.id.split("w-m")[1];
 
     const myData = myworld.getMapDataFromIndex(mapid);
@@ -522,8 +523,9 @@ class World {
                 //Check if is mutual relation
                 if(data.settings.mix_mutual_relationships){
 
+                    
                     if(this.getChara(relation.to).relations !== undefined){
-
+                        
                         const mutual = this.getChara(relation.to).relations.find(r => r.to == chara.id);
                         if(mutual != undefined){
                             
@@ -549,15 +551,12 @@ class World {
 
                 if(data.settings.labels) settings["middleLabel"] = relationData.name;
                 
-                //Draw relation lines
-                if(relation.drawn == undefined) {
-
-                    new LeaderLine(
-                        start,
-                        end,
-                        settings
-                    );
-                }
+                //Draw relation liness
+                new LeaderLine(
+                    start,
+                    end,
+                    settings
+                );
             });
         });
         
@@ -1198,12 +1197,6 @@ function switchView(view){
     }
 }
 
-function openDimension(dimension) {
-
-    // Open url
-    window.open("/index.html?dimension=" + dimension, "_self");
-}
-
 function loadDimension(element) {
 
     // Set up page
@@ -1238,14 +1231,23 @@ function loadDimension(element) {
         return
     }
 
-    content.innerHTML = "<h2 class='title'>"+element.name+"</h2>";
+    let icon = element.public ? "fa-user-group" : "fa-eye-slash";
+
+    content.innerHTML = `
+        <span class="icon-text">
+        <span class="icon is-medium auto">
+            <i class="fas ${icon}"></i>
+        </span>
+        <h2 class='title'>${element.name}</h2>
+        </span>
+    `;
 
     const outline = document.createElement("p");
     outline.className = "world-outline";
     outline.innerText = element.outline;
     
     content.appendChild(outline);
-    content.innerHTML += "<hr><h3 class='title is-4'>World contributtors</h3>";
+    content.innerHTML += "<hr><h3 class='title is-4'>World contributors</h3>";
 
     myworld.contributors = creators.map(c => getCreator(c));
     creators = myworld.contributors.map(c => makeTag(c)).join(" ");
@@ -1278,16 +1280,10 @@ function loadDimension(element) {
 
             <button class='button controller' onclick='relationship_control()'>Hide all relationships</button>
             <button onclick='reset_positions()' class='button'>Reset character positions</button>
+            <button class="button is-link is-outlined" onclick="share()">Share this world!</button>
             
             <div id="sorter${myworld.name}" class="dropdown">
-                <div class="dropdown-trigger">
-                    <button class="button" aria-haspopup="true" onclick="toggle_sorter()" aria-controls="dropdown-menu">
-                    <span>Sort by tags</span>
-                    <span class="icon is-small">
-                        <i class="fas fa-angle-down" aria-hidden="true"></i>
-                        </span>
-                        </button>
-                        </div>
+                
                 <div class="dropdown-menu" id="dropdown-menu" role="menu">
                     <div class='dropdown-content' id="${myworld.name}chara-sorter">
                     </div> 
@@ -1317,6 +1313,7 @@ function loadDimension(element) {
                                 : ""
                             )}
             <br /><br /><br />
+
             <! -- form for shit and maybe el menu -->
             <div class="">
                 <form name="search">
@@ -1561,7 +1558,7 @@ function export_data(){
 
     const chara = getCurrentCharacterPopUpData();
     var dataStr = "data:txt/json;charset=utf-8," + encodeURIComponent(
-        JSON.stringify(chara)
+        JSON.stringify(chara, null, '\t')
     );
 
     var dla = document.getElementById("downloadAnchor");

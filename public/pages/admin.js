@@ -33,11 +33,12 @@ function loadStuff(access){
 
     if(access >= 4){
 
+
         const peopleList = `
 
             <div class="select">
                 <select id="user-select">
-                    ${Object.entries(data.people).map(p =>
+                    ${Object.entries(data.people).filter(p => p[1].id != getThisId()).map(p =>
                         `<option value="${p[1].id}">${p[1].name} (${p[1].email})</option>`
                     ).join("")}
                 </select>
@@ -63,7 +64,7 @@ function loadStuff(access){
             <br>
             <div class="buttons">
                 <button onclick="backupDb()" class="button is-primary">Make a backup</button>
-                <button onclick="" class="button is-secondary">Load a backup</button>
+                <button onclick="" class="button is-secondary" disabled>Load a backup</button>
             </div>
             <textarea class="textarea is-small has-fixed-size" placeholder="Data goes here"></textarea>
         `;
@@ -212,7 +213,7 @@ const AccessWarnings = [
     "A visitor will only be able to look at content",
     "A creator is able to be invited to worlds and characters. They can create new characters, modify existing characters, delete existing characters, and manage the creators of characters. A creator can only edit their own characters",
     "A moderator is able to do everything a creator can, as well as be able to acept and reject creator applications. Moderators may have basic access to database functions",
-    "A helper is able to do everything a moderator can, as well as having access to more advanced database functions and are able to send messages to all users",
+    "A helper is able to do everything a moderator can, as well as having access to more advanced database functions like managing relationship information",
     "An administrator can do everything the other levels can and more. Total(ish) access to the database. Have access to sensitive information and can delete a lot of stuff"
 ]
 

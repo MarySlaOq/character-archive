@@ -12,6 +12,8 @@ export class Menu extends Component {
     }
 
     renderElement() {
+
+        let admin = (myuser != undefined && getCreatorByEmail(myuser.email).access > 1) ? `<a href="/pages/admin.html" class="navbar-item"> Admin pane </a>` : "";
         return `
             <nav class="navbar" role="navigation" aria-label="main navigation">
                 <div class="navbar-brand">
@@ -31,6 +33,7 @@ export class Menu extends Component {
                     <div class="navbar-start">
                         <a href="/index.html" class="navbar-item"> Home </a>
                         <a href="/pages/about.html" class="navbar-item"> Documentation </a>
+                        ${admin}
                         <div class="navbar-item has-dropdown is-hoverable">
                             <a class="navbar-link"> Community </a>
                             <div class="navbar-dropdown">

@@ -176,6 +176,10 @@ body {font-family: Arial; width: 70% !important; margin: auto !important;}
   display: none;
 }
 
+.auto {
+  margin: auto;
+}
+
 .map-rule {
 
   position: relative;

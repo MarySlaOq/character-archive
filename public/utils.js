@@ -48,7 +48,11 @@ function getRelationshipIndexById(id){ return Object.entries(data.relations).fin
 
 function getCharacteterWorld(character){ return data.dimensions.find(w => w.characters.includes(character)).name; }
 
-function makeTag(person){ return `<span class="tag is-light ${tagColors[person.access]}">${person.name}</span>`; }
+function makeTag(person){ 
+    return `
+        <a href="/pages/profile.html?user=${person.name}" class="tag is-light ${tagColors[person.access]}">${person.name}</a>
+    `; 
+}
 
 const popUpNotification = (text, type) => {
 
@@ -89,33 +93,45 @@ function setStateOfComponentIfExists(component, state){
     }
 }
 
+function openDimension(dimension) {
+
+    // Open url
+    window.open("/index.html?dimension=" + dimension, "_self");
+}
+
+function updateLoginInfo(){
+
+    if (myuser != undefined){
+
+        document.getElementById("username").innerText = myuser.displayName;
+        document.getElementById("userimg").src = myuser.photoURL;
+    
+        document.getElementById("login").innerText = "Sign out";
+        document.getElementById("login").className = "button";
+    }
+
+    // Set functionality of the login button
+    try {
+    
+        document.getElementById("login").onclick = globalThis.login;
+        
+    } catch (error) {
+
+        console.error(error);
+    }
+}
+
 function loadUserData(){
     
     if(localStorage.getItem("ca-user-account") != undefined) {
 
         myuser = JSON.parse(localStorage.getItem("ca-user-account"));
 
-        document.getElementById("username").innerText = myuser.displayName;
-        document.getElementById("userimg").src = myuser.photoURL;
-
-        document.getElementById("login").innerText = "Sign out";
-        document.getElementById("login").className = "button";
-
         sleep(1000).then(()=>{popUpNotification("Logged in as " + myuser.displayName, 0);});
         
     }else {
 
         sleep(1000).then(()=>{popUpNotification("No account was found", 2);});
-    }
-
-    // Set functionality of the login button
-    try {
-        
-        document.getElementById("login").onclick = globalThis.login;
-        
-    } catch (error) {
-
-        console.error(error);
     }
 
 }
@@ -204,21 +220,27 @@ function loadAccessRights(){
     document.getElementById("access").className = accessColors[access];
     document.getElementById("access-cont").innerText = accessRightss[access];
 
-    if(access > 1 && document.getElementById("admin-pane-access") == undefined){
+    // if(access > 1 && document.getElementById("admin-pane-access") == undefined){
 
-        const pane = document.getElementById("adminpane");
+    //     const pane = document.getElementById("adminpane");
 
-        const btn = document.createElement("a");
-        btn.className = "button is-link";
-        btn.innerText = "Admin panel";
-        btn.href = "admin.html";
-        btn.id = "admin-pane-access";
+    //     const btn = document.createElement("a");
+    //     btn.className = "button is-link";
+    //     btn.innerText = "Admin panel";
+    //     btn.href = "admin.html";
+    //     btn.id = "admin-pane-access";
 
-        try {
-            pane.appendChild(btn);
-        } catch (error) {}
+    //     try {
+    //         pane.appendChild(btn);
+    //     } catch (error) {}
 
-    }
+    // }
+}
+
+function share() {
+
+    navigator.clipboard.writeText(window.location.href);
+    popUpNotification("Link copied to clipboard", 0);
 }
 
 function uploadFile(){
