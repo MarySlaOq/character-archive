@@ -11,9 +11,20 @@ export class Menu extends Component {
         };
     }
 
+    onMount() {
+   
+        if (myuser != undefined) 
+            this.setState({userImage: myuser.photoURL, username: myuser.displayName, isLoggedIn: true});
+    }
+
     renderElement() {
 
-        let admin = (myuser != undefined && getCreatorByEmail(myuser.email).access > 1) ? `<a href="/pages/admin.html" class="navbar-item"> Admin pane </a>` : "";
+        let admin = "";
+        if (myuser != undefined){
+
+            let creator = getCreatorByEmail(myuser.email);
+            admin = (creator != undefined &&  creator.access > 1) ? `<a href="/pages/admin.html" class="navbar-item"> Admin pane </a>` : "";
+        }
         return `
             <nav class="navbar" role="navigation" aria-label="main navigation">
                 <div class="navbar-brand">
@@ -37,7 +48,7 @@ export class Menu extends Component {
                         <div class="navbar-item has-dropdown is-hoverable">
                             <a class="navbar-link"> Community </a>
                             <div class="navbar-dropdown">
-                                <a href="#" class="navbar-item js-modal-trigger" data-target="modal-create">
+                                <a href="#" class="navbar-item js-modal-trigger" data-target="modal-create" event="checkCreatorValidity">
                                     <i class="fa-solid fa-pencil mr"></i> Apply to be a creator
                                 </a>
                                 <a href="pages/logs.html" class="navbar-item">
@@ -68,14 +79,12 @@ export class Menu extends Component {
                                 src="${this.state.userImage}"
                                 alt="Profile"
                             />
-                            <p id="username" class="m10 card-header-title">
-                                <b>${this.state.username}</b>
-                            </p>
+                            <a href="${(myuser == undefined || getThisId() == -1) ? "#" : "/pages/profile.html?user=" + getCreator(getThisId()).name}">
+                                <p id="username" class="m10 card-header-title">
+                                    <b>${this.state.username}</b>
+                                </p>
+                            </a>
                         </div>
-                        <article id="access" style="margin: auto;">
-                            <div class="message-body" id="access-cont">
-                            </div>
-                        </article>
                         <button id="login" class="button">
                             ${this.state.isLoggedIn ? 'Logout' : 'Login with google'}
                         </button>

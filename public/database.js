@@ -19,8 +19,6 @@ import {
 // Get the database info
 const loadDB = (database, app) => {
 
-    var connection = false;
-
     // Get the database info
     async function fetchAllDataBaseInfo(database, app) {
 
@@ -71,15 +69,17 @@ const loadDB = (database, app) => {
                                 for (const property in snapshot.val()) {
                                     const element = snapshot.val()[property];
                                     const dimData = {
-                                    name: element.name,
-                                    outline: element.outline,
-                                    world: {
-                                        divisions: element.divisions,
-                                        maps: [],
-                                    },
-                                    characters: [],
-                                    public: element.public,
-                                    create_date: element.creation_date,
+                                        id: property,
+                                        name: element.name,
+                                        outline: element.outline,
+                                        world: {
+                                            divisions: element.divisions,
+                                            maps: [],
+                                        },
+                                        characters: [],
+                                        public: element.public,
+                                        create_date: element.creation_date,
+                                        owner: element.owner,
                                     };
 
                                     if (element.divisions == undefined)
@@ -102,13 +102,16 @@ const loadDB = (database, app) => {
                                     get(child(dbRef, `characters`)).then(
                                         (snapshot) => {
                                         if (snapshot.exists()) {
-                                            for (const property in snapshot.val()) {
-                                            const element =
-                                                snapshot.val()[property];
 
-                                            data.dimensions.find(
-                                                (d) => d.name == property
-                                            ).characters = element;
+                                            for (const property in snapshot.val()) {
+                                                //characterData[property] = snapshot.val()[property];
+
+                                                const element =
+                                                    snapshot.val()[property];
+
+                                                let relatedDim = data.dimensions.find((d) => d.id == property);
+
+                                                if (relatedDim != undefined) relatedDim.characters = element;
                                             }
 
                                             get(child(dbRef, `magic`)).then(
@@ -127,6 +130,14 @@ const loadDB = (database, app) => {
                                                     (snapshot) => {
                                                         if (snapshot.exists()) {
                                                             data.logs = snapshot.val();
+                                                            
+                                                            // Object.defineProperty(characterData, "World 3", Object.getOwnPropertyDescriptor(characterData, "The Nazi Femboys"));
+                                                            // Object.defineProperty(characterData, "World 4", Object.getOwnPropertyDescriptor(characterData, "Stonersonas"));
+                                                            // delete characterData["The Nazi Femboys"];
+                                                            // delete characterData["Stonersonas"];
+                                                            // console.log(characterData);
+
+                                                            // updateDatabaseValue(characterData, "characters");
 
                                                             globalThis.dataInfo = data;
                                                             startApp();
@@ -186,7 +197,6 @@ const loadDB = (database, app) => {
     try {
 
         const app = initializeApp(firebaseConfig);
-        connection = true;
 
         const analytics = getAnalytics(app);
         auth = getAuth(app);
@@ -208,11 +218,6 @@ const loadDB = (database, app) => {
             .then(() => {
                 myuser = undefined;
                 localStorage.removeItem("ca-user-account");
-                document.getElementById("username").innerText =
-                "Browsing as guest";
-                document.getElementById("userimg").src = "resources/default.jpg";
-                document.getElementById("login").innerText = "Login with google";
-                document.getElementById("login").className = "button";
 
                 window.location.reload();
             })

@@ -55,7 +55,8 @@ export class Universe extends Component {
                 createDate: dimension.create_date,
                 public: dimension.public,
                 creators: creators,
-                image: randomCharacter.image,
+                image: randomCharacter == undefined ? "" : randomCharacter.image,
+                owner: dimension.owner
             });
 
             this.dimensions.push(
@@ -72,23 +73,16 @@ export class Universe extends Component {
         let dimCode = "";
         let temp = this.dimensions;
 
-        
         if (this.state.tab == 1 && myuser == undefined) {
 
             popUpNotification("You need to be logged in to see your worlds!", 2);
                 this.setState({ tab: 0 });
         }
 
-        if (this.state.tab == 1)
-            temp = this.dimensions.filter(dim => dim.is_mine);
-            
-        temp.forEach(dim => {
-            dimCode += `<div class="column">${dim.code}</div>`;
-        });
-
-        if (dimCode == "") {
-            dimCode = "<div class='column'>Nothing to see here D:</div>";
-        }
+        dimCode = temp
+            .filter(dim => this.state.tab == 0 || dim.is_mine)
+            .map(dim => `<div class="column">${dim.code}</div>`)
+            .join("");
 
         let level = "";
         
@@ -97,6 +91,10 @@ export class Universe extends Component {
             data.components.level = level;
 
             level = level.code();
+        }
+
+        if (dimCode == "") {
+            dimCode = "<div class='column'>Nothing to see here D:</div>";
         }
 
         let universe_block = this.state.tab == 0 ? `
@@ -134,13 +132,16 @@ export class Universe extends Component {
                 </ul>
                 </div>
 
-                <section>                
-                    <section class="section">
-                    <h1 class="title">The character archive universe!</h1>
-                    <h2 class="subtitle">
-                        Explore the wonderful worlds created by the community!
-                    </h2>
-                </section>
+                ${
+                    this.state.tab == 0 ? `
+                        <section class="section">
+                            <h1 class="title">The character archive universe!</h1>
+                            <h2 class="subtitle">
+                                Explore the wonderful worlds created by the community!
+                            </h2>
+                        </section>
+                    ` : ""
+                }
                 ${universe_block}
             `;
         } else {

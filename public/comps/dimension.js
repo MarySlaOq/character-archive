@@ -25,7 +25,7 @@ export class Dimension extends Component {
             if (person == undefined) {
                 return; // skip if undefined
             }
-
+        
             creators.push(makeTag(person));
         });
 

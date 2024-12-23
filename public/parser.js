@@ -2,12 +2,7 @@ function getRelationshipData(id){ return data.relations[id]; }
 function getResource(name){
 
     if(name==undefined) return "";
-
-    if(name.includes("public/resources")) name = name.split("/").slice(-1)[0];
-    if(name.includes("http")) return name;
-
-    if(name.includes("resources")) return name;
-    return "resources/" + name;
+    return name;
 }
 function getFlagOf(name){ return `resources/flags/${name}-Pride.jpg`; }
 
@@ -295,52 +290,14 @@ function clearLines(color=null){
     }
 }
 
-// Open new world
-function openWorld(event, world, view=0){
-    
-    localStorage.setItem("ca-visit", world);
-
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-
-        tablinks[i].className = tablinks[i].className.replace(" is-active", "");
-        if(tablinks[i].innerText == world) tablinks[i].classList.add("is-active");
-    }
-
-    clearLines();
-
-    let w = new World(world);
-    myworld = w;
-
-    document.getElementById(world).style.display = "block";
-
-    //After creation
-    w.establishRelations();
-    defineGrabbable();
-    
-    //Lock page height
-    const n_char = Math.floor(myworld.characters.length / 2);
-    const height = n_char * (320 + 290);
-    
-    //document.getElementsByClassName("chara-container").item(0).style.height = height + "px";
-    
-    loadCharacterSelect();
-    switchView(view);
-}
-
 class World {
 
     name = "";
     outline = "";
     characters = [];
     magic = [];
+    public = false;
+    id = "";
 
     output = "";
     divisions = [];
@@ -365,6 +322,9 @@ class World {
         this.name = dim.name;
         this.outline = dim.outline;
         this.characters = dim.characters.filter(c => c != undefined);
+        this.public = dim.public;
+        this.owner = dim.owner;
+        this.id = dim.id;
 
         this.world = dim.world;
         this.events = dim.events;
@@ -1242,15 +1202,21 @@ function loadDimension(element) {
         </span>
     `;
 
-    const outline = document.createElement("p");
-    outline.className = "world-outline";
+    const outline = document.createElement("section");
+    outline.className = "section";
     outline.innerText = element.outline;
     
     content.appendChild(outline);
     content.innerHTML += "<hr><h3 class='title is-4'>World contributors</h3>";
 
     myworld.contributors = creators.map(c => getCreator(c));
-    creators = myworld.contributors.map(c => makeTag(c)).join(" ");
+    creators = myworld.contributors.map(c => {
+
+        let icon = undefined;
+        if (myworld.owner == c.id) icon = "crown";
+
+        return makeTag(c, icon);
+    }).join(" ");
 
     const creatornames = document.createElement("div");
     creatornames.innerHTML = creators;
@@ -1275,6 +1241,43 @@ function loadDimension(element) {
     const cView = document.createElement("div");
     cView.id = myworld.name + "-" + "chara-container";
 
+    const getButtons = () => {
+
+        let isOwner = myworld.owner == id;
+
+        return myuser=== undefined ? "" : 
+        (
+            (myworld.contributors.map(c => c.email).includes(myuser.email)) ? 
+            `
+                <br />
+                <br />
+
+                <button data-target='popup' onclick='open_creator()' class='js-modal-trigger button is-rounded is-success'>
+                    <span class='icon'>
+                        <i class='fas fa-user'></i>
+                    </span>
+                    <span>Create new character</span>
+                </button>
+                
+                <button class='button is-rounded is-info ml-3 js-modal-trigger' data-target="collaborator" event="loadCharacterSelect">
+                    <span class='icon'>
+                        <i class='fas fa-pen'></i>
+                    </span>
+                    <span>Add world collaborator</span>
+                </button>
+
+                ${isOwner ? `
+                    <button class='button is-rounded is-link ml-3 js-modal-trigger' data-target="world-data" event="loadWorldData">
+                        <span class='icon'>
+                            <i class='fas fa-book'></i>
+                        </span>
+                        <span>Edit world data</span>
+                    </button>
+                ` : ""}
+            ` : ""
+        )
+    }
+
     const controller = `
         <div class="block">
 
@@ -1290,28 +1293,7 @@ function loadDimension(element) {
                     </div>
                 </div>
                     
-                    ${myuser=== undefined ? "" : 
-                        (
-                            (myworld.contributors.map(c => c.email).includes(myuser.email)) ? 
-                            `
-                                <br />
-                                <br />
-                                <button data-target='popup' onclick='open_creator()' class='js-modal-trigger button is-rounded is-success'>
-                                    <span class='icon'>
-                                        <i class='fas fa-user'></i>
-                                    </span>
-                                    <span>Create new character</span>
-                                </button>
-                                
-                                <button class='button is-rounded is-info ml-3 js-modal-trigger' data-target="collaborator">
-                                    <span class='icon'>
-                                        <i class='fas fa-pen'></i>
-                                    </span>
-                                    <span>Add world collaborator</span>
-                                </button>
-                                ` 
-                                : ""
-                            )}
+                    ${getButtons()}
             <br /><br /><br />
 
             <! -- form for shit and maybe el menu -->
@@ -1393,6 +1375,14 @@ function loadDimension(element) {
     myworld.setupTagFilters();
     
     setTriggers();
+}
+
+function loadWorldData(){
+
+    document.getElementById("we-name").value = myworld.name;
+    document.getElementById("we-outline").value = myworld.outline;
+
+    document.getElementById("we-public").checked = myworld.public;
 }
 
 function parse() {
@@ -1899,6 +1889,7 @@ function saveNewCharacterInformation(operation=DatabaseOperations.UPDATE){
             default:break;
         }
     }
+
     currentTarget.sexuality = document.getElementById("sexuality-selector").value;
 
     // Save the metadata
@@ -1944,6 +1935,9 @@ function saveNewCharacterInformation(operation=DatabaseOperations.UPDATE){
             currentTarget.id = lastID;
             currentTarget.creators = [getCreatorByEmail(myuser.email).id];
 
+            // Add owner too
+            if(myworld.owner != getCreatorByEmail(myuser.email).id) currentTarget.creators.push(myworld.owner);
+
             globalThis.createDatabaseValue(
                 currentTarget,
                 `characters/${myworld.name}/${currentTarget.id}`
@@ -1957,6 +1951,8 @@ function saveNewCharacterInformation(operation=DatabaseOperations.UPDATE){
 }
 
 function loadCharacterSelect(){
+
+    console.log("Loading character select");
 
     try {
         const characterOptions = myworld.characters.filter(c => c.creators.includes(getCreatorByEmail(myuser.email).id)).map(c => `<option value=${c.id}>${c.name}</option>`).join("");
@@ -2027,6 +2023,12 @@ function removeCharacterCreator(creator) {
 
     const chara = getCurrentCharacterPopUpData();
     const person = getCreator(creator);
+
+    if (person.id == myworld.owner) {
+        popUpNotification("You can't remove the owner of this world", 1)
+        return;
+    }
+
     if (person.email == myuser.email){
         popUpNotification("You can't remove yourself from the creator list", 1)
         return;
@@ -2064,7 +2066,7 @@ function open_creator(){
     const create = document.getElementById("next_c");
     create.innerText = "Create new character";
 
-    create.onclick = () => {saveNewCharacterInformation(DatabaseOperations.CREATE);}
+    create.onclick = () => { saveNewCharacterInformation(DatabaseOperations.CREATE); }
 
     document.getElementById("prev_c").onclick = closeAllModals;
 }
@@ -2165,8 +2167,6 @@ function previousMagicPage(amount) {
 
 function checkCreatorValidity(){
 
-    console.log("Checking creator validity");
-
     if(myuser == undefined) {
         popUpNotification("You need to log in to request a creator account", 2);
         closeAllModals();
@@ -2236,4 +2236,64 @@ function createApplication(){
     popUpNotification("Application submited", 0);
     closeAllModals();
     window.location.reload();
+}
+
+function updateWorld() {
+
+    const name = document.getElementById("we-name").value;
+    const outline = document.getElementById("we-outline").value;
+    const isPublic = document.getElementById("we-public").checked;
+
+    // Check for access rights
+    if(myworld.owner != getThisId()){
+        popUpNotification("You can't edit this world", 1);
+        return;
+    }
+
+    // Cehck for validity
+    if(name.trim() == "" || outline.trim() == ""){
+        popUpNotification("Name and outline can't be empty", 2);
+        return;
+    }
+
+    // Check if anme already exists
+    if(data.dimensions.find(d => d.name == name) && name != myworld.name){
+        popUpNotification("A world with this name already exists", 2);
+        return;
+    }
+
+    if (name.length > 50 || outline.length > 500){
+        popUpNotification("Name and outline can't be longer than 50 and 500 characters respectively", 2);
+        return;
+    }
+
+    // Update the world
+    myworld.name = name;
+    myworld.outline = outline;
+    myworld.public = isPublic;
+
+    updateWorldData(myworld);
+
+    closeAllModals();
+    popUpNotification("World data updated", 0);
+}
+
+function updateWorldData(world){
+
+    let divisions = undefined;
+    if (world.world != undefined) divisions = world.world.divisions;
+
+    let newWorld = {
+        divisions: divisions,
+        name: world.name,
+        outline: world.outline,
+        public: world.public,
+        owner: world.owner,
+    }
+
+    if (divisions== undefined) delete newWorld.divisions;
+    globalThis.updateDatabaseValue(newWorld, `worlds/${world.id}`);
+
+    // reload the page with the new name
+    openDimension(world.name);
 }

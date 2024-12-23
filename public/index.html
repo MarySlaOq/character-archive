@@ -71,6 +71,40 @@
     <div id="level"></div>
 
     <!-- POP UPs -->
+    <div class="modal" id="world-data">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <div class="box">
+          
+          <span class="title">
+            Edit world information
+          </span><br><hr>
+
+          <label>World name</label>
+          <input id="we-name" class="input" type="text" placeholder="The name of your world" maxlength=50/>
+
+          <br><br>
+          <label>World outline</label>
+          <textarea id="we-outline" class="textarea" placeholder="A brief description of your world" maxlength=500></textarea>
+
+          <br>
+          <article class="message is-warning" id="share-warning">
+            <div class="message-body">
+              Making a world public means anyone that uses the character archive will be able to see your characters and world
+            </div>
+          </article>
+
+          <label class="checkbox">
+            <input id="we-public" type="checkbox" />
+            Is public
+          </label>
+          <hr>
+
+          <input onclick="updateWorld()" type="button" class="button is-info" value="Update world"></input>
+        </div>
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
+    </div>
 
     <div class="map-popup" id="map-popup">
       <div id="header">

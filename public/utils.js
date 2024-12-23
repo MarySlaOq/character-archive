@@ -48,9 +48,20 @@ function getRelationshipIndexById(id){ return Object.entries(data.relations).fin
 
 function getCharacteterWorld(character){ return data.dimensions.find(w => w.characters.includes(character)).name; }
 
-function makeTag(person){ 
+function makeTag(person, icon = undefined){ 
+
+    let iconText = icon == undefined ? "" : `
+        <span class="icon m10">
+            <i class="fas fa-${icon}"></i>
+        </span>&nbsp;
+    `;
+
     return `
-        <a href="/pages/profile.html?user=${person.name}" class="tag is-light ${tagColors[person.access]}">${person.name}</a>
+        
+        <a href="/pages/profile.html?user=${person.name}" class="tag is-light ${tagColors[person.access]}">
+            ${iconText}
+            ${person.name}
+        </a>
     `; 
 }
 
@@ -138,12 +149,6 @@ function loadUserData(){
 
 function saveUserData(user){
 
-    document.getElementById("username").innerText = user.displayName;
-    document.getElementById("userimg").src = user.photoURL;
-
-    document.getElementById("login").innerText = "Sign out";
-    document.getElementById("login").className = "button";
-
     myuser = user;
     localStorage.setItem("ca-user-account", JSON.stringify(myuser));
 }
@@ -217,8 +222,7 @@ function loadAccessRights(){
     const creator = getCreatorByEmail(myuser.email);
 
     const access = creator == undefined ? 0 : (creator.access == undefined ? 1 : creator.access);
-    document.getElementById("access").className = accessColors[access];
-    document.getElementById("access-cont").innerText = accessRightss[access];
+    // document.getElementById("access").className = accessColors[access];
 
     // if(access > 1 && document.getElementById("admin-pane-access") == undefined){
 
