@@ -494,3 +494,10 @@ body {font-family: Arial; width: 70% !important; margin: auto !important;}
 
   transform:translateY(-5px);
 }
+
+/* Example CSS: Force Firefox to render SVGs differently (if necessary) */
+@-moz-document url-prefix() {
+  svg {
+      /* Specific rules for Firefox rendering */
+  }
+}

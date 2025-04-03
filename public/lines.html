@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+<script src="lines/connect/jquery.html-svg-connect.js"></script>
+
+  <meta charset="utf-8">
+  <title>jQuery Bezier.js Plugin Demo</title>
+  <style>
+    .box
+	{
+	  margin: 10px;
+	  background-color: yellow;
+	  width: 80px;
+	  padding: 10px;
+	  text-align: center;
+	  font-weight: bold;
+	  border: 2px solid black;
+
+      position: absolute;
+	}
+	.box-blue
+	{
+	   background-color: #0000AA;
+	   color: white;
+	}
+	.box-red
+	{
+	   background-color: #AA0000;
+	   color: white;
+	}
+	body { background-color: #fafafa; font-family: 'Open Sans'; }
+	.container { }
+  </style>
+</head>
+<body>
+
+    <div id="svgContainer"></div>
+    <div id="s1" class="box element s2">Supply 1</div>
+	<div id="s2" class="box element s1 s3">Supply 2</div>
+	<div id="s3" class="box element">Supply 3</div>
+
+  <script>
+
+    for (i=1; i<=3; i++)
+    {
+      $('#s' + i).css({top: Math.random() * 800, left: Math.random() * 800});
+    }
+
+	$("#svgContainer").HTMLSVGconnect({
+	paths: [
+		{ start: "#s1", end: "#s2"},
+		{ start: "#s2", end: "#s1"},
+		{ start: "#s2", end: "#s3"},
+	]
+	})
+  </script>
+</body>
+</html>

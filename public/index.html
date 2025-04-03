@@ -42,7 +42,26 @@
       href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
     />
 
+    <script src="lines/src/path-data-polyfill/path-data-polyfill.js"></script>
     <script src="lines/leader-line.min.js"></script>
+
+    <script>
+      SVGPathElement.prototype.setPathData = function(pathDataArray) {
+        var d = "";
+        for (var i = 0, l = pathDataArray.length; i < l; i += 1) {
+          var seg = pathDataArray[i];
+          if (i > 0) {
+            d += " ";
+          }
+          d += seg.type;
+          if (seg.values && seg.values.length > 0) {
+            d += " " + seg.values.join(" ");
+          }
+        }
+        this.setAttribute("d", d);
+        return this; 
+      };
+    </script>
 
     <link
       rel="stylesheet"

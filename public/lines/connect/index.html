@@ -1,0 +1,138 @@
+<!--
+/*
+ * jQuery HTML SVG connect Plugin Demo
+ * https://github.com/a115/HTML-SVG-connect
+ *
+ * Licensed under the MIT license:
+ * http://www.opensource.org/licenses/MIT
+ */
+-->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery HTML SVG Connect Plugin Demo</title>
+  <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="jquery.html-svg-connect.js"></script>
+  <script type="text/javascript">
+    jQuery(document).ready(function($) {
+      $("#svgContainer").HTMLSVGconnect({
+        stroke: "#000",
+        strokeWidth: 8,
+        orientation: "auto",
+        paths: [
+          { start: "#red", end: "#aqua", strokeWidth: 12, },
+          { start: "#purple", end: "#green", stroke: "red", }
+        ]
+      });
+    });
+  </script>
+  <style>
+    #svgContainer {
+      z-index: -10;
+      position: absolute;
+
+      background-color: gray;
+      opacity: 0.5;
+    }
+    
+    body {
+      background-color: gray;
+    }
+    div {
+      opacity: 0.6;
+    }
+    #outer {
+      margin: 150px auto;
+      width: 80%;
+    }
+    #teal {
+      width: 6em;
+      height: 6em;
+      background-color: teal;
+      margin-left: 10%;
+    }
+    #orange {
+      height: 4em;
+      width: 35%;
+      padding: 2em 8em;
+      margin-left: 15em;
+      margin-top: 6em;
+      background-color: orange;
+    }
+    #red {
+      width: 6em;
+      height: 4em;
+      margin-left: 40%;
+      padding: 4em 3em;
+      background-color: red;
+    }
+    #aqua {
+      width: 5em;
+      height: 5em;
+      margin-left: 10%;
+      background-color: aqua;
+    }
+    #purple {
+      width: 9em;
+      height: 5em;
+      background-color: purple;
+    }
+    #green {
+      width: 5em;
+      height: 7em;
+      margin-top: 2em;
+      margin-left: 50%;
+      background-color: green;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="svgContainer"></div>
+<div id="jquery-script-menu">
+<div class="jquery-script-center">
+<ul>
+<li><a href="http://www.jqueryscript.net/other/jQuery-Plugin-To-Connect-HTML-Elements-with-Lines-HTML-SVG-Connect.html">Download This Plugin</a></li>
+<li><a href="http://www.jqueryscript.net/">Back To jQueryScript.Net</a></li>
+</ul>
+<div class="jquery-script-ads"><script type="text/javascript"><!--
+google_ad_client = "ca-pub-2783044520727903";
+/* jQuery_demo */
+google_ad_slot = "2780937993";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></div>
+<div class="jquery-script-clear"></div>
+</div>
+</div>
+  <div id="outer">
+  <h1 style="color:#fff;">jQuery HTML SVG Connect Plugin Demo</h1>
+    <div id="aqua" style="margin-bottom: 150px"></div>
+    <div id="red"></div>
+    <div id="green" style="margin-bottom: 100px; margin-left: 200px;"></div>
+    <div id="purple"></div>
+  </div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36251023-1']);
+  _gaq.push(['_setDomainName', 'jqueryscript.net']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+</html>

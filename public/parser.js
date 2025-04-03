@@ -128,6 +128,8 @@ function reset_positions() {
     });
 
     saveIconsPositions();
+
+    $("svgContainer").HTMLSVGconnect("reset");
 }
 
 let ismerging = false;
@@ -263,6 +265,8 @@ function toggle_pins(){
 }
 
 function clearLines(color=null){
+
+    //$("#svgContainer").empty();
 
     document.querySelectorAll(".controller").forEach(e => e.innerText = "Show all relationships");
 
@@ -414,7 +418,7 @@ class World {
             container.setAttribute("data-target", "popup");
 
             container.draggable = true;
-            container.id = this.name+ "c"+chara.id;
+            container.id = "c"+chara.id;
             
             let chara_image = document.createElement("img");
             chara_image.src = getResource(chara.image);
@@ -450,23 +454,25 @@ class World {
     }
 
     subtitles = [];
+    lines = [];
 
     establishRelations(){
 
         clearLines();
 
         this.subtitles = [];
+        this.lines = [];
 
         document.querySelectorAll(".controller").forEach(e => e.innerText = "Hide all relationships");
-        
+
         this.characters.forEach(chara => {
             if(chara.relations == undefined) return;
             chara.relations.forEach(relation => {
 
-                const start = document.getElementById(this.name + 'c' + chara.id);
+                const start = document.getElementById('c' + chara.id);
                 if(start.style.display == "none") return;
 
-                const end = document.getElementById(this.name + 'c' + relation.to);
+                const end = document.getElementById('c' + relation.to);
                 if(end.style.display == "none") return;
                 
                 const relationData = getRelationshipData(relation.details);
@@ -482,7 +488,6 @@ class World {
 
                 //Check if is mutual relation
                 if(data.settings.mix_mutual_relationships){
-
                     
                     if(this.getChara(relation.to).relations !== undefined){
                         
@@ -510,15 +515,51 @@ class World {
                 }
 
                 if(data.settings.labels) settings["middleLabel"] = relationData.name;
-                
-                //Draw relation liness
+
+                try {
+                    
+                    //Draw relation liness
+                    // var line = new LeaderLine(
+                    //     start,
+                    //     end,
+                    //     settings
+                    // );
+
+                // Draw line
+                // let index = this.lines.length;
+
+                // let line = { 
+                //     start: "#" + start.id, 
+                //     end: "#" + end.id,
+                //     stroke: settings.color,
+                //     strokeWidth: 6,
+                // };
+                // this.lines.push(line);
+
                 new LeaderLine(
                     start,
                     end,
                     settings
                 );
+
+                } catch (error) {
+                    console.error("Error drawing line: ", error);
+                }
             });
         });
+
+        // // Remove duplicates
+        // this.lines = this.lines.filter((line, index, self) =>
+        //     index === self.findIndex((l) => (
+        //         l.start === line.start && l.end === line.end ||
+        //         l.start === line.end && l.end === line.start
+        //     ))
+        // );
+
+        // // Draw
+        // $("#svgContainer").HTMLSVGconnect({
+        //     paths: this.lines
+        // });
         
         // Draw subtitles
         document.querySelectorAll(".subtitles").forEach(sub => {
@@ -534,7 +575,7 @@ class World {
             }
 
             sub.innerHTML = innerHTML;
-        })
+        });
     }
 
     drawMaps() {
@@ -1525,6 +1566,8 @@ function defineGrabbable(restore = false, xx=0, yy=0){
             ele.style.position = "relative";
             ele.style.left = e.clientX - offsetX - ele.getAttribute("rel-x") + "px";
             ele.style.top = e.clientY - offsetY - ele.getAttribute("rel-y") + window.scrollY + "px";
+
+            $("#svgContainer").HTMLSVGconnect("reset");
         }
     }
 }
