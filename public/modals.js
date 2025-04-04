@@ -2,6 +2,12 @@ const setTriggers = () => {
 
   // Functions to open and close a modal
   function openModal($el) {
+
+    if (block_popup) {
+      block_popup = false;
+      return;
+    }
+
     $el.classList.add('is-active');
   }
 
@@ -9,13 +15,13 @@ const setTriggers = () => {
   (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
     const modal = $trigger.dataset.target;
     const $target = document.getElementById(modal);
-
     
     $trigger.addEventListener('click', () => {
 
       openModal($target);
 
       if($trigger.hasAttribute("event")){
+
         const eventFunction = $trigger.getAttribute("event");
         window[eventFunction]();
       }
@@ -65,9 +71,9 @@ function closeAllModals() {
 }
 
 function closeModal($el) {
-if(window["exit_editor"] != undefined){
-  
-  exit_editor();
-}
-$el.classList.remove('is-active');
+  if(window["exit_editor"] != undefined){
+    
+    exit_editor();
+  }
+  $el.classList.remove('is-active');
 }

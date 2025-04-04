@@ -1,0 +1,63 @@
+{
+  "name": "plain-draggable",
+  "version": "2.5.15",
+  "title": "PlainDraggable",
+  "description": "The simple and high performance library to allow HTML/SVG element to be dragged.",
+  "keywords": [
+    "draggable",
+    "drag",
+    "html",
+    "dom",
+    "svg",
+    "grid",
+    "snaps",
+    "performance",
+    "ui",
+    "requestanimationframe "
+  ],
+  "main": "plain-draggable.min.js",
+  "module": "plain-draggable.esm.js",
+  "jsnext:main": "plain-draggable.esm.js",
+  "files": [
+    "plain-draggable?(-limit)?(-debug).@(min.js|esm.js)",
+    "bower.json"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@babel/preset-env": "^7.14.2",
+    "anim-event": "^1.0.17",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-loader": "^7.1.5",
+    "cross-env": "^7.0.3",
+    "cssprefix": "^2.0.17",
+    "jasmine-core": "^3.7.1",
+    "log4js": "^6.4.0",
+    "m-class-list": "^1.1.10",
+    "node-static-alias": "^1.1.2",
+    "pointer-event": "^1.0.2",
+    "pre-proc": "^1.0.2",
+    "skeleton-loader": "^2.0.0",
+    "stats-filelist": "^1.0.1",
+    "test-page-loader": "^1.0.8",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^3.3.12"
+  },
+  "scripts": {
+    "build": "cross-env NODE_ENV=production webpack --verbose",
+    "dev": "webpack --verbose",
+    "build-limit": "cross-env EDITION=limit NODE_ENV=production webpack --verbose",
+    "dev-limit": "cross-env EDITION=limit webpack --verbose",
+    "test": "node ./test/httpd"
+  },
+  "homepage": "https://anseki.github.io/plain-draggable/",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/anseki/plain-draggable.git"
+  },
+  "bugs": "https://github.com/anseki/plain-draggable/issues",
+  "license": "MIT",
+  "author": {
+    "name": "anseki",
+    "url": "https://github.com/anseki"
+  }
+}

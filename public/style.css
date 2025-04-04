@@ -76,7 +76,7 @@ body {font-family: Arial; width: 70% !important; margin: auto !important;}
 
     border: 5px black solid;
     padding:4px;
-    display:inline-block;  
+    
   }
 
   .chara-name button {
@@ -94,19 +94,16 @@ body {font-family: Arial; width: 70% !important; margin: auto !important;}
 
   .chara {
     width: fit-content;
-    animation: float 3s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
     padding: 10px;
     margin: 0px;
     justify-content: center;
 
-    z-index: 20;
+    z-index: 20 !important;
     position:relative;
   }
 
-  .chara:hover {
-
-    animation: none;
-    transform: scale(1.1, 1.1);
+  svg {
+    z-index: 0 !important;
   }
 
   @keyframes float{

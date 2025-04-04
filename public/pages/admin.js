@@ -99,7 +99,7 @@ function loadStuff(access){
                 <label> Relation to delete </label><br />
                 <div class="select">
                     <select id="rel-delete">
-                    ${Object.entries(data.relations).map(c => `<option value="${c[0]}">${c[1].name}</option>`).join("3")}
+                    ${makeRelationSelect(undefined)}
                     </select>
                 </div>
                 <hr>
@@ -135,8 +135,12 @@ function setInformation(){
 
 function deleteRelationship(){
 
-    const id = document.getElementById("rel-delete").value;
-    const name = data.relations[id].name;
+    let id = document.getElementById("rel-delete").value;
+    const name = id;
+    
+    Object.entries(data.relations).forEach(r => {
+        if(r[1].name == id) id = r[0];
+    });
 
     const val = confirm(`Are you sure you want to delete ${name}?\nThis action can't be undone.`);
 

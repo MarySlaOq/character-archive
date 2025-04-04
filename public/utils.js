@@ -26,6 +26,20 @@ const color_codes = {
     "palegreen":"#98fb98", "paleturquoise":"#afeeee", "palevioletred":"#d87093", "papayawhip":"#ffefd5", "peachpuff":"#ffdab9", "peru":"#cd853f", "pink":"#ffc0cb", "plum":"#dda0dd", "powderblue":"#b0e0e6", "purple":"#800080", "rebeccapurple":"#663399", "red":"#ff0000", "rosybrown":"#bc8f8f", "royalblue":"#49e1", "saddlebrown":"#8b4513", "salmon":"#fa8072", "sandybrown":"#f4a460", "seagreen":"#2e8b57", "seashell":"#fff5ee", "sienna":"#a0522d", "silver":"#c0c0c0", "skyblue":"#87ceeb", "slateblue":"#6a5acd", "slategray":"#708090", "snow":"#fffafa", "springgreen":"#00ff7f", "steelblue":"#4682b4", "tan":"#d2b48c", "teal":"#008080", "thistle":"#d8bfd8", "tomato":"#ff6347", "turquoise":"#40e0d0", "violet":"#ee82ee", "wheat":"#f5deb3", "white":"#ffffff", "whitesmoke":"#f5f5f5", "yellow":"#ffff00", "yellowgreen":"#9acd32"
 }
 
+const relationshipSorter = {
+    0: "Friendship",
+    1: "Romantic",
+    2: "Familial",
+    3: "Professional",
+    4: "Rivalry",
+    5: "Acquaintance",
+    6: "Figurative",
+    999: "Miscellaneous",
+}
+
+const socialList = ["Twitter", "Instagram", "Reddit", "Github"];
+const socialIcons = ["fa-twitter", "fa-instagram", "fa-reddit", "fa-github"];
+
 var myuser = undefined;
 
 function getCreator(id){ 
@@ -48,6 +62,12 @@ function getRelationshipIndexById(id){ return Object.entries(data.relations).fin
 
 function getCharacteterWorld(character){ return data.dimensions.find(w => w.characters.includes(character)).name; }
 
+function getPageOfLink(link){
+    const url = new URL(link);
+    const page = url.pathname.split("/").pop();
+    return page;
+}
+
 function makeTag(person, icon = undefined){ 
 
     let iconText = icon == undefined ? "" : `
@@ -63,6 +83,27 @@ function makeTag(person, icon = undefined){
             ${person.name}
         </a>
     `; 
+}
+
+function makeRelationSelect(selected = undefined){
+
+    let relationTypes = Object.entries(data.relations);
+    
+    // Sort by sorter and alphabetically
+    relationTypes = relationTypes.sort((a, b) => a[1].name.localeCompare(b[1].name));
+    relationTypes = relationTypes.sort((a, b) => a[1].sorter - b[1].sorter);
+
+    let relationEntries = relationTypes.map(r => "<option "+ (selected === undefined ? "" : (r[0] == selected ? "selected": "")) +">" + r[1].name + "</option>");
+    
+    // Add optgroup for sorter
+    for (let i = 0; i < relationEntries.length; i++) 
+        if (i > 0 && relationTypes[i][1].sorter != relationTypes[i-1][1].sorter) 
+            relationEntries[i] = "<optgroup label='" + relationshipSorter[relationTypes[i][1].sorter] + "'>" + relationEntries[i];
+
+    // Insert first optgroup
+    relationEntries[0] = "<optgroup label='" + relationshipSorter[relationTypes[0][1].sorter] + "'>" + relationEntries[0];
+
+    return relationEntries.join("");
 }
 
 const popUpNotification = (text, type) => {
@@ -169,31 +210,31 @@ function downloadFile(filename, text) {
 
 function saveIconsPositions(){
 
-    const positions = {};
-    document.querySelectorAll(".chara").forEach(character => {
+    // const positions = {};
+    // document.querySelectorAll(".chara").forEach(character => {
 
-        positions[character.id] = {"left": character.style.left, "top": character.style.top};
-    });
+    //     positions[character.id] = {"left": character.style.left, "top": character.style.top};
+    // });
 
-    localStorage.setItem("ca-icon-positions", JSON.stringify(positions));
+    // localStorage.setItem("ca-icon-positions", JSON.stringify(positions));
 }
 
 function loadIconPositions(){
 
-    const positions = JSON.parse(localStorage.getItem("ca-icon-positions"));
-    for(const icon in positions){
+    // const positions = JSON.parse(localStorage.getItem("ca-icon-positions"));
+    // for(const icon in positions){
 
-        const character = document.getElementById(icon);
-        if (character == null) continue;
+    //     const character = document.getElementById(icon);
+    //     if (character == null) continue;
 
-        if(positions[icon].left == "" || positions[icon].top == "") continue;
+    //     if(positions[icon].left == "" || positions[icon].top == "") continue;
 
-        character.style.left = positions[icon].left;
-        character.style.top = positions[icon].top;
-    }
+    //     character.style.left = positions[icon].left;
+    //     character.style.top = positions[icon].top;
+    // }
 
-    clearLines();
-    myworld.establishRelations();
+    // clearLines();
+    // myworld.establishRelations();
 }
 
 const parserFinishedCallback = () => {

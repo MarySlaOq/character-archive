@@ -115,21 +115,19 @@ function next_map(){
 
 function reset_positions() {
 
-    document.querySelectorAll(".chara").forEach(character => {
+    // document.querySelectorAll(".chara").forEach(character => {
 
-        // Dont change if in different world
-        if(character.offsetParent == null) return;
+    //     // Dont change if in different world
+    //     if(character.offsetParent == null) return;
 
-        character.style.left = 0;
-        character.style.top = 0;
+    //     character.style.left = 0;
+    //     character.style.top = 0;
 
-        clearLines();
-        myworld.establishRelations();
-    });
+    //     clearLines();
+    //     myworld.establishRelations();
+    // });
 
-    saveIconsPositions();
-
-    $("svgContainer").HTMLSVGconnect("reset");
+    // saveIconsPositions();
 }
 
 let ismerging = false;
@@ -270,28 +268,12 @@ function clearLines(color=null){
 
     document.querySelectorAll(".controller").forEach(e => e.innerText = "Show all relationships");
 
-    lines = Array.from(document.getElementsByTagName('svg'));
-    for (var l of lines) {
+    lines = document.querySelectorAll(".leader-line");
 
-        flag = true;
-        if(color != null){
-
-            const list = l.querySelectorAll("svg>g>use");
-            for (let index = 0; index < list.length; index++) {
-                const g = list.item(index);                
-
-                const stroke_color = g.style.stroke;
-                console.log(stroke_color + " " + color);
-                if(stroke_color == color) {
-                    flag = false;
-                    break;
-                }
-            }
-            
-        }
-
-        if(flag) l.remove();
-    }
+    lines.forEach(line => {
+        line.remove();
+    });
+    
 }
 
 class World {
@@ -414,10 +396,9 @@ class World {
             const chara = this.characters[index];
             
             let container = document.createElement("div");
-            container.className = "chara DraggableItem js-modal-trigger";
+            container.className = "chara js-modal-trigger";
             container.setAttribute("data-target", "popup");
 
-            container.draggable = true;
             container.id = "c"+chara.id;
             
             let chara_image = document.createElement("img");
@@ -466,7 +447,9 @@ class World {
         document.querySelectorAll(".controller").forEach(e => e.innerText = "Hide all relationships");
 
         this.characters.forEach(chara => {
+
             if(chara.relations == undefined) return;
+
             chara.relations.forEach(relation => {
 
                 const start = document.getElementById('c' + chara.id);
@@ -517,30 +500,12 @@ class World {
                 if(data.settings.labels) settings["middleLabel"] = relationData.name;
 
                 try {
-                    
-                    //Draw relation liness
-                    // var line = new LeaderLine(
-                    //     start,
-                    //     end,
-                    //     settings
-                    // );
 
-                // Draw line
-                // let index = this.lines.length;
-
-                // let line = { 
-                //     start: "#" + start.id, 
-                //     end: "#" + end.id,
-                //     stroke: settings.color,
-                //     strokeWidth: 6,
-                // };
-                // this.lines.push(line);
-
-                new LeaderLine(
-                    start,
-                    end,
-                    settings
-                );
+                    let line = new LeaderLine(
+                        start,
+                        end,
+                        settings
+                    );
 
                 } catch (error) {
                     console.error("Error drawing line: ", error);
@@ -1358,6 +1323,7 @@ function loadDimension(element) {
     
     let dom = document.createElement("div");
     dom.className = "is-flex is-flex-wrap-wrap m30 is-justify-content-center";
+    dom.id = "character-bounding-box";
     
     for (let index = 0; index < world.divisions.length; index++) dom.append(world.divisions[index]);
     cView.append(dom);
@@ -1414,8 +1380,64 @@ function loadDimension(element) {
     content.appendChild(mgView);
 
     myworld.setupTagFilters();
+    defineGrabbable();
     
     setTriggers();
+}
+
+var grabRefs = [];
+var dragAmount = 0;
+
+function defineGrabbable() {
+
+    document.querySelectorAll(".chara").forEach(chara => {
+
+        const id = chara.getAttribute("id");
+        const element = document.getElementById(id);
+
+        const boundingElem = document.getElementById("character-bounding-box");
+        const boundingBox = {
+            left: boundingElem.getBoundingClientRect().left,
+            top: boundingElem.getBoundingClientRect().top,
+            width: boundingElem.getBoundingClientRect().width,
+            height: boundingElem.getBoundingClientRect().height
+        }
+
+        dragAmount = 0;
+        if (grabRefs.find(c => c[0] == id) != undefined) {
+
+            // Redefine bounds
+            const d = grabRefs.find(c => c[0] == id)[1];
+            d.containment = boundingBox;
+            return;
+        }
+
+        let d = new PlainDraggable(element);
+        d.onDragStart = function() {
+            element.style.zIndex = 1000;
+            element.style.opacity = 0.8;
+        }
+
+        d.onDragEnd = function() {
+            element.style.zIndex = 0;
+            element.style.opacity = 1;
+
+            if (dragAmount != 0){
+
+                block_popup = true;
+                dragAmount = 0;
+            }
+        }
+
+        // Update arrows
+        d.onDrag = function() {
+            myworld.establishRelations();
+            dragAmount++;
+        }
+
+        d.containment = boundingBox;
+        grabRefs.push([id, d]);
+    });
 }
 
 function loadWorldData(){
@@ -1493,83 +1515,6 @@ function toggle_sorter() {
     const sorter = document.getElementById("sorter" + myworld.name);
     if(sorter.classList.contains("is-active")) sorter.classList.remove("is-active");
     else sorter.classList.add("is-active");
-}
-
-// Dragging and dropping elements
-function defineGrabbable(restore = false, xx=0, yy=0){
-
-    var draggableItems = Array.from(
-        document.querySelectorAll(".DraggableItem")
-    );
-
-    //Loop over each draggable item and add the listeners
-    for (var i = 0; i < draggableItems.length; i++) {
-        var element = draggableItems[i];
-
-        //console.log(element.getBoundingClientRect());
-
-        if(element.offsetParent == null) continue;
-
-        element.setAttribute("rel-x", element.getBoundingClientRect().left);
-        element.setAttribute("rel-y", element.getBoundingClientRect().top + window.scrollY);
-
-        dragElement(element);
-    }
-
-    function dragElement(ele) {
-        //Listen for whenever the element is clicked
-        ele.addEventListener("mousedown", dragMouseDown);
-
-        //vars to hold the listeners after the mouse
-        var mouseMoveListener;
-        var mouseUpListener;
-
-        //Save the mouse offset on the element, so it will not snap to top left corner when starting to drag
-        var offsetX = 0,
-            offsetY = 0;
-
-        function dragMouseDown(e) {
-
-            var e = window.event;
-            if(e.which != 3) return;
-            
-            //Set the offsets
-            offsetX = e.offsetX;
-            offsetY = e.offsetY;
-            //Add the listeners
-            mouseMoveListener = window.addEventListener("mousemove", elementDrag);
-            mouseUpListener = window.addEventListener("mouseup", dragMouseUp);
-        }
-        function dragMouseUp(e) {
-
-            //Check placing validity
-            var e = window.event;
-            if(e.which != 3) return;
-
-            //remove the listeners, which stops teh element from following the mouse
-            mouseMoveListener = window.removeEventListener(
-                "mousemove",
-                elementDrag
-            );
-            mouseUpListener = window.removeEventListener("mouseup", dragMouseUp);
-
-            clearLines();
-            myworld.establishRelations();
-
-            saveIconsPositions();
-        }
-        function elementDrag(e) {
-
-            //console.log(ele.getAttribute("rel-x"));
-
-            //move the element
-            ele.style.position = "relative";
-            ele.style.left = e.clientX - offsetX - ele.getAttribute("rel-x") + "px";
-            ele.style.top = e.clientY - offsetY - ele.getAttribute("rel-y") + window.scrollY + "px";
-
-            $("#svgContainer").HTMLSVGconnect("reset");
-        }
-    }
 }
 
 function delete_chara(){
@@ -1696,7 +1641,7 @@ function toggle_edit(values=null){
                                 <span class="select">
                                 <select>
                                     ${
-                                        Object.entries(data.relations).map(r => "<option "+ (element === undefined ? "" : (r[0] == element.details ? "selected": "")) +">" + r[1].name + "</option>")
+                                        makeRelationSelect(element == undefined ? undefined : element.details)
                                     }
                                 </select>
                                 </span>
@@ -1951,7 +1896,7 @@ function saveNewCharacterInformation(operation=DatabaseOperations.UPDATE){
     switch (operation) {
         case DatabaseOperations.UPDATE:
             
-            globalThis.updateDatabaseValue(currentTarget, `/characters/${myworld.name}/${currentTarget.id}`).then((result) => {
+            globalThis.updateDatabaseValue(currentTarget, `/characters/${myworld.id}/${currentTarget.id}`).then((result) => {
         
                 data.dimensions.find(d => d.name == myworld.name)[currentTarget.id] = currentTarget;
         
@@ -1983,7 +1928,7 @@ function saveNewCharacterInformation(operation=DatabaseOperations.UPDATE){
 
             globalThis.createDatabaseValue(
                 currentTarget,
-                `characters/${myworld.name}/${currentTarget.id}`
+                `characters/${myworld.id}/${currentTarget.id}`
             );
 
             popUpNotification(`${currentTarget.name} was created into ${myworld.name} successfully`, 0);
@@ -2234,7 +2179,6 @@ function checkCreatorValidity(){
     }
 }
 
-const socialList = ["Twitter", "Instagram", "Reddit", "Github"];
 function createApplication(){
 
     const name = document.getElementById("creator-name").value;
